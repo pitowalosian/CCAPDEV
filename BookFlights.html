@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Flights</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+            $(document).ready(function() {
+                $('#swap').click(function() {
+                    var origin = $('#origin').val();
+                    var destination = $('#destination').val();
+
+                    $('#origin').val(destination);
+                    $('#destination').val(origin);
+                });
+                $('#toggleDark').click(function() {
+                    var currentTheme = $('html').attr('data-bs-theme');
+                    var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    $('html').attr('data-bs-theme', newTheme);
+                    $('#navbarNav').toggleClass('bg-dark-subtle bg-primary');
+                    $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
+                    $('body').toggleClass('text-bg-dark text-bg-light');
+                    $('body').toggleClass('bg-secondary-subtle bg-light');
+                    
+                });
+            });
+        </script>
+</head>
+<body class="bg-secondary-subtle text-bg-dark"> <!--navigation bar-->
+    <div class="container-fluid fixed-top">
+        <div class="navbar fixed-top bg-dark-subtle" id="navbarNav">
+            <a class="navbar-brand" href="#"><img height="40" src="pictures/icon (2).png"/></a>
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link" href="FlightSearch.html">Flight Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Book Flights</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Reservations.html">My Reservations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Profile.html">Profile</a>
+                </li>
+                <li class="nav-item align-items-center d-flex">
+                    <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></label>
+                </li>   
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        
+    </div>
+
+</body>
+
+
+
+</html>
