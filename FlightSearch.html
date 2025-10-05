@@ -8,15 +8,15 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     </head>
     <body class="bg-secondary-subtle text-bg-dark">
-        <div class="container-fluid fixed-top">
-            <div class="navbar fixed-top bg-dark-subtle text-dark-emphasis border-bottom border-primary" id="navbarNav">
+        <div class="container-fluid sticky-top">
+            <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
                 <a class="navbar-brand" href="#"><img height="40" src="pictures/icon (2).png"/></a>
                 <ul class="nav nav-pills nav-fill" id="navtabs">
                     <li class="nav-item">
                        <a class="nav-link active bg-primary" aria-current="page" href="#">Flight Search</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="BookFlight.html">Book Flight</a>
+                        <a class="nav-link" href="BookFlights.html">Book Flights</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="Reservations.html">My Reservations</a>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="container-fluid pt-5 mt-5 text-center">
-            <span class="pt-5 mt-5 lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
+            <span class="lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
             <h1 class="display-4 text-center">Flight Search</h1>
             <img class="img-fluid transform-middle-y z-2" width="1100" src="pictures/jbu-plane1.png" alt="Plane Icon"><br><br>
         </div>
@@ -75,54 +75,52 @@
                 </form>
             </div>
         </div>
-                <!-- Modal (Form Warnings)
-                <div class="modal fade" id="formWarning" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Warning</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body"> 
-                                <p id="summaryText"></p>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
+        <!-- Modal (Form Warnings) -->
+        <div class="modal fade" id="formModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-warning">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                </div> -->
+                    <div class="modal-body"> 
+                        <p id="errorText"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <br><br>
-        <div class="position-fluid bg-primary-subtle p-3 w-100" id="searchResults">
-            <div class="display-6 text-center">
+        <div class="position-fluid bg-primary-subtle p-3 border-top border-bottom border-primary visually-hidden" id="searchCont">
+            <div id="searchResults" class="display-6 text-center">
                 Search Results
             </div>
             <br>
-            <div id="flight1" class="container">
-                <div class="row">
-                    <div class="bd-title text-center lead">
-                        Flight Details
-                    </div>
-                    <div class="col-md-auto lead">
-                        Airline: JetBlue
-                    </div>
-                    <div class="col-md-auto lead">
-                        Flight Number: B6 1204 
-                    </div>
-                    <div class="col-md-auto lead">
-                            Departure Time: 12:40 AM 
-                    </div>
-                    <div class="col-md-auto lead">
-                        Arrival Time: 6:10 AM
-                    </div>
-                    <div class="col-md-auto lead">
-                        Price: $200
-                    </div>
+            <div class="container-fluid bg-light text-primary">
+                <div class="d-flex justify-content-between lead fw-bold px-5 mx-5">
+                    <div>Airline:</div>
+                    <div>Flight Number:</div>
+                    <div>Departure Time:</div>
+                    <div>Arrival Time:</div>
+                    <div>Price:</div>
+                </div>
+            </div>
+            <div id="flight1">
+                <div class="d-flex justify-content-between lead px-5 mx-5">
+                    <div>JetBlue</div>
+                    <div>B6 1204</div>
+                    <div>12:05 AM</div>
+                    <div>6:05 AM</div>
+                    <div>$200</div>
                 </div>
             </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
         <script>
             $(document).ready(function() {
                 $('#swap').click(function() {
@@ -147,35 +145,29 @@
                     $('#swap').toggleClass('btn-primary btn-outline-light');
                     $('#search').toggleClass('btn-primary btn-outline-light');
                 });
-                $('#searchForm').click(function(event) {
+                $('#search').click(function(event) {
                     event.preventDefault();
-                    clearErrors();
 
-                    const errors = [];
+                    let passcount = $('#passcount').val().trim();
+                    let origin = $('#origin').val().trim();
+                    let destination = $('#destination').val().trim();
+                    let depdate = new Date($('#depdate').val());
+                    let retdate = new Date($('#retdate').val());
 
-                    var passcount = $('#passcount').val().trim();
-                    var origin = $('#origin').text().trim();
-                    var destination = $('#destination').text().trim();
-                    var depdate = new Date($('#depdate').val());
-                    var retdate = new Date($('#retdate').val());
+                    let fillError = `Please fill in all fields except return date.`;
+                    let locError = `Origin and Destination cannot be the same`;
 
-                    
                     if (!origin || !destination || !depdate) {
-                        alert('Please fill in all fields except return date.');
-                        if (origin == destination) {
-                            alert('Origin and Destination cannot be the same.');
-                        }
+                        $("#errorText").html(fillError);
+                        let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                        formModal.show();
+                    } else if (origin && destination && (origin == destination)){
+                        $("#errorText").html(locError);
+                        let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                        formModal.show();
+                    } else {
+                        $('#searchResults').removeClass('visually-hidden')[0].scrollIntoView({ behavior: 'smooth' });
                     }
-
-                    var searchParams = new URLSearchParams({
-                        passcount: passcount,
-                        origin: origin,
-                        destination: destination,
-                        depdate: depdate,
-                        retdate: retdate
-                    });
-
-                    window.location.href = 'FlightSearch.html?' + searchParams.toString();
                 });
             });
         </script>
