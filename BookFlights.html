@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body class="bg-secondary-subtle text-bg-dark"> 
-    <!--navigation bar-->
     <div class="container-fluid fixed-top">
         <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
             <a class="navbar-brand" href="#"><img height="40" src="pictures/icon (2).png"/></a>
@@ -32,20 +31,26 @@
         </div>
     </div>
 
-    <div class="container">
-        
+    <div class="container text-center pt-5 mt-5">
+        <h1 class="display-5 text-center mt-5">Book Flights</h1>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <div class="container pt-3 mt-5 position pb-3 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p1">
+        <div class="buttons text-center" type="button">
+            <button class="btn btn-primary me-3 dropdown-toggle" id="button1" data-toggle="dropdown">Round-Trip </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Round-Trip</a></li>
+                <li><a class="dropdown-item" href="#">One-Way</a></li>
+                <li><a class="dropdown-item" href="#">Multi-City</a></li>
+            </ul>
+            <button class="btn btn-primary" id="button2">1 Adult</button>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
             $(document).ready(function() {
-                $('#swap').click(function() {
-                    var origin = $('#origin').val();
-                    var destination = $('#destination').val();
-
-                    $('#origin').val(destination);
-                    $('#destination').val(origin);
-                });
                 $('#toggleDark').click(function() {
                     var currentTheme = $('html').attr('data-bs-theme');
                     var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -57,10 +62,11 @@
                     $('body').toggleClass('text-bg-dark text-bg-light');
                     $('body').toggleClass('bg-secondary-subtle bg-light');
                 });
+
+                $('#button1').click(function() {
+                    $(this).dropdown('toggle')
+                });
             });
-        </script>
+    </script>
 </body>
-
-
-
 </html>
