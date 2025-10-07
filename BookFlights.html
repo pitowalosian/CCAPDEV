@@ -104,7 +104,7 @@
                         <div class="col-md-6 mt-2">
                             <label for="meal" class="form-label">Meal Options</label>
                             <select class="form-select" id="meal">
-                                <option value="0 (included)">Standard</option>
+                                <option value="100">Standard</option>
                                 <option value="200">Vegetarian</option>
                                 <option value="250">Vegan</option>
                                 <option value="300">Halal</option>
@@ -282,7 +282,7 @@
                     //costs
                     let tripTypeCost = 0;//implement
                     let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
-                    let mealCost = $("#meal option:selected").val();
+                    let mealCost = parseInt($("#meal option:selected").val());
                     let travelClassCost = 0; //implement
                     let baggageCost = (baggageWeight / 5) * 250;
 
