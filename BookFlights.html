@@ -32,22 +32,137 @@
     </div>
 
     <div class="container text-center pt-5 mt-5">
-        <h1 class="display-5 text-center mt-5">Book Flights</h1>
+        <h1 class="display-5 text-center text-primary mt-5">Book Flights</h1>
+        <p class="lead">Answer the reservation form below to book your flight</p>
     </div>
 
-    <div class="container pt-3 mt-5 position pb-3 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p1">
-        <div class="buttons text-center" type="button">
-            <button class="btn btn-primary me-3 dropdown-toggle" id="button1" data-toggle="dropdown">Round-Trip </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Round-Trip</a></li>
-                <li><a class="dropdown-item" href="#">One-Way</a></li>
-                <li><a class="dropdown-item" href="#">Multi-City</a></li>
-            </ul>
-            <button class="btn btn-primary" id="button2">1 Adult</button>
+    <!--passenger details-->
+    <div class="container mt-4 mb-5 position pt-2 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p1">
+        <div class="container mt-4 mb-5 justify-content-center">
+            <form id="passengerInfo">
+                <fieldset class="form-section">
+                    <div class="row justify-content-center mb-3">
+
+                        <div class="col-md-6">
+                            <legend class="h5 text-left pb-2">Personal Information</legend>
+                        </div>
+
+                        <!--buttons-->
+                        <div class="col-md-6">
+                            <div class="buttons text-left" type="button">
+                                <!--type of flight-->
+                                <button type="button" class="btn btn-primary me-2 dropdown-toggle" id="button1" data-bs-toggle="dropdown">Round-Trip </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" value="3000" href="#">Round-trip </a></li>
+                                    <li><a class="dropdown-item" value="2000" href="#">One-way </a></li>
+                                    <li><a class="dropdown-item" value="18000" href="#">Multi-city </a></li>
+                                </ul>
+
+                                <!--passenger count-->
+                                <button type="button" class="btn btn-primary me-2 dropdown-toggle" id="button2" data-bs-toggle="modal" data-bs-target="#passengersCount">1 Adult</button>
+                                <div class="modal fade text-center" id="passengersCount" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-dark-subtle">
+                                                <h5 class="modal-title">Passenger Count</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="container justify-content-center border border-primary rounded-3 p-2">
+                                                    <div class="row">
+                                                        <div class="col-4 border-end p-3">
+                                                            <label for="adultCount" class="form-label">Adults</label>
+                                                            <input type="number" class="form-control" id="adultCount" min="1" max="20">
+                                                        </div>
+                                                        <div class="col-4 border-end p-3">
+                                                            <label for="childrenCount" class="form-label">Children</label>
+                                                            <input type="number" class="form-control" id="childrenCount" min="0" max="20">
+                                                        </div>
+                                                        <div class="col-4 p-3">
+                                                            <label for="infantCount" class="form-label">Infants</label>
+                                                            <input type="number" class="form-control" id="infantCount" min="0" max="20">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p id="errorText" class="text-danger p-2 justify-content-center"></p>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" id="submitPassCount">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--travel classes-->
+                                <button type="button" class="btn btn-primary me-2 dropdown-toggle" id="button3" data-bs-toggle="dropdown">Economy </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" value ="18000" href="#">Economy </a></li>
+                                    <li><a class="dropdown-item" value ="30000" href="#">Premium Economy </a></li>
+                                    <li><a class="dropdown-item" value ="60000" href="#">Business </a></li>
+                                    <li><a class="dropdown-item" value ="100000" href="#">First Class </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--passenger personal info-->
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-md-6">
+                            <label for="fullName" class="form-label">Full name *</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="emailAdd" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="emailAdd" name="email" required>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <label for="phoneNum" class="form-label">Phone No. *</label>
+                            <input type="number" class="form-control" id="phoneNum" name="phoneNum" required>
+                        </div> 
+                        <div class="col-md-6">
+                            <label for="passNum" class="form-label">Passport No. *</label>
+                            <input type="number" class="form-control" id="passNum" name="passNum" required>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!--optional package selection-->
+                <fieldset class="form-section">
+                    <legend class="h5 text-left pt-5 pb-3">Preferences</legend>
+                    <div class="row justify-content-center">
+                        
+                        <div class="col-md-6 mt-2">
+                            <label for="meal" class="form-label">Meal Options</label>
+                            <select class="form-select" id="meal">
+                                <option value="0">Standard</option>
+                                <option value="200">Vegetarian</option>
+                                <option value="250">Vegan</option>
+                                <option value="300">Halal</option>
+                                <option value="350">Kosher</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-check mt-2">
+                                <label for="baggage" class="form-check-label">Add Extra Baggage (+ ₱250 per kg)</label>
+                                <input type="checkbox" class="form-check-input" id="baggage">
+                            </div>
+                            <div class="mt-2">
+                                <input type="number" class="form-control" id="extrabags" min="4" max="40" step="4">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </fieldset>
+            </form>
         </div>
-
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
             $(document).ready(function() {
@@ -63,10 +178,51 @@
                     $('body').toggleClass('bg-secondary-subtle bg-light');
                 });
 
-                $('#button1').click(function() {
-                    $(this).dropdown('toggle')
+                $('.dropdown-item').click(function(){
+                    let choice = $(this).text().trim(); 
+
+                    //find the button with this choice
+                    if (['Round-trip', 'One-way', 'Multi-city'].includes(choice)) {
+                        buttonClicked = '#button1';
+                    } else {
+                        buttonClicked = '#button3'
+                    }
+                    $(buttonClicked).text(choice); //replace button text
                 });
+
+                $('.passengersCount').click(function(){
+                    let passCountModal = new bootstrap.Modal(document.getElementById('passengersCount'));
+                    passCountModal.show();
+                });
+
+                $('#submitPassCount').click(function(){
+                    let adults = parseInt($('#adultCount').val() || 0); //if input empty, return 0
+                    let children = parseInt($('#childrenCount').val() || 0);
+                    let infants = parseInt($('#infantCount').val() || 0);
+                    let passCount = adults + children + infants;
+
+                    if (passCount > 20) {
+                        $('#errorText').text("Passengers cannot exceed 20.");
+                        return;
+                    } else if (passCount < 1) {
+                        $('#errorText').text("There must be at least 1 passenger.");
+                        return;
+                    } else if (adults == 0) {
+                        $('#errorText').text("There must be at least 1 adult passenger.");
+                        return;
+                    } else {
+                        $('#errorText').text("");
+                    }
+
+                    $('#button2').text(passCount + ' Traveller' + (passCount > 1 ? 's' : ''));
+                    
+                    let passCountInstance = bootstrap.Modal.getInstance(document.getElementById('passengersCount')); //get same modal instance
+                    passCountInstance.hide(); //close modal
+                });
+                
             });
+
+            
     </script>
 </body>
 </html>
