@@ -32,7 +32,7 @@
         </div>
         <div class="container-fluid pt-5 mt-5 text-center">
             <span class="lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
-            <h1 class="display-4 text-center">Flight Search</h1>
+            <h1 class="display-5 text-center text-primary">Flight Search</h1>
             <img class="img-fluid transform-middle-y z-2" width="1100" src="pictures/jbu-plane1.png" alt="Plane Icon"><br><br>
         </div>
         <div class="d-flex justify-content-center px-5 mx-5">
@@ -94,76 +94,48 @@
         </div>
         <br><br><br>
         <div id="searchCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary">
-            <div id="searchResults" class="display-6 text-center">
-                Search Results
+            <div id="searchResults">
+                <p class="display-6 text-center">Search Results</p>
+                <p id="noResults"class="lead text-center">No Flights Found</p>
             </div>
             <br>
             <div class="d-flex justify-content-center">
-                <table class="table table-striped table-hover text-center">
-                    <thead class="lead text-center">
+                <table class="table table-hover align-middle text-center">
+                    <thead class="lead table-primary text-light text-center" id="resultsTable">
                         <tr>
-                            <th scope="col" class="text-danger">Airline</th>
-                            <th scope="col" class="text-warning">Flight Number</th>
-                            <th scope="col" class="text-success">Departure Time</th>
-                            <th scope="col" class="text-info">Arrival Time</th>
-                            <th scope="col" class="text-primary">Price</th>
+                            <th>Airline</th>
+                            <th>Flight Number</th>
+                            <th>Departure Time</th>
+                            <th>Arrival Time</th>
+                            <th>Flight Duration</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
-                    <tbody id="flight1" class="lead">
-                        <tr>
-                            <td scope="row">JetBlue</th>
-                            <td>B6 1204</td>
-                            <td>12:05 AM</td>
-                            <td>6:05 AM</td>
-                            <td>$200</td>
-                        </tr>
-                    </tbody>
-                    <tbody id="flight2" class="lead">
-                        <tr>
-                            <td scope="row">JetBlue</th>
-                            <td>B6 1204</td>
-                            <td>12:05 AM</td>
-                            <td>6:05 AM</td>
-                            <td>$200</td>
-                        </tr>
-                    </tbody>
-                    <tbody id="flight3" class="lead">
-                        <tr>
-                            <td scope="row">JetBlue</th>
-                            <td>B6 1204</td>
-                            <td>12:05 AM</td>
-                            <td>6:05 AM</td>
-                            <td>$200</td>
-                        </tr>
-                    </tbody>
-                    <tbody id="flight4" class="lead">
-                        <tr>
-                            <td scope="row">JetBlue</th>
-                            <td>B6 1204</td>
-                            <td>12:05 AM</td>
-                            <td>6:05 AM</td>
-                            <td>$200</td>
-                        </tr>
-                    </tbody>
-                    <tbody id="flight5" class="lead">
-                        <tr>
-                            <td scope="row">JetBlue</th>
-                            <td>B6 1204</td>
-                            <td>12:05 AM</td>
-                            <td>6:05 AM</td>
-                            <td>$200</td>
-                        </tr>
+                    <tbody id="tableBody" class="lead">
+                        <!-- Results handled by JQuery -->
                     </tbody>
                 </table>
             </div>
         </div>
-        <br><br><br>
+        <br><br>
+        <div class="text-center pb-3 text-secondary">
+            <small>© 2025 jetBlue Airlines — All Rights Reserved</small>
+        </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
             $(document).ready(function() {
-                // $('#searchCont').hide();
+                $('#searchCont').hide();
+                const flights = [
+                        { airline: "JetBlue", flightNo: "B6 1101", depart: "06:45", arrive: "10:15", flightDur: "3h 30m", destination: "Cancun", price: "$265" },
+                        { airline: "JetBlue", flightNo: "B6 1234", depart: "08:30", arrive: "12:05", flightDur: "3h 35m", destination: "Seoul", price: "$280" },
+                        { airline: "JetBlue", flightNo: "B6 1390", depart: "10:10", arrive: "14:20", flightDur: "3h 10m", destination: "London", price: "$525" },
+                        { airline: "JetBlue", flightNo: "B6 1522", depart: "15:05", arrive: "19:45", flightDur: "3h 40m", destination: "Paris", price: "$540" },
+                        { airline: "JetBlue", flightNo: "B6 1902", depart: "21:40", arrive: "01:30 (+1)", flightDur: "3h 50m", destination: "Chicago", price: "$350" },
+                        { airline: "JetBlue", flightNo: "B6 1204", depart: "00:05", arrive: "06:05", flightDur: "6h", destination: "Tokyo", price: "$200" },                        
+                ];
+
                 $('#swap').click(function() {
                     var origin = $('#origin').val();
                     var destination = $('#destination').val();
@@ -186,15 +158,16 @@
                     $('#swap').toggleClass('btn-primary btn-outline-light');
                     $('#search').toggleClass('btn-primary btn-outline-light');
                 });
+                // check form inputs
                 $('#search').click(function(event) {
                     let passcount = $('#passcount').val().trim();
-                    let origin = $('#origin').val().trim();
-                    let destination = $('#destination').val().trim();
+                    let origin = $('#origin').val().toLowerCase().trim();
+                    let destination = $('#destination').val().toLowerCase().trim();
                     let depdate = new Date($('#depdate').val());
                     let retdate = new Date($('#retdate').val());
 
-                    let fillError = `Please fill in all fields except return date.`;
-                    let locError = `Origin and Destination cannot be the same`;
+                    const fillError = `Please fill in all fields except return date.`;
+                    const locError = `Origin and Destination cannot be the same`;
 
                     if (!origin || !destination || !depdate) {
                         event.preventDefault();
@@ -207,9 +180,44 @@
                         let formModal = new bootstrap.Modal(document.getElementById('formModal'));
                         formModal.show();
                     } else {
+                        $("#tableBody").empty();
+
+                        // Get all flights by origin and destination
+                        const filteredFlights = flights.filter(f =>
+                            // f.origin.toLowerCase().includes(origin) &&
+                            f.destination.toLowerCase().includes(destination)
+                        );
+
+                        if (filteredFlights.length === 0) {
+                            $("#tableBody").empty();
+                            $('#resultsTable').hide();
+                        } else {
+                            $("#tableBody").empty();
+                            $('#noResults').hide();
+                            $('#resultsTable').show();
+
+                            filteredFlights.forEach(f => {
+                            const row = `
+                                <tr>
+                                    <td>${f.airline}</td>
+                                    <td>${f.flightNo}</td>
+                                    <td>${f.depart}</td>
+                                    <td>${f.arrive}</td>
+                                    <td>${f.flightDur}</td>
+                                    <td>${f.price}</td>
+                                </tr>
+                            `;
+                            $('#tableBody').append(row);
+                        });
+                        }
                         $('#searchCont').css("scroll-margin-top", "65px");
                         $('#searchCont').fadeIn(1000);
                     }
+                });
+                $('#searchCont').on('mouseleave', function() {
+                    $('#searchCont').fadeOut(1000);
+                    $('input').val('');
+                    $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
                 });
             });
         </script>
