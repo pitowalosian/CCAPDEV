@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     </head>
     <body class="bg-secondary-subtle text-bg-dark">
+        <!--Navigation Bar-->
         <div class="container-fluid fixed-top">
             <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
                 <a class="navbar-brand" href="#"><img height="40" src="pictures/icon (2).png"/></a>
@@ -30,44 +31,54 @@
                 </ul>
             </div>
         </div>
+        <!--Title-->
         <div class="container-fluid pt-5 mt-5 text-center">
             <span class="lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
-            <h1 class="display-5 text-center text-primary">Flight Search</h1>
+            <h1 class="display-5 text-center">Flight Search</h1>
             <img class="img-fluid transform-middle-y z-2" width="1100" src="pictures/jbu-plane1.png" alt="Plane Icon"><br><br>
         </div>
-        <div class="d-flex justify-content-center px-5 mx-5">
+        <!--Form Container-->
+        <div class="d-flex justify-content-center px-5 mx-5" id="formContainer">
             <div class="position-fluid p-3 shadow-lg container-fluid rounded-3 bg-dark-subtle border border-primary" id="form">
+                <!--Search Flights Form-->
                 <form class="align-items-center bg-dark-subtle" id="searchForm">
                     <div class="row align-items-start g-2">
+                        <!--Passenger Count-->
                         <div class="col-md-auto">
                             <div class="input-group w-auto flex-grow-0">
                                 <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                                 <input type="number" class="form-control w-auto flex-grow-0" id="passcount" val="1" placeholder="1" min="1" max="30">
                             </div>
                         </div>
+                        <!--Origin-->
                         <div class="col-md-auto">
                             <div class="input-group w-auto align-items-center">
                                 <span class="input-group-text"><i class="bi bi-house-door-fill"></i></span>
                                 <input type="text" class="form-control w-auto flex-grow-0" id="origin" placeholder="Where from?">
                             </div>
                         </div>
+                        <!--Swap Button-->
                         <div class="col-md-auto">
                             <button id="swap" type="button" class="btn btn-primary" data-bs-theme="dark"><i class="bi bi-arrow-left-right"></i></button>
                         </div>
+                        <!--Destination-->
                         <div class="col-md-auto">
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
                                 <input type="text" class="form-control w-auto flex-grow-0" id="destination" placeholder="Where to?">
                             </div>
                         </div>
+                        <!--Depart Date-->
                         <div class="col input-group">
                             <span class="input-group-text">Depart:</span>
                             <input type="date" class="form-control" id="depdate">
                         </div>
+                        <!--Return Date-->
                         <div class="col input-group">
                             <span class="input-group-text">Return:</span>
                             <input type="date" class="form-control" id="retdate">
                         </div>
+                        <!--Search Button-->
                         <div class="col-md-auto">
                             <a href="#searchCont" id="search" class="btn btn-primary">Search Flights</a>
                         </div>
@@ -75,7 +86,7 @@
                 </form>
             </div>
         </div>
-        <!-- Modal (Form Warnings) -->
+        <!--Modal (Form Warnings)-->
         <div class="modal fade" id="formModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -93,14 +104,17 @@
             </div>
         </div>
         <br><br><br>
+        <!--Search Container-->
         <div id="searchCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary">
+            <!--Title-->
             <div id="searchResults">
-                <p class="display-6 text-center">Search Results</p>
+                <p class="display-6 text-center text-primary">Search Results</p>
                 <p id="noResults"class="lead text-center">No Flights Found</p>
             </div>
-            <br>
+            <!--Results Table-->
             <div class="d-flex justify-content-center">
                 <table class="table table-hover align-middle text-center">
+                    <!--Table Headings-->
                     <thead class="lead table-primary text-light text-center" id="resultsTable">
                         <tr>
                             <th>Airline</th>
@@ -111,43 +125,89 @@
                             <th>Price</th>
                         </tr>
                     </thead>
+                    <!--Table Body-->
                     <tbody id="tableBody" class="lead">
                         <!-- Results handled by JQuery -->
                     </tbody>
                 </table>
             </div>
         </div>
-        <br><br>
+        <br>
+        <!--Copyright-->
         <div class="text-center pb-3 text-secondary">
             <small>© 2025 jetBlue Airlines — All Rights Reserved</small>
         </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
         <script>
             $(document).ready(function() {
-                $('#searchCont').hide();
+                // $('#searchCont').hide();
                 const flights = [
-                        { airline: "JetBlue", flightNo: "B6 1101", depart: "06:45", arrive: "10:15", flightDur: "3h 30m", destination: "Cancun", price: "$265" },
-                        { airline: "JetBlue", flightNo: "B6 1234", depart: "08:30", arrive: "12:05", flightDur: "3h 35m", destination: "Seoul", price: "$280" },
-                        { airline: "JetBlue", flightNo: "B6 1390", depart: "10:10", arrive: "14:20", flightDur: "3h 10m", destination: "London", price: "$525" },
-                        { airline: "JetBlue", flightNo: "B6 1522", depart: "15:05", arrive: "19:45", flightDur: "3h 40m", destination: "Paris", price: "$540" },
-                        { airline: "JetBlue", flightNo: "B6 1902", depart: "21:40", arrive: "01:30 (+1)", flightDur: "3h 50m", destination: "Chicago", price: "$350" },
-                        { airline: "JetBlue", flightNo: "B6 1204", depart: "00:05", arrive: "06:05", flightDur: "6h", destination: "Tokyo", price: "$200" },                        
+                    // Tokyo (NRT)
+                    { airline: "JetBlue", flightNo: "B6 1101", depart: "06:45", arrive: "11:30", flightDur: "4h 45m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱12,500" },
+                    { airline: "JetBlue", flightNo: "B6 1102", depart: "12:10", arrive: "17:00", flightDur: "4h 50m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱13,200" },
+                    { airline: "JetBlue", flightNo: "B6 1103", depart: "22:15", arrive: "03:00 (+1)", flightDur: "4h 45m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱11,900" },
+
+                    // Seoul (ICN)
+                    { airline: "JetBlue", flightNo: "B6 1234", depart: "08:30", arrive: "13:05", flightDur: "4h 35m", origin: "Manila", destination: "Seoul (ICN)", price: "₱9,800" },
+                    { airline: "JetBlue", flightNo: "B6 1235", depart: "14:20", arrive: "18:55", flightDur: "4h 35m", origin: "Manila", destination: "Seoul (ICN)", price: "₱10,100" },
+                    { airline: "JetBlue", flightNo: "B6 1236", depart: "20:40", arrive: "01:15 (+1)", flightDur: "4h 35m", origin: "Manila", destination: "Seoul (ICN)", price: "₱9,500" },
+
+                    // London (LHR)
+                    { airline: "JetBlue", flightNo: "B6 1390", depart: "10:10", arrive: "18:20", flightDur: "13h 10m", origin: "Manila", destination: "London (LHR)", price: "₱42,000" },
+                    { airline: "JetBlue", flightNo: "B6 1391", depart: "16:25", arrive: "00:40 (+1)", flightDur: "13h 15m", origin: "Manila", destination: "London (LHR)", price: "₱43,500" },
+                    { airline: "JetBlue", flightNo: "B6 1392", depart: "23:50", arrive: "08:00 (+2)", flightDur: "13h 10m", origin: "Manila", destination: "London (LHR)", price: "₱41,700" },
+
+                    // Paris (CDG)
+                    { airline: "JetBlue", flightNo: "B6 1522", depart: "15:05", arrive: "23:00", flightDur: "13h 55m", origin: "Manila", destination: "Paris (CDG)", price: "₱44,500" },
+                    { airline: "JetBlue", flightNo: "B6 1523", depart: "09:30", arrive: "17:20", flightDur: "13h 50m", origin: "Manila", destination: "Paris (CDG)", price: "₱45,200" },
+                    { airline: "JetBlue", flightNo: "B6 1524", depart: "21:15", arrive: "05:05 (+1)", flightDur: "13h 50m", origin: "Manila", destination: "Paris (CDG)", price: "₱43,800" },
+
+                    // Los Angeles (LAX)
+                    { airline: "JetBlue", flightNo: "B6 1902", depart: "21:40", arrive: "19:30 (+1)", flightDur: "12h 50m", origin: "Manila", destination: "Los Angeles (LAX)", price: "₱38,200" },
+                    { airline: "JetBlue", flightNo: "B6 1903", depart: "07:25", arrive: "05:15 (+1)", flightDur: "12h 50m", origin: "Manila", destination: "Los Angeles (LAX)", price: "₱39,000" },
+                    { airline: "JetBlue", flightNo: "B6 1904", depart: "13:15", arrive: "11:55 (+1)", flightDur: "12h 40m", origin: "Manila", destination: "Los Angeles (LAX)", price: "₱37,800" },
+
+                    // Singapore (SIN)
+                    { airline: "JetBlue", flightNo: "B6 1204", depart: "00:05", arrive: "03:55", flightDur: "3h 50m", origin: "Manila", destination: "Singapore (SIN)", price: "₱7,200" },
+                    { airline: "JetBlue", flightNo: "B6 1205", depart: "11:40", arrive: "15:25", flightDur: "3h 45m", origin: "Manila", destination: "Singapore (SIN)", price: "₱7,800" },
+                    { airline: "JetBlue", flightNo: "B6 1206", depart: "18:30", arrive: "22:15", flightDur: "3h 45m", origin: "Manila", destination: "Singapore (SIN)", price: "₱6,900" },
+
+                    // Cebu (CEB)
+                    { airline: "JetBlue", flightNo: "B6 2101", depart: "06:00", arrive: "07:25", flightDur: "1h 25m", origin: "Manila", destination: "Cebu (CEB)", price: "₱2,500" },
+                    { airline: "JetBlue", flightNo: "B6 2102", depart: "12:15", arrive: "13:40", flightDur: "1h 25m", origin: "Manila", destination: "Cebu (CEB)", price: "₱2,800" },
+                    { airline: "JetBlue", flightNo: "B6 2103", depart: "18:45", arrive: "20:10", flightDur: "1h 25m", origin: "Manila", destination: "Cebu (CEB)", price: "₱2,600" },
+
+                    // Davao (DVO)
+                    { airline: "JetBlue", flightNo: "B6 2201", depart: "05:30", arrive: "07:30", flightDur: "2h", origin: "Manila", destination: "Davao (DVO)", price: "₱3,200" },
+                    { airline: "JetBlue", flightNo: "B6 2202", depart: "13:20", arrive: "15:20", flightDur: "2h", origin: "Manila", destination: "Davao (DVO)", price: "₱3,400" },
+                    { airline: "JetBlue", flightNo: "B6 2203", depart: "20:10", arrive: "22:10", flightDur: "2h", origin: "Manila", destination: "Davao (DVO)", price: "₱3,100" },
+
+                    // Iloilo (ILO)
+                    { airline: "JetBlue", flightNo: "B6 2301", depart: "07:10", arrive: "08:25", flightDur: "1h 15m", origin: "Manila", destination: "Iloilo (ILO)", price: "₱2,000" },
+                    { airline: "JetBlue", flightNo: "B6 2302", depart: "14:00", arrive: "15:15", flightDur: "1h 15m", origin: "Manila", destination: "Iloilo (ILO)", price: "₱2,200" },
+                    { airline: "JetBlue", flightNo: "B6 2303", depart: "19:30", arrive: "20:45", flightDur: "1h 15m", origin: "Manila", destination: "Iloilo (ILO)", price: "₱2,100" }
                 ];
 
+                // Swap Button 
                 $('#swap').click(function() {
-                    var origin = $('#origin').val();
-                    var destination = $('#destination').val();
+                    // Get origin and destination values
+                    var origin = $('#origin').val();            
+                    var destination = $('#destination').val();  
 
-                    $('#origin').val(destination);
-                    $('#destination').val(origin);
+                    // Swap
+                    $('#origin').val(destination);  
+                    $('#destination').val(origin);  
                 });
-                $('#toggleDark').click(function() {
-                    var currentTheme = $('html').attr('data-bs-theme');
-                    var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                    $('html').attr('data-bs-theme', newTheme);
 
+                // Toggle Dark Button
+                $('#toggleDark').click(function() {
+                    var currentTheme = $('html').attr('data-bs-theme');         // Get current theme
+                    var newTheme = currentTheme === 'dark' ? 'light' : 'dark';  // Check if current theme is dark or light then change
+                    $('html').attr('data-bs-theme', newTheme);                  // Insert new theme to page 
+
+                    // Toggle classes to change bootstrap elements in light/dark mode
                     $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
                     $('#navbarNav').toggleClass('text-dark-emphasis text-primary-emphasis');
                     $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
@@ -158,44 +218,61 @@
                     $('#swap').toggleClass('btn-primary btn-outline-light');
                     $('#search').toggleClass('btn-primary btn-outline-light');
                 });
-                // check form inputs
+
+                // Check form inputs
                 $('#search').click(function(event) {
+                    // Get input values
                     let passcount = $('#passcount').val().trim();
                     let origin = $('#origin').val().toLowerCase().trim();
                     let destination = $('#destination').val().toLowerCase().trim();
                     let depdate = new Date($('#depdate').val());
                     let retdate = new Date($('#retdate').val());
 
+                    // Error strings
                     const fillError = `Please fill in all fields except return date.`;
                     const locError = `Origin and Destination cannot be the same`;
+                    const dateError = `Return date must be after departure date.`;
 
-                    if (!origin || !destination || !depdate) {
+                    // Check required fields
+                    if (!origin || !destination || isNaN(depdate.getTime())) {     
                         event.preventDefault();
                         $("#errorText").html(fillError);
                         let formModal = new bootstrap.Modal(document.getElementById('formModal'));
                         formModal.show();
-                    } else if (origin && destination && (origin == destination)){
-                         event.preventDefault();
+                    } 
+                    // Check same location
+                    else if (origin && destination && (origin == destination)){       
+                        event.preventDefault();
                         $("#errorText").html(locError);
                         let formModal = new bootstrap.Modal(document.getElementById('formModal'));
                         formModal.show();
-                    } else {
+                    } 
+                    // Check if return date is valid
+                    else if ($('#retdate').val() && retdate <= depdate) {
+                        event.preventDefault();
+                        $('#errorText').html(dateError);
+                        let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                        formModal.show();
+                    }
+                    // Success
+                    else {      
                         $("#tableBody").empty();
 
                         // Get all flights by origin and destination
                         const filteredFlights = flights.filter(f =>
-                            // f.origin.toLowerCase().includes(origin) &&
+                            f.origin.toLowerCase().includes(origin) &&
                             f.destination.toLowerCase().includes(destination)
                         );
 
-                        if (filteredFlights.length === 0) {
-                            $("#tableBody").empty();
+                        // Conditions
+                        if (filteredFlights.length === 0) {     // No flights found
+                            $('#noResults').show();
                             $('#resultsTable').hide();
-                        } else {
-                            $("#tableBody").empty();
+                        } else {                                // Success
                             $('#noResults').hide();
                             $('#resultsTable').show();
 
+                            // Print filtered flights details
                             filteredFlights.forEach(f => {
                             const row = `
                                 <tr>
@@ -207,16 +284,17 @@
                                     <td>${f.price}</td>
                                 </tr>
                             `;
-                            $('#tableBody').append(row);
+                            $('#tableBody').append(row);    // Add to html 
                         });
                         }
                         $('#searchCont').css("scroll-margin-top", "65px");
                         $('#searchCont').fadeIn(1000);
                     }
                 });
-                $('#searchCont').on('mouseleave', function() {
+
+                // Hide search container on form container mouse enter
+                $('#formContainer').on('mouseenter', function() {
                     $('#searchCont').fadeOut(1000);
-                    $('input').val('');
                     $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
                 });
             });
