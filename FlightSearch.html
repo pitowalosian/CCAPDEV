@@ -104,11 +104,11 @@
             </div>
         </div>
         <br><br>
+        <p class="display-6 text-center" id="resultsText">Search Results</p>
         <!--Search Container-->
         <div id="searchCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary">
             <!--Title-->
             <div id="searchResults">
-                <p class="display-6 text-center text-primary">Search Results</p>
                 <p id="noResults"class="lead text-center">No Flights Found</p>
             </div>
             <!--Results Table-->
@@ -143,52 +143,55 @@
         <script>
             $(document).ready(function() {
                 $('#searchCont').hide();
+                $('#resultsText').hide();
                 
                 const flights = [
                     // Tokyo (NRT)
                     { airline: "JetBlue", flightNo: "B6 1101", depart: "06:45", arrive: "11:30", flightDur: "4h 45m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱12,500" },
                     { airline: "JetBlue", flightNo: "B6 1102", depart: "12:10", arrive: "17:00", flightDur: "4h 50m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱13,200" },
-                    { airline: "JetBlue", flightNo: "B6 1103", depart: "22:15", arrive: "03:00 (+1)", flightDur: "4h 45m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱11,900" },
-
+                   
                     // Seoul (ICN)
                     { airline: "JetBlue", flightNo: "B6 1234", depart: "08:30", arrive: "13:05", flightDur: "4h 35m", origin: "Manila", destination: "Seoul (ICN)", price: "₱9,800" },
                     { airline: "JetBlue", flightNo: "B6 1235", depart: "14:20", arrive: "18:55", flightDur: "4h 35m", origin: "Manila", destination: "Seoul (ICN)", price: "₱10,100" },
-                    { airline: "JetBlue", flightNo: "B6 1236", depart: "20:40", arrive: "01:15 (+1)", flightDur: "4h 35m", origin: "Manila", destination: "Seoul (ICN)", price: "₱9,500" },
-
+                    
                     // London (LHR)
                     { airline: "JetBlue", flightNo: "B6 1390", depart: "10:10", arrive: "18:20", flightDur: "13h 10m", origin: "Manila", destination: "London (LHR)", price: "₱42,000" },
                     { airline: "JetBlue", flightNo: "B6 1391", depart: "16:25", arrive: "00:40 (+1)", flightDur: "13h 15m", origin: "Manila", destination: "London (LHR)", price: "₱43,500" },
-                    { airline: "JetBlue", flightNo: "B6 1392", depart: "23:50", arrive: "08:00 (+2)", flightDur: "13h 10m", origin: "Manila", destination: "London (LHR)", price: "₱41,700" },
-
+                    
                     // Paris (CDG)
                     { airline: "JetBlue", flightNo: "B6 1522", depart: "15:05", arrive: "23:00", flightDur: "13h 55m", origin: "Manila", destination: "Paris (CDG)", price: "₱44,500" },
                     { airline: "JetBlue", flightNo: "B6 1523", depart: "09:30", arrive: "17:20", flightDur: "13h 50m", origin: "Manila", destination: "Paris (CDG)", price: "₱45,200" },
-                    { airline: "JetBlue", flightNo: "B6 1524", depart: "21:15", arrive: "05:05 (+1)", flightDur: "13h 50m", origin: "Manila", destination: "Paris (CDG)", price: "₱43,800" },
-
+                    
                     // Los Angeles (LAX)
                     { airline: "JetBlue", flightNo: "B6 1902", depart: "21:40", arrive: "19:30 (+1)", flightDur: "12h 50m", origin: "Manila", destination: "Los Angeles (LAX)", price: "₱38,200" },
                     { airline: "JetBlue", flightNo: "B6 1903", depart: "07:25", arrive: "05:15 (+1)", flightDur: "12h 50m", origin: "Manila", destination: "Los Angeles (LAX)", price: "₱39,000" },
-                    { airline: "JetBlue", flightNo: "B6 1904", depart: "13:15", arrive: "11:55 (+1)", flightDur: "12h 40m", origin: "Manila", destination: "Los Angeles (LAX)", price: "₱37,800" },
-
+                    
                     // Singapore (SIN)
                     { airline: "JetBlue", flightNo: "B6 1204", depart: "00:05", arrive: "03:55", flightDur: "3h 50m", origin: "Manila", destination: "Singapore (SIN)", price: "₱7,200" },
                     { airline: "JetBlue", flightNo: "B6 1205", depart: "11:40", arrive: "15:25", flightDur: "3h 45m", origin: "Manila", destination: "Singapore (SIN)", price: "₱7,800" },
-                    { airline: "JetBlue", flightNo: "B6 1206", depart: "18:30", arrive: "22:15", flightDur: "3h 45m", origin: "Manila", destination: "Singapore (SIN)", price: "₱6,900" },
-
+                    
                     // Cebu (CEB)
                     { airline: "JetBlue", flightNo: "B6 2101", depart: "06:00", arrive: "07:25", flightDur: "1h 25m", origin: "Manila", destination: "Cebu (CEB)", price: "₱2,500" },
                     { airline: "JetBlue", flightNo: "B6 2102", depart: "12:15", arrive: "13:40", flightDur: "1h 25m", origin: "Manila", destination: "Cebu (CEB)", price: "₱2,800" },
-                    { airline: "JetBlue", flightNo: "B6 2103", depart: "18:45", arrive: "20:10", flightDur: "1h 25m", origin: "Manila", destination: "Cebu (CEB)", price: "₱2,600" },
-
+                    
                     // Davao (DVO)
                     { airline: "JetBlue", flightNo: "B6 2201", depart: "05:30", arrive: "07:30", flightDur: "2h", origin: "Manila", destination: "Davao (DVO)", price: "₱3,200" },
                     { airline: "JetBlue", flightNo: "B6 2202", depart: "13:20", arrive: "15:20", flightDur: "2h", origin: "Manila", destination: "Davao (DVO)", price: "₱3,400" },
-                    { airline: "JetBlue", flightNo: "B6 2203", depart: "20:10", arrive: "22:10", flightDur: "2h", origin: "Manila", destination: "Davao (DVO)", price: "₱3,100" },
-
+                    
                     // Iloilo (ILO)
                     { airline: "JetBlue", flightNo: "B6 2301", depart: "07:10", arrive: "08:25", flightDur: "1h 15m", origin: "Manila", destination: "Iloilo (ILO)", price: "₱2,000" },
                     { airline: "JetBlue", flightNo: "B6 2302", depart: "14:00", arrive: "15:15", flightDur: "1h 15m", origin: "Manila", destination: "Iloilo (ILO)", price: "₱2,200" },
-                    { airline: "JetBlue", flightNo: "B6 2303", depart: "19:30", arrive: "20:45", flightDur: "1h 15m", origin: "Manila", destination: "Iloilo (ILO)", price: "₱2,100" }
+                    
+                    // Manila (MNL)
+                    { airline: "JetBlue", flightNo: "B6 4101", depart: "23:00", arrive: "05:30 (+2)", flightDur: "16h 30m", origin: "New York (JFK)", destination: "Manila", price: "₱38,500" },
+                    { airline: "JetBlue", flightNo: "B6 4201", depart: "18:10", arrive: "21:45", flightDur: "4h 35m", origin: "Seoul (ICN)", destination: "Manila", price: "₱12,200" },
+                    { airline: "JetBlue", flightNo: "B6 4301", depart: "21:15", arrive: "18:30 (+1)", flightDur: "13h 15m", origin: "London (LHR)", destination: "Manila", price: "₱42,000" },
+                    { airline: "JetBlue", flightNo: "B6 4401", depart: "20:05", arrive: "17:50 (+1)", flightDur: "13h 45m", origin: "Paris (CDG)", destination: "Manila", price: "₱40,800" },
+                    { airline: "JetBlue", flightNo: "B6 4501", depart: "22:40", arrive: "06:10 (+2)", flightDur: "15h 30m", origin: "Chicago (ORD)", destination: "Manila", price: "₱37,900" },
+                    { airline: "JetBlue", flightNo: "B6 4601", depart: "22:00", arrive: "02:30 (+1)", flightDur: "4h 30m", origin: "Tokyo (NRT)", destination: "Manila", price: "₱15,800" },
+                    { airline: "JetBlue", flightNo: "B6 3101", depart: "14:45", arrive: "16:10", flightDur: "1h 25m", origin: "Cebu (CEB)", destination: "Manila", price: "₱2,700" },
+                    { airline: "JetBlue", flightNo: "B6 3201", depart: "12:15", arrive: "14:15", flightDur: "2h 00m", origin: "Davao (DVO)", destination: "Manila", price: "₱3,500" },
+                    { airline: "JetBlue", flightNo: "B6 3301", depart: "08:00", arrive: "09:15", flightDur: "1h 15m", origin: "Iloilo (ILO)", destination: "Manila", price: "₱2,200" }
                 ];
 
                 // Swap Button 
@@ -265,6 +268,7 @@
                             f.destination.toLowerCase().includes(destination)
                         );
 
+                        $('#resultsText').show();
                         // Conditions
                         if (filteredFlights.length === 0) {     // No flights found
                             $('#noResults').show();
@@ -295,6 +299,7 @@
 
                 // Hide search container on form container mouse enter
                 $('#formContainer').on('mouseenter', function() {
+                    $('#resultsText').fadeOut(1000);
                     $('#searchCont').fadeOut(1000);
                     $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
                 });

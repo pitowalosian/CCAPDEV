@@ -124,38 +124,39 @@
                     </div>
                 </fieldset>
 
-        <!--seat map selection-->
-        <div class="row justify-content-center" id="seatSelection">
-            <legend class="h5 text-left pt-5 pb-3">Seat Selection</legend>
-            <p class="text-center text-primary-emphasis lead fw-medium" id="firstClass">First Class</p>
-            <div class="container-flex justify-content-center px-5 mx-5">
-                <div class="row" id="firstSeatMap">
-                    <!--Content handled by JQuery-->
-                </div>
-            </div>
-            <p class="text-center text-info-emphasis lead fw-medium" id="businessClass">Business Class</p>
-            <div class="container-flex justify-content-center px-5 mx-5">
-                <div class="row" id="businessSeatMap">
-                    <!--Content handled by JQuery-->
-                </div>
-            </div>
-            <p class="text-center text-success-emphasis lead fw-medium" id="epClass">Premium Economy Class</p>
-            <div class="container-flex justify-content-center px-5 mx-5">
-                <div class="row" id="epSeatMap">
-                    <!--Content handled by JQuery-->
-                </div>
-            </div>
-            <p class="text-center text-warning-emphasis lead fw-medium" id="economyClass">Economy Class</p>
-            <div class="container-flex justify-content-center px-5 mx-5">
-                <div class="row" id="economySeatMap">
-                    <!--Content handled by JQuery-->
-                </div>
-            </div>
+                <!--seat map selection-->
+                <div class="row justify-content-center" id="seatSelection">
+                    <legend class="h5 text-left pt-5 pb-3">Seat Selection</legend>
+                    <p class="text-center text-primary-emphasis lead fw-medium" id="firstClass">First Class</p>
+                    <div class="container-flex justify-content-center px-5 mx-5">
+                        <div class="row" id="firstSeatMap">
+                            <!--Content handled by JQuery-->
+                        </div>
+                    </div>
+                    <p class="text-center text-info-emphasis lead fw-medium" id="businessClass">Business Class</p>
+                    <div class="container-flex justify-content-center px-5 mx-5">
+                        <div class="row" id="businessSeatMap">
+                            <!--Content handled by JQuery-->
+                        </div>
+                    </div>
+                    <p class="text-center text-success-emphasis lead fw-medium" id="epClass">Premium Economy Class</p>
+                    <div class="container-flex justify-content-center px-5 mx-5">
+                        <div class="row" id="epSeatMap">
+                            <!--Content handled by JQuery-->
+                        </div>
+                    </div>
+                    <p class="text-center text-warning-emphasis lead fw-medium" id="economyClass">Economy Class</p>
+                    <div class="container-flex justify-content-center px-5 mx-5">
+                        <div class="row" id="economySeatMap">
+                            <!--Content handled by JQuery-->
+                        </div>
+                    </div>
 
-                <!--submit button-->
-                <div class="text-end pt-3">
-                    <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
-                </div>
+                    <!--submit button-->
+                    <div class="text-end pt-3">
+                        <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
+                    </div>
+                </div>  
             </form>
         </div>
     </div>
@@ -207,7 +208,7 @@
 
                 <div class="modal-body">
                     <div class="row text-left p-2">
-                        <p id="summaryText" style="line-height:2;"></p>
+                        <p id="summaryText"></p>
                         <h5 class="text-primary">Total: <span id="totalCost"></span></h5>
 
                     </div>
@@ -320,12 +321,12 @@
 
                         $('#businessSeatMap').append(row);
                     }
+                    
+                     $('.bi-square-fill').click(function(e) {
+                        e.preventDefault();
+                        $(this).toggleClass('text-danger');
+                    });
                 }
-                
-                $('#seatSelection .bi').click(function(e) {
-                    e.preventDefault();
-                    $(this).toggleClass('text-danger');
-                });
 
                 $('#toggleDark').click(function() {
                     var currentTheme = $('html').attr('data-bs-theme');
