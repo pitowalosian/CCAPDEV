@@ -269,7 +269,7 @@
                 let children = 0;
                 let infants = 0;
             
-                let passCount = 0;
+                let passCount = adults + children + infants;
                 let tripTypeCost = 0;
                 let travelClassCost = 0;
 
@@ -293,7 +293,7 @@
                         for (let j = 0; j < 1; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0 disabled">
-                                                <i class="seat bi bi-square-fill" data-row="${i+1}" data-col="${j+1}" data-class="F"></i>
+                                                <i class="seat bi bi-square-fill" data-row="${i+1}" data-col="${j+1}" data-class="FA"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -306,7 +306,7 @@
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="F"></i>
+                                                <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="FB"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -319,7 +319,7 @@
                         for (let j = 0; j < 1; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="F"></i>
+                                                <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="FC"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -336,7 +336,7 @@
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="B"></i>
+                                                <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BA"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -349,7 +349,7 @@
                         for (let j = 0; j < 3; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="B"></i>
+                                                <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BB"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -362,7 +362,7 @@
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="B"></i>
+                                                <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BC"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -379,7 +379,7 @@
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="P"></i>
+                                                <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PA"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -392,7 +392,7 @@
                         for (let j = 0; j < 4; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="P"></i>
+                                                <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PB"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -405,7 +405,7 @@
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="P"></i>
+                                                <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PC"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -422,7 +422,7 @@
                         for (let j = 0; j < 3; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="E"></i>
+                                                <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EA"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -435,7 +435,7 @@
                         for (let j = 0; j < 3; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="E"></i>
+                                                <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EB"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -448,7 +448,7 @@
                         for (let j = 0; j < 3; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="E"></i>
+                                                <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EC"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -610,6 +610,8 @@
                     let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
                     let mealCost = parseInt($("#meal option:selected").val());
                     let baggageCost = extraBaggage ? (baggageWeight / 5) * 250: 0;
+                    tripTypeCost = tripTypeCost * passCount;
+                    travelClassCost = travelClassCost * passCount;
 
                     if (extraBaggage) {
                         if (baggageWeight > 0) {
@@ -636,12 +638,18 @@
                         errorsArray.push("Please enter a valid passport number.");
                     }
                     
+                    if (selectedSeats.length != passCount) {
+                        errorsArray.push(`You can only select ${passCount} seat${passCount > 1 ? 's' : ''}.`);
+                    }
+
                     if (errorsArray.length > 0) {
                         $('#error').html(`<div class="error">${errorsArray.join('<br>')}</div>`);
                         return;
                     } else {
                         $('#error').text('');
                     }
+
+                    
 
                     //summary string
                     let summary =`<b>Passenger Name:</b> ${passName} <br>
@@ -672,7 +680,7 @@
 
                     <br>`;
 
-                    let total = ((tripTypeCost + travelClassCost) * passCount) + passCost + mealCost + baggageCost;
+                    let total = tripTypeCost + travelClassCost + passCost + mealCost + baggageCost;
                     let totalString = total.toLocaleString();
 
                     $('#summaryText').html(summary);
