@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="bg-secondary-subtle text-bg-dark">
+  <div id="navbar-container" class="container-fluid fixed-top"></div>
+
+  <div class="container text-center pt-5 mt-5">
+    <h1 class="display-5 text-primary mt-5">Flight Management</h1>
+    <p class="lead">Add, update, or remove flight information</p>
+  </div>
+
+  <div class="container mt-4 mb-5">
+    <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
+      <form class="text-start">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Flight Number</label>
+            <input type="text" class="form-control" placeholder="e.g. PR 102">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Airline</label>
+            <input type="text" class="form-control" placeholder="e.g. Philippine Airlines">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Origin</label>
+            <input type="text" class="form-control" placeholder="e.g. Manila (MNL)">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Destination</label>
+            <input type="text" class="form-control" placeholder="e.g. Cebu (CEB)">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Departure Time</label>
+            <input type="datetime-local" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Arrival Time</label>
+            <input type="datetime-local" class="form-control">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Aircraft Type</label>
+            <input type="text" class="form-control" placeholder="e.g. Airbus A320">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Seat Capacity</label>
+            <input type="number" class="form-control" placeholder="e.g. 180">
+          </div>
+        </div>
+
+        <div class="text-end mt-4">
+          <button type="button" class="btn btn-outline-light me-2"><i class="bi bi-plus-circle"></i> Add Flight</button>
+          <button type="button" class="btn btn-primary me-2"><i class="bi bi-pencil-square"></i> Update Flight</button>
+          <button type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Delete Flight</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="container mt-5">
+    <div class="table-responsive bg-dark-subtle border border-primary rounded-3 shadow p-3">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary text-dark">
+          <tr>
+            <th>Flight No.</th>
+            <th>Airline</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Aircraft</th>
+            <th>Seats</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PR 102</td>
+            <td>Philippine Airlines</td>
+            <td>Manila (MNL)</td>
+            <td>Cebu (CEB)</td>
+            <td>2025-12-10 08:00</td>
+            <td>2025-12-10 09:15</td>
+            <td>Airbus A320</td>
+            <td>180</td>
+          </tr>
+          <tr>
+            <td>5J 971</td>
+            <td>Cebu Pacific</td>
+            <td>Davao (DVO)</td>
+            <td>Manila (MNL)</td>
+            <td>2025-12-14 15:30</td>
+            <td>2025-12-14 17:45</td>
+            <td>Airbus A321</td>
+            <td>200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center pb-3 text-secondary">
+    <small>© 2025 jetBlue Airlines — All Rights Reserved</small>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(function() {
+      $("#navbar-container").load("navbar.html", function() {
+        $('#toggleDark').click(function() {
+          var currentTheme = $('html').attr('data-bs-theme');
+          var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          $('html').attr('data-bs-theme', newTheme);
+          $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
+          $('body').toggleClass('text-bg-dark text-bg-light');
+          $('body').toggleClass('bg-secondary-subtle bg-light');
+          $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
