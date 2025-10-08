@@ -123,18 +123,16 @@
                         </div>
                     </div>
                 </fieldset>
-            </form>
-        </div>
-    </div>
 
-    <!--seat selection-->
-    <div class="container mt-4 mb-5 position pt-2 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p2">
-        <div class="container mt-4 mb-4 justify-content-center">
-            <form id="seatSelection">
-
-                <div class="col-md-6">
-                    <legend class="h5 text-left pb-2">Seat Selection</legend>
+        <!--seat map selection-->
+        <div class="row justify-content-center">
+            <legend class="h5 text-left pt-5 pb-3">Seat Selection</legend>
+            <p class="text-center text-primary-emphasis lead">First Class</p>
+            <div class="container-flex w-50 justify-content-center px-5 mx-5">
+                <div class="row" id="seatMap">
+                    <!--Content handled by JQuery-->
                 </div>
+            </div>
 
                 <!--submit button-->
                 <div class="text-end pt-3">
@@ -223,6 +221,42 @@
                 const childCost = 2000;
                 const infantCost = 1000;
 
+                seatMap();
+                function seatMap() {
+                    // First Class
+                    for (let i = 0; i < 4; i ++) {
+                        let row = $('<div class="row justify-content-center mb-1"></div>');
+
+                        // left pair
+                        for (let j = 0; j < 2; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn">
+                                                <i class="bi bi-square-fill text-primary opacity-50"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-1"></div>`);
+                        
+                        // right pair
+                        for (let j = 0; j < 2; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn">
+                                                <i class="bi bi-square-fill text-primary opacity-50"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        $('#seatMap').append(row);
+                    }
+                }
+                
+                $('#seatMap i').click(function() {
+                    $(this).toggleClass('text-danger');
+                });
 
                 $('#toggleDark').click(function() {
                     var currentTheme = $('html').attr('data-bs-theme');
