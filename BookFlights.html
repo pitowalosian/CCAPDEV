@@ -64,10 +64,10 @@
                                 <!--travel classes-->
                                 <button type="button" class="btn btn-primary me-2 dropdown-toggle" id="button3" data-bs-toggle="dropdown">Economy </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" value ="18000" href="#" selected>Economy </a></li>
-                                    <li><a class="dropdown-item" value ="30000" href="#">Premium Economy </a></li>
-                                    <li><a class="dropdown-item" value ="60000" href="#">Business </a></li>
-                                    <li><a class="dropdown-item" value ="100000" href="#">First Class </a></li>
+                                    <li><a class="dropdown-item" value ="10000" href="#" selected>Economy </a></li>
+                                    <li><a class="dropdown-item" value ="20000" href="#">Premium Economy </a></li>
+                                    <li><a class="dropdown-item" value ="30000" href="#">Business </a></li>
+                                    <li><a class="dropdown-item" value ="60000" href="#">First Class </a></li>
                                 </ul>
                             </div>
                         </div>
@@ -130,25 +130,25 @@
                     <p class="text-center text-primary-emphasis lead fw-medium" id="firstClass">First Class</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
                         <div class="row" id="firstSeatMap">
-                            <!--Content handled by JQuery-->
+                            <!--content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-info-emphasis lead fw-medium" id="businessClass">Business</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
                         <div class="flex-row" id="businessSeatMap">
-                            <!--Content handled by JQuery-->
+                            <!--content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-warning-emphasis lead fw-medium" id="epClass">Premium Economy</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
                         <div class="flex-row" id="epSeatMap">
-                            <!--Content handled by JQuery-->
+                            <!--content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-success-emphasis lead fw-medium" id="economyClass">Economy</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
                         <div class="flex-row" id="economySeatMap">
-                            <!--Content handled by JQuery-->
+                            <!--content handled by JQuery-->
                         </div>
                     </div>
 
@@ -189,6 +189,8 @@
                     <div class="text-end pt-3">
                         <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
                     </div>
+
+                    <p id="error" class="text-danger p-2 justify-content-center"></p>
                 </div>  
             </form>
         </div>
@@ -242,7 +244,7 @@
                 <div class="modal-body">
                     <div class="row text-left p-2">
                         <p id="summaryText"></p>
-                        <h5 class="text-primary">Total: <span id="totalCost"></span></h5>
+                        <h5 class="text-primary">Total: ₱<span id="totalCost"></span></h5>
 
                     </div>
                 </div>
@@ -266,7 +268,7 @@
                 let adults = 1;
                 let children = 0;
                 let infants = 0;
-                // ^ will change this logic later
+            
                 let passCount = 0;
                 let tripTypeCost = 0;
                 let travelClassCost = 0;
@@ -575,6 +577,10 @@
                 });
 
                 $('#submitForm').click(function(){
+
+                    $('#error').empty();
+                    const errorsArray = [];
+
                     let passName = $("#fullName").val().trim();
                     let email = $("#emailAdd").val().trim();
                     let phoneNum = $("#phoneNum").val().trim();
@@ -601,6 +607,32 @@
                         availed = "No";
                     }
 
+                    //validation rules
+                    if (!/^[a-zA-Z ]{2,}$/.test(passName)) {
+                        errorsArray.push("Name must include at least two letters and contain only letters.");
+                    } 
+                    
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        errorsArray.push("Please enter a valid email address.");
+                    } 
+                    
+                    if (!/^\d{11}$/.test(phoneNum)){
+                        errorsArray.push("Please enter a valid phone number.");
+                    }
+                    
+                    if (!/^P\d{7}$/.test(passNum)) {
+                        errorsArray.push("Please enter a valid passport number.");
+                    }
+                    
+                    if (errorsArray.length > 0) {
+                        $('#error').html(`<div class="error">${errorsArray.join('<br>')}</div>`);
+                        return;
+                    } else {
+                        $('#error').text('');
+                    }
+                    
+
+
                     let summary =`<b>Passenger Name:</b> ${passName} <br>
                     <b>Email: </b> ${email} <br>
                     <b>Phone Number: </b> ${phoneNum} <br>
@@ -612,6 +644,7 @@
                     ${children} child${children != 1 ? 'ren':''}, 
                     ${infants} infant${infants != 1 ? 's':''}) <br>
                     <b>Travel Class: </b> ${travelClass} <br>
+
                     <hr>
 
                     <b>Meal Option: </b> ${mealOption} <br>
@@ -629,9 +662,10 @@
                     `;
 
                     let total = tripTypeCost + passCost + travelClassCost + mealCost + baggageCost;
+                    let totalString = total.toLocaleString();
 
                     $('#summaryText').html(summary);
-                    $('#totalCost').html(total);
+                    $('#totalCost').html(totalString);
 
                     let summaryModal = new bootstrap.Modal(document.getElementById('summary'));
                     summaryModal.show();
