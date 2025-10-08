@@ -53,7 +53,7 @@
                                 <!--type of flight-->
                                 <button type="button" class="btn btn-primary me-2 dropdown-toggle" id="button1" data-bs-toggle="dropdown">Round-Trip </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" value="3000" href="#">Round-trip </a></li>
+                                    <li><a class="dropdown-item" value="3000" href="#" selected>Round-trip </a></li>
                                     <li><a class="dropdown-item" value="2000" href="#">One-way </a></li>
                                     <li><a class="dropdown-item" value="5000" href="#">Multi-city </a></li>
                                 </ul>
@@ -64,7 +64,7 @@
                                 <!--travel classes-->
                                 <button type="button" class="btn btn-primary me-2 dropdown-toggle" id="button3" data-bs-toggle="dropdown">Economy </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" value ="18000" href="#">Economy </a></li>
+                                    <li><a class="dropdown-item" value ="18000" href="#" selected>Economy </a></li>
                                     <li><a class="dropdown-item" value ="30000" href="#">Premium Economy </a></li>
                                     <li><a class="dropdown-item" value ="60000" href="#">Business </a></li>
                                     <li><a class="dropdown-item" value ="100000" href="#">First Class </a></li>
@@ -104,7 +104,7 @@
                         <div class="col-md-6 mt-2">
                             <label for="meal" class="form-label">Meal Options</label>
                             <select class="form-select" id="meal">
-                                <option value="0" selected>Standard</option>
+                                <option value="0" selected>Standard (included)</option>
                                 <option value="200">Vegetarian</option>
                                 <option value="250">Vegan</option>
                                 <option value="300">Halal</option>
@@ -214,7 +214,10 @@
                 let adults = 1;
                 let children = 0;
                 let infants = 0;
+                // ^ will change this logic later
                 let passCount = 0;
+                let tripTypeCost = 0;
+                let travelClassCost = 0;
 
                 //cost equivalent of passengers depending on type
                 const adultCost = 4000;
@@ -272,12 +275,15 @@
 
                 $('.dropdown-item').click(function(){
                     let choice = $(this).text().trim(); 
+                    let cost = parseInt($(this).attr('value')) || 0; //get cost
                     
                     //find the button with this choice
                     if (['Round-trip', 'One-way', 'Multi-city'].includes(choice)) {
                         buttonClicked = '#button1';
+                        tripTypeCost = cost;
                     } else {
                         buttonClicked = '#button3'
+                        travelClassCost = cost;
                     }
 
                     $(buttonClicked).text(choice); //replace button text
@@ -337,10 +343,8 @@
                     let availed = '';
 
                     //costs
-                    let tripTypeCost = 0;//implement
                     let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
                     let mealCost = parseInt($("#meal option:selected").val());
-                    let travelClassCost = 0; //implement
                     let baggageCost = extraBaggage ? (baggageWeight / 5) * 250: 0;
 
                     if (extraBaggage) {
