@@ -129,25 +129,25 @@
                     <legend class="h5 text-left pt-5 pb-3">Seat Selection</legend>
                     <p class="text-center text-primary-emphasis lead fw-medium" id="firstClass">First Class</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
-                        <div class="row" id="firstSeatMap">
+                        <div id="firstSeatMap">
                             <!--content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-info-emphasis lead fw-medium" id="businessClass">Business</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
-                        <div class="flex-row" id="businessSeatMap">
+                        <div id="businessSeatMap">
                             <!--content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-warning-emphasis lead fw-medium" id="epClass">Premium Economy</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
-                        <div class="flex-row" id="epSeatMap">
+                        <div id="epSeatMap">
                             <!--content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-success-emphasis lead fw-medium" id="economyClass">Economy</p>
                     <div class="d-flex justify-content-center flex-wrap px-5 mx-5">
-                        <div class="flex-row" id="economySeatMap">
+                        <div id="economySeatMap">
                             <!--content handled by JQuery-->
                         </div>
                     </div>
@@ -285,7 +285,7 @@
                     
                     // First Class
                     for (let i = 0; i < 2; i++) {
-                        let row = $('<div class="row justify-content-center m-1"></div>');
+                        let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
 
 
                         // leftmost seats
@@ -329,7 +329,7 @@
 
                     // Business
                     for (let i = 0; i < 5; i++) {
-                        let row = $('<div class="row justify-content-center mb-1"></div>');
+                        let row = $('<div class="d-flex justify-content-center g-0 mb-1"></div>');
 
                         // left pair
                         for (let j = 0; j < 2; j++) {
@@ -342,7 +342,7 @@
                         }
 
                         // aisle 
-                        row.append(`<div class="col-auto"></div>`);
+                        row.append(`<div class="col-1"></div>`);
 
                         // middle trio
                         for (let j = 0; j < 3; j++) {
@@ -355,7 +355,7 @@
                         }
 
                         // aisle 
-                        row.append(`<div class="col-auto"></div>`);
+                        row.append(`<div class="col-1"></div>`);
                         
                         // right pair
                         for (let j = 0; j < 2; j++) {
@@ -372,7 +372,7 @@
 
                     // Premium Economy
                     for (let i = 0; i < 6; i++) {
-                        let row = $('<div class="row justify-content-center m-1"></div>');
+                        let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
 
                         // left pair
                         for (let j = 0; j < 2; j++) {
@@ -385,7 +385,7 @@
                         }
 
                         // aisle 
-                        row.append(`<div class="col-auto"></div>`);
+                        row.append(`<div class="col-1"></div>`);
                         
                         // middle seats
                         for (let j = 0; j < 4; j++) {
@@ -398,7 +398,7 @@
                         }
 
                         // aisle 
-                        row.append(`<div class="col-auto"></div>`);
+                        row.append(`<div class="col-1"></div>`);
                         
                         // right pair
                         for (let j = 0; j < 2; j++) {
@@ -415,7 +415,7 @@
 
                     // Economy
                     for (let i = 0; i < 10; i ++) {
-                        let row = $('<div class="row justify-content-center mb-1"></div>');
+                        let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
 
                         // left trio
                         for (let j = 0; j < 3; j++) {
@@ -428,7 +428,7 @@
                         }
 
                         // aisle 
-                        row.append(`<div class="col-auto"></div>`);
+                        row.append(`<div class="col-1"></div>`);
 
                         // middle trio
                         for (let j = 0; j < 3; j++) {
@@ -441,7 +441,7 @@
                         }
 
                         // aisle 
-                        row.append(`<div class="col-auto"></div>`);
+                        row.append(`<div class="col-1"></div>`);
                         
                         // right trio
                         for (let j = 0; j < 3; j++) {
