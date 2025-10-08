@@ -128,27 +128,60 @@
                 <div class="row justify-content-center" id="seatSelection">
                     <legend class="h5 text-left pt-5 pb-3">Seat Selection</legend>
                     <p class="text-center text-primary-emphasis lead fw-medium" id="firstClass">First Class</p>
-                    <div class="container-flex justify-content-center px-5 mx-5">
+                    <div class="container d-flex justify-content-center px-5 mx-5">
                         <div class="row" id="firstSeatMap">
                             <!--Content handled by JQuery-->
                         </div>
                     </div>
                     <p class="text-center text-info-emphasis lead fw-medium" id="businessClass">Business Class</p>
-                    <div class="container-flex justify-content-center px-5 mx-5">
+                    <div class="container d-flex justify-content-center px-5 mx-5">
                         <div class="row" id="businessSeatMap">
                             <!--Content handled by JQuery-->
                         </div>
                     </div>
-                    <p class="text-center text-success-emphasis lead fw-medium" id="epClass">Premium Economy Class</p>
-                    <div class="container-flex justify-content-center px-5 mx-5">
+                    <p class="text-center text-warning-emphasis lead fw-medium" id="epClass">Premium Economy Class</p>
+                    <div class="container d-flex justify-content-center px-5 mx-5">
                         <div class="row" id="epSeatMap">
                             <!--Content handled by JQuery-->
                         </div>
                     </div>
-                    <p class="text-center text-warning-emphasis lead fw-medium" id="economyClass">Economy Class</p>
-                    <div class="container-flex justify-content-center px-5 mx-5">
+                    <p class="text-center text-success-emphasis lead fw-medium" id="economyClass">Economy Class</p>
+                    <div class="container d-flex justify-content-center px-5 mx-5">
                         <div class="row" id="economySeatMap">
                             <!--Content handled by JQuery-->
+                        </div>
+                    </div>
+
+                    <div class="container d-flex justify-content-center px-5 mx-5">
+                        <div class="row">
+                            <div class="row justify-content-center m-1">
+                                <div class="col-auto">
+                                    <button class="btn border-0 disabled">
+                                        <i class="bi bi-square-fill"></i>
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn border-0">
+                                        <i class="bi bi-square-fill text-danger"></i>
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn border-0">
+                                        <i class="bi bi-square-fill available-color"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center m-1">
+                                <div class="col-auto">
+                                    <span>Reserved</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="text-danger">Selected</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="available-color">Available</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -249,7 +282,7 @@
                     $('#seatSelection').hide();
                     
                     // First Class
-                    for (let i = 0; i < 2; i ++) {
+                    for (let i = 0; i < 2; i++) {
                         let row = $('<div class="row justify-content-center m-1"></div>');
 
 
@@ -257,7 +290,7 @@
                         for (let j = 0; j < 1; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0 disabled">
-                                                <i class="bi bi-square-fill"></i>
+                                                <i class="seat bi bi-square-fill"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -267,10 +300,10 @@
                         row.append(`<div class="col-1"></div>`);
                         
                         // middle seats
-                        for (let j = 0; j < 1; j++) {
+                        for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="bi bi-square-fill text-primary"></i>
+                                                <i class="seat bi bi-square-fill text-primary"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -283,7 +316,7 @@
                         for (let j = 0; j < 1; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="bi bi-square-fill text-primary"></i>
+                                                <i class="seat bi bi-square-fill text-primary"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -293,14 +326,27 @@
                     }
 
                     // Business
-                    for (let i = 0; i < 4; i ++) {
+                    for (let i = 0; i < 5; i++) {
                         let row = $('<div class="row justify-content-center mb-1"></div>');
 
                         // left pair
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="bi bi-square-fill text-primary-emphasis"></i>
+                                                <i class="seat bi bi-square-fill text-info opacity-75"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-auto"></div>`);
+
+                        // middle trio
+                        for (let j = 0; j < 3; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-info opacity-75"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -313,7 +359,7 @@
                         for (let j = 0; j < 2; j++) {
                             let seat = `<div class="col-auto">
                                             <button class="btn border-0">
-                                                <i class="bi bi-square-fill text-primary-emphasis"></i>
+                                                <i class="seat bi bi-square-fill text-info opacity-75"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -321,11 +367,105 @@
 
                         $('#businessSeatMap').append(row);
                     }
+
+                    // Premium Economy
+                    for (let i = 0; i < 6; i++) {
+                        let row = $('<div class="row justify-content-center m-1"></div>');
+
+                        // left pair
+                        for (let j = 0; j < 2; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-warning"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-auto"></div>`);
+                        
+                        // middle seats
+                        for (let j = 0; j < 4; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-warning"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-auto"></div>`);
+                        
+                        // right pair
+                        for (let j = 0; j < 2; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-warning"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        $('#epSeatMap').append(row);
+                    }
+
+                    // Economy
+                    for (let i = 0; i < 10; i ++) {
+                        let row = $('<div class="row justify-content-center mb-1"></div>');
+
+                        // left trio
+                        for (let j = 0; j < 3; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-success"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-auto"></div>`);
+
+                        // middle trio
+                        for (let j = 0; j < 3; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-success"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-auto"></div>`);
+                        
+                        // right trio
+                        for (let j = 0; j < 3; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="seat bi bi-square-fill text-success"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        $('#economySeatMap').append(row);
+                    }
+
+                    // Seat on hover
+                    $('.seat').hover(function(e) {
+                        e.preventDefault();
+                        $(this).toggleClass('opacity-75 opacity-50');
+                    });
                     
-                     $('.bi-square-fill').click(function(e) {
+                    // Seat on click
+                    $('.seat').click(function(e) {
                         e.preventDefault();
                         $(this).toggleClass('text-danger');
                     });
+                    
                 }
 
                 $('#toggleDark').click(function() {
@@ -368,18 +508,26 @@
                         
                         switch (choice) {
                             case "First Class": 
+                                $('.available-color').addClass('text-primary');
+                                $('.available-color').removeClass('text-info opacity-75 text-warning text-success');
                                 $('#firstClass').show();
                                 $('#firstSeatMap').show();
                                 break;
                             case "Business":
+                                $('.available-color').addClass('text-info opacity-75');
+                                $('.available-color').removeClass('text-primary text-warning text-success');
                                 $('#businessClass').show();
                                 $('#businessSeatMap').show();
                                 break;
-                            case "Economy Premium":
+                            case "Premium Economy":
+                                $('.available-color').addClass('text-warning');
+                                $('.available-color').removeClass('text-info opacity-75 text-primary text-success');
                                 $('#epClass').show();
                                 $('#epSeatMap').show();
                                 break;
                             case "Economy":
+                                $('.available-color').addClass('text-success');
+                                $('.available-color').removeClass('text-info opacity-75 text-primary text-warning');
                                 $('#economyClass').show();
                                 $('#economySeatMap').show();
                                 break;
