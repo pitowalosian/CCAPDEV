@@ -32,7 +32,7 @@
     </div>
 
     <div class="container text-center pt-5 mt-5">
-        <h1 class="display-5 text-center text-primary mt-5">Book Flights</h1>
+        <h1 class="display-5 text-center text-primary">Book Flights</h1>
         <p class="lead">Answer the reservation form to book your flight</p>
     </div>
 
@@ -125,11 +125,29 @@
                 </fieldset>
 
         <!--seat map selection-->
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" id="seatSelection">
             <legend class="h5 text-left pt-5 pb-3">Seat Selection</legend>
-            <p class="text-center text-primary-emphasis lead">First Class</p>
-            <div class="container-flex w-50 justify-content-center px-5 mx-5">
-                <div class="row" id="seatMap">
+            <p class="text-center text-primary-emphasis lead fw-medium" id="firstClass">First Class</p>
+            <div class="container-flex justify-content-center px-5 mx-5">
+                <div class="row" id="firstSeatMap">
+                    <!--Content handled by JQuery-->
+                </div>
+            </div>
+            <p class="text-center text-info-emphasis lead fw-medium" id="businessClass">Business Class</p>
+            <div class="container-flex justify-content-center px-5 mx-5">
+                <div class="row" id="businessSeatMap">
+                    <!--Content handled by JQuery-->
+                </div>
+            </div>
+            <p class="text-center text-success-emphasis lead fw-medium" id="epClass">Premium Economy Class</p>
+            <div class="container-flex justify-content-center px-5 mx-5">
+                <div class="row" id="epSeatMap">
+                    <!--Content handled by JQuery-->
+                </div>
+            </div>
+            <p class="text-center text-warning-emphasis lead fw-medium" id="economyClass">Economy Class</p>
+            <div class="container-flex justify-content-center px-5 mx-5">
+                <div class="row" id="economySeatMap">
                     <!--Content handled by JQuery-->
                 </div>
             </div>
@@ -225,16 +243,20 @@
                 const infantCost = 1000;
 
                 seatMap();
-                function seatMap() {
-                    // First Class
-                    for (let i = 0; i < 4; i ++) {
-                        let row = $('<div class="row justify-content-center mb-1"></div>');
 
-                        // left pair
-                        for (let j = 0; j < 2; j++) {
+                function seatMap() {
+                    $('#seatSelection').hide();
+                    
+                    // First Class
+                    for (let i = 0; i < 2; i ++) {
+                        let row = $('<div class="row justify-content-center m-1"></div>');
+
+
+                        // leftmost seats
+                        for (let j = 0; j < 1; j++) {
                             let seat = `<div class="col-auto">
-                                            <button class="btn">
-                                                <i class="bi bi-square-fill text-primary opacity-50"></i>
+                                            <button class="btn border-0 disabled">
+                                                <i class="bi bi-square-fill"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
@@ -243,21 +265,65 @@
                         // aisle 
                         row.append(`<div class="col-1"></div>`);
                         
-                        // right pair
-                        for (let j = 0; j < 2; j++) {
+                        // middle seats
+                        for (let j = 0; j < 1; j++) {
                             let seat = `<div class="col-auto">
-                                            <button class="btn">
-                                                <i class="bi bi-square-fill text-primary opacity-50"></i>
+                                            <button class="btn border-0">
+                                                <i class="bi bi-square-fill text-primary"></i>
                                             </button>
                                         </div>`;
                             row.append(seat);
                         }
 
-                        $('#seatMap').append(row);
+                        // aisle 
+                        row.append(`<div class="col-1"></div>`);
+                        
+                        // rightmost seats
+                        for (let j = 0; j < 1; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="bi bi-square-fill text-primary"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        $('#firstSeatMap').append(row);
+                    }
+
+                    // Business
+                    for (let i = 0; i < 4; i ++) {
+                        let row = $('<div class="row justify-content-center mb-1"></div>');
+
+                        // left pair
+                        for (let j = 0; j < 2; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="bi bi-square-fill text-primary-emphasis"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        // aisle 
+                        row.append(`<div class="col-auto"></div>`);
+                        
+                        // right pair
+                        for (let j = 0; j < 2; j++) {
+                            let seat = `<div class="col-auto">
+                                            <button class="btn border-0">
+                                                <i class="bi bi-square-fill text-primary-emphasis"></i>
+                                            </button>
+                                        </div>`;
+                            row.append(seat);
+                        }
+
+                        $('#businessSeatMap').append(row);
                     }
                 }
                 
-                $('#seatMap i').click(function() {
+                $('#seatSelection .bi').click(function(e) {
+                    e.preventDefault();
                     $(this).toggleClass('text-danger');
                 });
 
@@ -287,6 +353,37 @@
                     }
 
                     $(buttonClicked).text(choice); //replace button text
+                    
+                    if (buttonClicked == '#button3') {
+                        $('#firstClass').hide();
+                        $('#firstSeatMap').hide();
+                        $('#businessClass').hide();
+                        $('#businessSeatMap').hide();
+                        $('#epClass').hide();
+                        $('#epSeatMap').hide();
+                        $('#economyClass').hide();
+                        $('#economySeatMap').hide();
+                        $('#seatSelection').show();
+                        
+                        switch (choice) {
+                            case "First Class": 
+                                $('#firstClass').show();
+                                $('#firstSeatMap').show();
+                                break;
+                            case "Business":
+                                $('#businessClass').show();
+                                $('#businessSeatMap').show();
+                                break;
+                            case "Economy Premium":
+                                $('#epClass').show();
+                                $('#epSeatMap').show();
+                                break;
+                            case "Economy":
+                                $('#economyClass').show();
+                                $('#economySeatMap').show();
+                                break;
+                        }
+                    }
                 });
 
                 $('.passengersCount').click(function(){
