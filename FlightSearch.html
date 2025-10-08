@@ -6,6 +6,7 @@
         <title>Flight Search</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.1/dist/css/bootstrap-datepicker3.min.css">
     </head>
     <body class="bg-secondary-subtle text-bg-dark">
         <!--Navigation Bar-->
@@ -69,7 +70,7 @@
                             </div>
                         </div>
                         <!--Depart Date-->
-                        <div class="col input-group">
+                        <div class="col input-group"> 
                             <span class="input-group-text">Depart:</span>
                             <input type="date" class="form-control" id="depdate">
                         </div>
@@ -139,12 +140,26 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             $(document).ready(function() {
                 $('#searchCont').hide();
                 $('#resultsText').hide();
                 
+                // Set minimum dates
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const minDate = `${year}-${month}-${day}`;
+                $('#depdate').attr('min', minDate);
+                $('#depdate').on('change', function(){
+                    let depdate = $(this).val();
+                    $('#retdate').attr('min', depdate); 
+                })
+               
+
                 const flights = [
                     // Tokyo (NRT)
                     { airline: "JetBlue", flightNo: "B6 1101", depart: "06:45", arrive: "11:30", flightDur: "4h 45m", origin: "Manila", destination: "Tokyo (NRT)", price: "₱12,500" },
@@ -235,8 +250,7 @@
                     // Error strings
                     const fillError = `Please fill in all fields except return date.`;
                     const locError = `Origin and Destination cannot be the same`;
-                    const dateError = `Return date must be after departure date.`;
-
+                    
                     // Check required fields
                     if (!origin || !destination || isNaN(depdate.getTime())) {     
                         event.preventDefault();
@@ -251,13 +265,6 @@
                         let formModal = new bootstrap.Modal(document.getElementById('formModal'));
                         formModal.show();
                     } 
-                    // Check if return date is valid
-                    else if ($('#retdate').val() && retdate <= depdate) {
-                        event.preventDefault();
-                        $('#errorText').html(dateError);
-                        let formModal = new bootstrap.Modal(document.getElementById('formModal'));
-                        formModal.show();
-                    }
                     // Success
                     else {      
                         $("#tableBody").empty();
