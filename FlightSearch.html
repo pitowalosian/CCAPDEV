@@ -12,23 +12,23 @@
         <!--Navigation Bar-->
         <div class="container-fluid fixed-top">
             <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
-                <a class="navbar-brand d-flex" href="#"><img height="40" src="pictures/icon (2).png"/></a>
+                <a class="navbar-brand" href="#"><img height="40" src="pictures/icon (2).png"/></a>
                 <ul class="nav nav-pills nav-fill" id="navtabs">
-                    <li class="nav-item d-flex">
+                    <li class="nav-item">
                        <a class="nav-link active bg-primary" aria-current="page" href="#">Flight Search</a>
                     </li>
-                    <li class="nav-item d-flex">
+                    <li class="nav-item">
                         <a class="nav-link" href="BookFlights.html">Book Flights</a>
                     </li>
-                    <li class="nav-item d-flex">
+                    <li class="nav-item">
                         <a class="nav-link" href="Reservations.html">My Reservations</a>
                     </li>
-                    <li class="nav-item d-flex">
+                    <li class="nav-item">
                         <a class="nav-link" href="Profile.html">Profile</a>
-                    </li>
-                    <li class="nav-item align-items-center d-flex">
+                    </li>  
+                    <li class="nav-item">
                         <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></label>
-                    </li>   
+                    </li> 
                 </ul>
             </div>
         </div>
@@ -77,7 +77,7 @@
                         </div>
                         <!--Destination-->
                         <div class="col-md-auto">
-                            <div class="input-group align-items-center">
+                            <div class="input-group w-auto align-items-center">
                                 <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
                                 <button type="button" class="btn btn-outline-secondary me-2 dropdown-toggle" id="destination" data-bs-toggle="dropdown">Where to? </button>
                                 <ul class="dropdown-menu">
@@ -262,6 +262,8 @@
                     $('#form').toggleClass('bg-dark-subtle bg-primary');
                     $('form').toggleClass('bg-dark-subtle bg-primary');
                     $('#swap').toggleClass('btn-primary btn-outline-light');
+                    $('#origin').toggleClass('btn-outline-secondary btn-light');
+                    $('#destination').toggleClass('btn-outline-secondary btn-light');
                     $('#search').toggleClass('btn-primary btn-outline-light');
                 });
 
