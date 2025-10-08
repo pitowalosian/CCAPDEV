@@ -630,7 +630,6 @@
                     } else {
                         $('#error').text('');
                     }
-                    
 
 
                     let summary =`<b>Passenger Name:</b> ${passName} <br>
@@ -658,10 +657,9 @@
                     <b>Meal Cost: </b> ${mealCost} <br>
                     <b>Baggage Cost: </b> ${baggageCost} <br>
 
-                    <br>
-                    `;
+                    <br>`;
 
-                    let total = tripTypeCost + passCost + travelClassCost + mealCost + baggageCost;
+                    let total = ((tripTypeCost + travelClassCost) * passCount) + passCost + mealCost + baggageCost;
                     let totalString = total.toLocaleString();
 
                     $('#summaryText').html(summary);
