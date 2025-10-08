@@ -33,7 +33,7 @@
 
     <div class="container text-center pt-5 mt-5">
         <h1 class="display-5 text-center text-primary mt-5">Book Flights</h1>
-        <p class="lead">Answer the reservation form below to book your flight</p>
+        <p class="lead">Answer the reservation form to book your flight</p>
     </div>
 
     <!--passenger details-->
@@ -123,6 +123,18 @@
                         </div>
                     </div>
                 </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <!--seat selection-->
+    <div class="container mt-4 mb-5 position pt-2 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p2">
+        <div class="container mt-4 mb-4 justify-content-center">
+            <form id="seatSelection">
+
+                <div class="col-md-6">
+                    <legend class="h5 text-left pb-2">Seat Selection</legend>
+                </div>
 
                 <!--submit button-->
                 <div class="text-end pt-3">
@@ -186,7 +198,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="submitSummary">Proceed to Seat Selection</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitSummary">Proceed to Checkout</button>
                 </div>
             </div>
         </div>
