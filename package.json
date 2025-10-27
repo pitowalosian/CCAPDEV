@@ -1,0 +1,26 @@
+{
+  "name": "ccapdev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pitowalosian/CCAPDEV.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pitowalosian/CCAPDEV/issues"
+  },
+  "homepage": "https://github.com/pitowalosian/CCAPDEV#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-handlebars": "^8.0.3",
+    "mongoose": "^8.19.2"
+  }
+}
