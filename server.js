@@ -57,6 +57,49 @@ app.get('/flights', async (req, res) => {
     }
 });
 
+// Display edit form
+app.get('/flights/edit/:id', async (req, res) => {
+    try {
+        const flight = await Flight.findById(req.params.id).lean();
+        if (flight) {
+            res.render('flights/edit', { title: 'Edit Flight', Flight: flight });
+        } else {
+            res.status(404).send('Flight not found'); 
+        }
+    } catch (err) {
+        res.status(500).send('Error retrieving flight');
+    }
+});
+
+// Handle edit form submission
+app.put('/flights/edit/:id', async (req, res) => {
+    try {
+        const { flightNo,  } = req.body;
+        const flight = await Flight.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (flight) {
+            res.redirect('/flights');
+        } else {
+            res.status(404).send('Flight not found');
+        }
+    } catch (err) {
+        res.status(500).send('Error updating flight');
+    }
+});
+
+// Delete a flight by ID
+app.post('/flights/delete/:id', async (req, res) => {
+    try {
+        const flight = await Flight.findByIdAndDelete(req.params.id);
+        if (flight) {
+            res.redirect('/flights');
+        } else {
+            res.status(404).send('Flight not found');
+        }
+    } catch (err) {
+        res.status(500).send('Error deleting flight');
+    }
+});
+
 
 Handlebars.registerHelper("equals", function(string1 ,string2, options) {
     if (string1 === string2) {
@@ -65,19 +108,6 @@ Handlebars.registerHelper("equals", function(string1 ,string2, options) {
         return options.inverse(this);
     }
 });
-// Show single flight by ID
-// app.get('/flights/:id', async (req, res) => {
-//     try {
-//         const flight = await Flight.findById(req.params.flightNo).lean();
-//         if (flight) {
-//             res.render('flights/detail', { title: 'Flight Details', flight });
-//         } else {
-//             res.status(404).send('Flight not found'); 
-//         }
-//     } catch (err) {
-//         res.status(500).send('Error retrieving flight');
-//     }
-// });
 
 // Start the server
 app.listen(PORT, () => {
