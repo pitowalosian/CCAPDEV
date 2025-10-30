@@ -23,10 +23,11 @@
         $(document).ready(function() {
             const msg = $('.form-msg');
             const title = $('#title');
+            const flightList = $('#flight-list');
             if (msg.length) {
                 title.removeClass('mt-5');
                 setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
-                
+
                 msg.on('closed.bs.alert', function () {
                     title.addClass('mt-5');
                 });

@@ -36,7 +36,7 @@ app.post('/add-flights', async (req, res) => {
     try {
         const newFlight = new Flight(req.body);
         await newFlight.save();
-        res.redirect('/flights?status=success'); // redirect with success flag
+        res.redirect('/flights?status=added'); // redirect with success flag
     } catch (error) {
         console.error(error);
         res.redirect('/flights?status=error'); // redirect with error flag
@@ -60,8 +60,8 @@ app.get('/flights/edit/:id', async (req, res) => {
     try {
         const flight = await Flight.findById(req.params.id).lean();
         if (flight) {
-            flight.departureTimeFormatted = flight.departureTime.toISOString().slice(0,16);
-            flight.arrivalTimeFormatted = flight.arrivalTime.toISOString().slice(0,16);
+            flight.departureTimeFormatted = formatDateTime(flight.departureTime);
+            flight.arrivalTimeFormatted = formatDateTime(flight.arrivalTime);
             res.render('flights/edit', { title: 'Edit Flight', flight: flight });
         } else {
             res.status(404).send('Flight not found'); 
@@ -99,6 +99,18 @@ Handlebars.registerHelper("equals", function(string1 ,string2, options) {
         return options.inverse(this);
     }
 });
+
+// Helper function to format date to 'YYYY-MM-DDTHH:MM' for datetime-local input
+function formatDateTime(date) {
+    const dt = new Date(date);
+    const year = dt.getFullYear();
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const day = String(dt.getDate()).padStart(2, '0');
+    const hours = String(dt.getHours()).padStart(2, '0');
+    const minutes = String(dt.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 
 // Start the server
 app.listen(PORT, () => {

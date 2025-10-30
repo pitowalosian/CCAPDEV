@@ -1,7 +1,7 @@
 {{!-- Page header --}}
 <div class="container text-center pt-3 mt-5">
     {{!-- Form Message --}}
-    {{#equals form.submit "success"}}
+    {{#equals form.submit "added"}}
         <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
             <i class="bi bi-check-circle"></i> Flight added successfully!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -88,7 +88,7 @@
 </div>
 
 {{!-- Flight List --}}
-<div class="container-fluid mt-3">
+<div id="flightList" class="container-fluid mt-3">
     <h2 class="text-primary text-center display-6 mb-3">All Flights</h2>
     {{#if flights.length}}
     <div class="table-responsive bg-dark-subtle border border-primary rounded-4 shadow-lg p-4">
