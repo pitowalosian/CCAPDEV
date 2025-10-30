@@ -1,23 +1,34 @@
-{{!-- Form Message --}}
-<div class="container mt-4">
-  {{#equals form.submit "success"}}
-    <div id="form-msg" class="alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
-      <i class="bi bi-check-circle"></i> Flight added successfully!
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  {{else}}
-    {{#equals form.submit "error"}}
-      <div id="form-msg" class="alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
-        <i class="bi bi-exclamation-triangle"></i> Error adding flight. Please try again.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    {{/equals}}
-  {{/equals}}
-</div>
-
 {{!-- Page header --}}
 <div class="container text-center pt-3 mt-5">
-    <h1 class="display-5 text-primary mt-5">Flight Management</h1>
+    {{!-- Form Message --}}
+    {{#equals form.submit "success"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-check-circle"></i> Flight added successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{else}}
+        {{#equals form.submit "updated"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-check-circle"></i> Flight updated successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{else}}
+            {{#equals form.submit "deleted"}}
+            <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                <i class="bi bi-check-circle"></i> Flight deleted successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{else}}
+                {{#equals form.submit "error"}}
+                <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> Error. Please try again.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {{/equals}}
+            {{/equals}}
+        {{/equals}}
+    {{/equals}}
+    <h1 id="title" class="display-5 text-primary mt-5">Flight Management</h1>
     <p class="lead">Create, update, or delete flight information</p>
 </div>
 
@@ -50,11 +61,11 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Departure Time</label>
-                    <input type="datetime-local" class="form-control" name="departureTime">
+                    <input type="datetime-local" class="form-control" name="departureTime" id="depTime">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Arrival Time</label>
-                    <input type="datetime-local" class="form-control" name="arrivalTime">
+                    <input type="datetime-local" class="form-control" name="arrivalTime" id="arrTime">
                 </div>
             </div>
 

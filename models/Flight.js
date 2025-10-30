@@ -6,7 +6,6 @@ const flightSchema = new mongoose.Schema({
     flightNo: {
         type: String,
         required: true,
-        unique: true,
         uppercase: true,
         trim: true
     },

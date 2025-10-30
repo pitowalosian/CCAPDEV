@@ -21,11 +21,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
-            const msg = $('#form-msg');
+            const msg = $('.form-msg');
+            const title = $('#title');
             if (msg.length) {
-            setTimeout(() => {
-                msg.alert('close');
-            }, 3000); // hides after 3 seconds
+                title.removeClass('mt-5');
+                setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
+                
+                msg.on('closed.bs.alert', function () {
+                    title.addClass('mt-5');
+                });
+            } else {
+                $('#title').addClass('mt-5');
             }
         });
     </script>

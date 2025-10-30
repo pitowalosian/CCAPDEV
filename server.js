@@ -4,6 +4,7 @@ const exphbs = require('express-handlebars');
 const Flight = require('./models/Flight');
 const mongoose = require('mongoose');
 const Handlebars = require('handlebars');
+const methodOverride = require('method-override');
 
 const app = express();
 const PORT = 3000;
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to parse URL-encoded bodies (for form submissions)
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 // List all flights
 app.get('/', async (req, res) => {
@@ -34,23 +36,19 @@ app.post('/add-flights', async (req, res) => {
     try {
         const newFlight = new Flight(req.body);
         await newFlight.save();
-        res.redirect('/flights?status=success'); // ✅ redirect with success flag
+        res.redirect('/flights?status=success'); // redirect with success flag
     } catch (error) {
         console.error(error);
         res.redirect('/flights?status=error'); // redirect with error flag
     }
 });
 
+// List all flights with status handling
 app.get('/flights', async (req, res) => {
     try {
         const flights = await Flight.find().lean(); // get all flights
         const status = req.query.status || ''; // read ?status=success or ?status=error
-
-        res.render('flights', { 
-        title: 'Flights List',
-        flights,
-        form: { submit: status } // send status to handlebars
-        });
+        res.render('flights', { title: 'Flights List', flights, form: { submit: status } }); // send status to handlebars
     } catch (error) {
         console.error(error);
         res.status(500).send('Error loading flights');
@@ -62,7 +60,9 @@ app.get('/flights/edit/:id', async (req, res) => {
     try {
         const flight = await Flight.findById(req.params.id).lean();
         if (flight) {
-            res.render('flights/edit', { title: 'Edit Flight', Flight: flight });
+            flight.departureTimeFormatted = flight.departureTime.toISOString().slice(0,16);
+            flight.arrivalTimeFormatted = flight.arrivalTime.toISOString().slice(0,16);
+            res.render('flights/edit', { title: 'Edit Flight', flight: flight });
         } else {
             res.status(404).send('Flight not found'); 
         }
@@ -72,31 +72,22 @@ app.get('/flights/edit/:id', async (req, res) => {
 });
 
 // Handle edit form submission
-app.put('/flights/edit/:id', async (req, res) => {
+app.patch('/flights/edit/:id', async (req, res) => {
     try {
-        const { flightNo,  } = req.body;
-        const flight = await Flight.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (flight) {
-            res.redirect('/flights');
-        } else {
-            res.status(404).send('Flight not found');
-        }
+        await Flight.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.redirect('/flights?status=updated');
     } catch (err) {
-        res.status(500).send('Error updating flight');
+        res.redirect('/flights?status=error');
     }
 });
 
 // Delete a flight by ID
 app.post('/flights/delete/:id', async (req, res) => {
     try {
-        const flight = await Flight.findByIdAndDelete(req.params.id);
-        if (flight) {
-            res.redirect('/flights');
-        } else {
-            res.status(404).send('Flight not found');
-        }
+        await Flight.findByIdAndDelete(req.params.id);
+        res.redirect('/flights?status=deleted');
     } catch (err) {
-        res.status(500).send('Error deleting flight');
+        res.redirect('/flights?status=error');
     }
 });
 

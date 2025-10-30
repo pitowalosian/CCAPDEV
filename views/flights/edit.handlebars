@@ -1,50 +1,51 @@
 <div class="text-center">
-    <h2 class="display-5 mb-4">Edit Flight {{Flight.flightNo}} Details</h2>
+    <h2 class="display-5 mb-4">Edit Flight {{flight.flightNo}} Details</h2>
 </div>
 <div class="container-fluid my-4">
     <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
-        <form class="text-start" action="/flights/edit/{{Flight._id}}" method="POST">
+        <form class="text-start" action="/flights/edit/{{flight._id}}?_method=PATCH" method="POST">
+            <input type="hidden" name="_method" value="PATCH">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Flight Number</label>
-                    <input type="text" class="form-control" name="flightNo" value="{{Flight.flightNo}}">
+                    <input type="text" class="form-control" name="flightNo" value="{{flight.flightNo}}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Airline</label>
-                    <input type="text" class="form-control" name="airline" value="{{Flight.airline}}">
+                    <input type="text" class="form-control" name="airline" value="{{flight.airline}}">
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Origin</label>
-                    <input type="text" class="form-control" name="origin" value="{{Flight.origin}}">
+                    <input type="text" class="form-control" name="origin" value="{{flight.origin}}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Airline</label>
-                    <input type="text" class="form-control" name="destination" value="{{Flight.destination}}">
+                    <input type="text" class="form-control" name="destination" value="{{flight.destination}}">
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Departure Time</label>
-                    <input type="text" class="form-control" name="departureTime" value="{{Flight.departureTime}}">
+                    <input type="datetime-local" class="form-control" name="departureTime" value="{{flight.departureTimeFormatted}}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Arrival Time</label>
-                    <input type="text" class="form-control" name="arrivalTime" value="{{Flight.arrivalTime}}">
+                    <input type="datetime-local" class="form-control" name="arrivalTime" value="{{flight.arrivalTimeFormatted}}">
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">Aircraft Type</label>
-                    <input type="text" class="form-control" name="aircraftType" value="{{Flight.aircraftType}}">
+                    <input type="text" class="form-control" name="aircraftType" value="{{flight.aircraftType}}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Seat Capacity</label>
-                    <input type="text" class="form-control" name="seatCap" value="{{Flight.seatCap}}">
+                    <input type="number" class="form-control" name="seatCap" value="{{flight.seatCap}}">
                 </div>
             </div>
 
