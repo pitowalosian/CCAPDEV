@@ -130,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <br><br><br><br>
+        <br><br><br>
         <p class="display-6 text-center" id="resultsText">Search Results</p>
         <!--Search Container-->
         <div id="searchCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary">
@@ -150,6 +150,7 @@
                             <th>Arrival Time</th>
                             <th>Flight Duration</th>
                             <th>Price</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <!--Table Body-->
@@ -157,6 +158,12 @@
                         <!-- Results handled by JQuery -->
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div id="summaryCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary visually-hidden">
+            <h3 class="text-center text-primary">Flight Summary</h3>
+            <div id="summaryBody" class="lead">
+                <!-- Summary handled by JQuery -->
             </div>
         </div>
         <br>
@@ -333,6 +340,7 @@
                                     <td>${f.arrive}</td>
                                     <td>${f.flightDur}</td>
                                     <td>${f.price}</td>
+                                    <td><button class="select-btn btn btn-primary">Select</button></td>
                                 </tr>
                             `;
                             $('#tableBody').append(row);    // Add to html 
@@ -348,6 +356,29 @@
                     $('#resultsText').fadeOut(1000);
                     $('#searchCont').fadeOut(1000);
                     $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
+                });
+
+                $(document).on('click', '.select-btn', function() {
+                    $(this).toggleClass('btn-primary btn-outline-success');
+                    $(this).text(
+                        $(this).hasClass('btn-outline-success') ? 'Selected' : 'Select'
+                    );
+
+                    $('#summaryCont').removeClass('visually-hidden');
+                    $('#summaryBody').text(''); // Clear previous summary
+                    $('#tableBody .select-btn.btn-outline-success').each(function() {
+                        const row = $(this).closest('tr');
+                        const flightNo = row.find('td:nth-child(2)').text();
+                        const depart = row.find('td:nth-child(3)').text();
+                        const arrive = row.find('td:nth-child(4)').text();
+                        const price = row.find('td:nth-child(6)').text();
+
+                        const summaryItem = `
+                            <p>Flight Number: ${flightNo} | Departure: ${depart} | Arrival: ${arrive} | Price: ${price}</p>
+                        `;
+                        $('#summaryBody').append(summaryItem);
+                    });
+                    
                 });
             });
         </script>
