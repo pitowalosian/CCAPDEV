@@ -32,7 +32,7 @@
     <p class="lead">Create, update, or delete flight information</p>
 </div>
 
-<div class="container-fluid my-4">
+<div class="container-fluid my-4 w-75">
     <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
         <form class="text-start" action="/add-flights" method="POST">
             <div class="row mb-3">
@@ -60,12 +60,36 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">Departure Time</label>
-                    <input type="datetime-local" class="form-control" name="departureTime" id="depTime">
+                    <label class="form-label">Departure Day | Time</label>
+                    <div class="input-group">
+                        <button id="depDay" class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Day</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item depDay" href="#">SundepDay</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Monday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Tuesday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Wednesday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Thursday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Friday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Saturday</a></li>
+                        </ul>
+                        <input type="time" class="form-control" name="departureTime" id="depTime">
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Arrival Time</label>
-                    <input type="datetime-local" class="form-control" name="arrivalTime" id="arrTime">
+                    <label class="form-label">Arrival Day | Time</label>
+                    <div class="input-group">
+                        <button id="arrDay" class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Day</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item arrDay" href="#">Sunday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Monday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Tuesday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Wednesday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Thursday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Friday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Saturday</a></li>
+                        </ul>
+                        <input type="time" class="form-control" name="arrivalTime" id="arrTime">
+                    </div>
                 </div>
             </div>
 

@@ -4,7 +4,6 @@ const exphbs = require('express-handlebars');
 const Flight = require('./models/Flight');
 const mongoose = require('mongoose');
 const Handlebars = require('handlebars');
-const methodOverride = require('method-override');
 
 const app = express();
 const PORT = 3000;
@@ -23,7 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to parse URL-encoded bodies (for form submissions)
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
 
 // List all flights
 app.get('/', async (req, res) => {
@@ -72,11 +70,25 @@ app.get('/flights/edit/:id', async (req, res) => {
 });
 
 // Handle edit form submission
-app.patch('/flights/edit/:id', async (req, res) => {
+app.post('/flights/edit/:id', async (req, res) => {
+    const { flightNo, airline, origin, destination, departureTime, arrivalTime, aircraftType, seatCap } = req.body;
     try {
-        await Flight.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        await Flight.findOneAndUpdate(
+            { _id: req.params.id},
+            { $set: {
+                flightNo,
+                airline, 
+                origin, 
+                destination, 
+                departureTime, 
+                arrivalTime, 
+                aircraftType,
+                seatCap
+            } }, 
+            { new: true, runValidators: true });
         res.redirect('/flights?status=updated');
     } catch (err) {
+        console.log(err);
         res.redirect('/flights?status=error');
     }
 });
@@ -84,9 +96,10 @@ app.patch('/flights/edit/:id', async (req, res) => {
 // Delete a flight by ID
 app.post('/flights/delete/:id', async (req, res) => {
     try {
-        await Flight.findByIdAndDelete(req.params.id);
+        await Flight.findOneAndDelete({_id: req.params.id});
         res.redirect('/flights?status=deleted');
     } catch (err) {
+        console.log(err);
         res.redirect('/flights?status=error');
     }
 });
