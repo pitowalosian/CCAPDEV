@@ -278,11 +278,17 @@
                 const childCost = 2000;
                 const infantCost = 1000;
 
+                //default show economy seat selection
+                $('#firstClass, #firstSeatMap, #businessClass, #businessSeatMap, #epClass, #epSeatMap').hide();
+                $('.available-color').addClass('text-success');
+                $('.available-color').removeClass('text-info opacity-75 text-primary text-warning');
+                $('#economyClass').show();
+                $('#economySeatMap').show();
+
                 let selectedSeats = [];
                 seatMap();
 
                 function seatMap() {
-                    $('#seatSelection').hide();
                     
                     // First Class
                     for (let i = 0; i < 2; i++) {
@@ -610,8 +616,11 @@
                     let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
                     let mealCost = parseInt($("#meal option:selected").val());
                     let baggageCost = extraBaggage ? (baggageWeight / 5) * 250: 0;
-                    tripTypeCost = tripTypeCost * passCount;
-                    travelClassCost = travelClassCost * passCount;
+                    let typeCost = tripTypeCost;
+                    let classCost = travelClassCost;
+
+                    const finalTypeCost = typeCost * passCount;
+                    const finalClassCost = classCost * passCount;
 
                     if (extraBaggage) {
                         if (baggageWeight > 0) {
@@ -649,7 +658,6 @@
                         $('#error').text('');
                     }
 
-                    
 
                     //summary string
                     let summary =`<b>Passenger Name:</b> ${passName} <br>
