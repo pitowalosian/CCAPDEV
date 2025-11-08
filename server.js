@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const Flight = require('./models/Flight');
+const Reservation = require('./models/Reservation');
+const shortid = require('shortid');
 const mongoose = require('mongoose');
 const Handlebars = require('handlebars');
 
@@ -104,14 +106,106 @@ app.post('/flights/delete/:id', async (req, res) => {
     }
 });
 
-
-Handlebars.registerHelper("equals", function(string1 ,string2, options) {
-    if (string1 === string2) {
-        return options.fn(this);
-    } else {
-        return options.inverse(this);
+// List all reservations
+app.get('/reservations', async (req, res) => {
+    try {
+        const reservations = await Reservation.find().populate('flight').lean();
+        res.render('reservations', { title: 'Reservations List', reservations });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error loading reservations');
     }
 });
+
+// Show form to create a new reservation
+app.get('/reservations/new', async (req, res) => {
+    try {
+        const flights = await Flight.find().lean();
+        res.render('reservations/new', { title: 'New Reservation', flights });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading new reservation form');
+    }
+});
+
+// Handle new reservation submission
+app.post('/reservations', async (req, res) => {
+    try {
+        const { passengerName, passengerEmail, passport, flightId, seat, meal, baggage } = req.body;
+        const bookingId = `BKG-${shortid.generate().toUpperCase()}`;
+
+        const newReservation = new Reservation({
+            bookingId,
+            passengerName,
+            passengerEmail,
+            passport,
+            flight: flightId,
+            package: { seat, meal, baggage },
+            status: 'Confirmed'
+        });
+
+        await newReservation.save();
+        res.redirect('/reservations?status=added');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/reservations?status=error');
+    }
+});
+
+// Edit reservation
+app.get('/reservations/edit/:id', async (req, res) => {
+    try {
+        const reservation = await Reservation.findById(req.params.id).populate('flight').lean();
+        if (!reservation) return res.status(404).send('Reservation not found');
+        res.render('reservations/edit', { title: 'Edit Reservation', reservation });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving reservation');
+    }
+});
+
+app.post('/reservations/edit/:id', async (req, res) => {
+    const { seat, meal, baggage, status } = req.body;
+    try {
+        await Reservation.findByIdAndUpdate(req.params.id, {
+            $set: { 'package.seat': seat, 'package.meal': meal, 'package.baggage': baggage, status }
+        });
+        res.redirect('/reservations?status=updated');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/reservations?status=error');
+    }
+});
+
+// Cancel (soft delete)
+app.post('/reservations/delete/:id', async (req, res) => {
+    try {
+        await Reservation.findByIdAndUpdate(req.params.id, { status: 'Cancelled' });
+        res.redirect('/reservations?status=cancelled');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/reservations?status=error');
+    }
+});
+
+Handlebars.registerHelper("equals", function (a, b, options) {
+  console.log("=== DEBUG: equals helper called ===");
+  console.log("a:", a);
+  console.log("b:", b);
+  console.log("options:", options);
+  console.log("options.fn:", options?.fn);
+  console.log("options.inverse:", options?.inverse);
+  console.log("==============================");
+
+  if (typeof options === "object" && typeof options.fn === "function") {
+    // This means it's being used as a block helper
+    return a === b ? options.fn(this) : options.inverse(this);
+  }
+
+  // Otherwise, it's inline — just return true/false
+  return a === b;
+});
+
 
 // Helper function to format date to 'YYYY-MM-DDTHH:MM' for datetime-local input
 function formatDateTime(date) {
@@ -129,3 +223,4 @@ function formatDateTime(date) {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+

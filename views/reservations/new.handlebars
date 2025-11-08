@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="bg-secondary-subtle text-bg-dark">
+
+    <!-- Navbar -->
+    <div class="container-fluid fixed-top">
+        <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
+            <a class="navbar-brand" href="#"><img height="40" src="/pictures/icon.png"/></a>
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link" href="/flights">Flight Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/reservations/new">Book Flights</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reservations">My Reservations</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="container text-center pt-5 mt-5">
+        <h1 class="display-5 text-center text-primary">Book Flights</h1>
+        <p class="lead">Answer the reservation form to book your flight</p>
+    </div>
+
+    <!-- Reservation Form -->
+    <div class="container mt-4 mb-5 p-4 shadow-lg rounded-3 bg-dark-subtle border border-primary">
+        <form action="/reservations" method="POST" id="reservationForm">
+            
+            <!-- Passenger Information -->
+            <fieldset class="form-section">
+                <legend class="h5 pb-3">Personal Information</legend>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="passengerName" class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" name="passengerName" id="passengerName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="passengerEmail" class="form-label">Email *</label>
+                        <input type="email" class="form-control" name="passengerEmail" id="passengerEmail" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="passport" class="form-label">Passport No. *</label>
+                        <input type="text" class="form-control" name="passport" id="passport" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="flightId" class="form-label">Select Flight *</label>
+                        <select name="flightId" id="flightId" class="form-select" required>
+                            <option value="">-- Choose Flight --</option>
+                            {{#each flights}}
+                                <option value="{{_id}}">
+                                    {{flightNo}} — {{origin}} → {{destination}} ({{airline}})
+                                </option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Package Preferences -->
+            <fieldset class="form-section">
+                <legend class="h5 pt-4 pb-3">Package Details</legend>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="seat" class="form-label">Seat</label>
+                        <input type="text" name="seat" id="seat" class="form-control" placeholder="e.g. 12A">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="meal" class="form-label">Meal Option</label>
+                        <select class="form-select" name="meal" id="meal">
+                            <option value="Standard">Standard</option>
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Vegan">Vegan</option>
+                            <option value="Halal">Halal</option>
+                            <option value="Kosher">Kosher</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="baggage" class="form-label">Extra Baggage</label>
+                        <select name="baggage" id="baggage" class="form-select">
+                            <option value="None">None</option>
+                            <option value="5kg">+5kg</option>
+                            <option value="10kg">+10kg</option>
+                            <option value="15kg">+15kg</option>
+                            <option value="20kg">+20kg</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Submit -->
+            <div class="text-end pt-3">
+                <button type="submit" class="btn btn-primary">Submit Reservation</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

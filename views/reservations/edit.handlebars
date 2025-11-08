@@ -1,0 +1,68 @@
+<div class="text-center">
+    <h2 class="display-5 mb-4">Edit Reservation {{reservation.bookingId}}</h2>
+</div>
+
+<div class="container-fluid my-4">
+    <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
+        <form class="text-start" action="/reservations/edit/{{reservation._id}}" method="POST">
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="seat">Seat</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="seat" 
+                        name="seat" 
+                        value="{{reservation.package.seat}}"
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="meal">Meal</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="meal"
+                        name="meal" 
+                        value="{{reservation.package.meal}}"
+                    >
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="baggage">Baggage</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="baggage" 
+                        name="baggage" 
+                        value="{{reservation.package.baggage}}"
+                    >
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="status">Status</label>
+                    <select 
+                        class="form-select" 
+                        id="status" 
+                        name="status"
+                    >
+                        <option value="Confirmed" {{#if (equals reservation.status 'Confirmed')}}selected{{/if}}>Confirmed</option>
+                        <option value="Pending" {{#if (equals reservation.status 'Pending')}}selected{{/if}}>Pending</option>
+                        <option value="Cancelled" {{#if (equals reservation.status 'Cancelled')}}selected{{/if}}>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="text-end mt-4">
+                <button type="submit" class="btn btn-outline-light me-2">
+                    <i class="bi bi-save"></i> Save Changes
+                </button>
+                <a href="/reservations" class="btn btn-outline-danger">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
