@@ -28,13 +28,39 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">Departure Time</label>
-                    <input type="datetime-local" class="form-control" name="departureTime" value="{{flight.departureTimeFormatted}}">
+                    <label class="form-label">Departure Day | Time</label>
+                    <div class="input-group">
+                        <button id="editDepDay" class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{flight.departureDay}}</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item depDay" href="#">Sunday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Monday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Tuesday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Wednesday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Thursday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Friday</a></li>
+                            <li><a class="dropdown-item depDay" href="#">Saturday</a></li>
+                        </ul>
+                        <input type="time" class="form-control" name="departureTime" id="editDepTime" value="{{flight.departureTime}}">
+                    </div>
                 </div>
+                <input type="hidden" name="departureDay" id="departureDay" value="{{flight.departureDay}}">
                 <div class="col-md-6">
-                    <label class="form-label">Arrival Time</label>
-                    <input type="datetime-local" class="form-control" name="arrivalTime" value="{{flight.arrivalTimeFormatted}}">
+                    <label class="form-label">Arrival Day | Time</label>
+                    <div class="input-group">
+                        <button id="editArrDay" class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{flight.arrivalDay}}</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item arrDay" href="#">Sunday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Monday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Tuesday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Wednesday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Thursday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Friday</a></li>
+                            <li><a class="dropdown-item arrDay" href="#">Saturday</a></li>
+                        </ul>
+                        <input type="time" class="form-control" name="arrivalTime" id="editArrTime" value="{{flight.arrivalTime}}">
+                    </div>
                 </div>
+                <input type="hidden" name="arrivalDay" id="editArrivalDay" value="{{flight.arrivalDay}}">
             </div>
 
             <div class="row mb-3">

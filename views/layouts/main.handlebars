@@ -35,19 +35,32 @@
                 $('#title').addClass('mt-5');
             }
 
+            const depDay = $('#departureDay').val();
+            const arrDay = $('#arrivalDay').val();
+
+            if (depDay) {
+                $('#editDepDay').text(depDay);
+                $('#editDepartureDay').val(depDay);
+            }
+
+            if (arrDay) {
+                $('#editArrDay').text(arrDay);
+                $('#editArrDay').val(arrDay);
+            } 
             $('.depDay').on('click', function(){
                     let choice = $(this).text().trim();
                     $('#depDay').text(choice);
+                    $('#editDepDay').text(choice);
                     $('#departureDay').val(choice);
-                    console.log("Selected departure day:", choice);
-                    console.log("Hidden input value:", $('#departureDay').val());
-
+                    $('#editDepartureDay').val(choice);
             });
 
             $('.arrDay').on('click', function(){
                     let choice = $(this).text().trim();
                     $('#arrDay').text(choice);
+                    $('#editArrDay').text(choice);
                     $('#arrivalDay').val(choice);
+                    $('#editArrivalDay').val(choice);
             });
         });
     </script>

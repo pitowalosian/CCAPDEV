@@ -35,8 +35,7 @@ app.get('/', async (req, res) => {
 app.post('/add-flights', async (req, res) => {
     try {
         const newFlight = new Flight(req.body);
-        newFlight.departureTime = `${newFlight.departureDay} ${newFlight.departureTime}`;
-        newFlight.arrivalTime = `${newFlight.arrivalDay} ${newFlight.arrivalTime}`;
+        console.log(req.body);
         await newFlight.save();
         res.redirect('/flights?status=added'); // redirect with success flag
     } catch (error) {
@@ -50,10 +49,14 @@ app.get('/flights', async (req, res) => {
     try {
         const flights = await Flight.find().lean(); // get all flights
         const status = req.query.status || ''; // read ?status=success or ?status=error
-        res.render('flights', { title: 'Flights List', flights, form: { submit: status } }); // send status to handlebars
+        res.render('flights', { title: 'Flights List', flights, status }); // send status to handlebars
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error loading flights');
+        res.render('flights', {
+            title: 'Flights List',
+            flights: [],
+            status: 'error'
+        });
     }
 });
 
@@ -62,8 +65,6 @@ app.get('/flights/edit/:id', async (req, res) => {
     try {
         const flight = await Flight.findById(req.params.id).lean();
         if (flight) {
-            flight.departureTimeFormatted = formatDateTime(flight.departureTime);
-            flight.arrivalTimeFormatted = formatDateTime(flight.arrivalTime);
             res.render('flights/edit', { title: 'Edit Flight', flight: flight });
         } else {
             res.status(404).send('Flight not found'); 
@@ -75,7 +76,8 @@ app.get('/flights/edit/:id', async (req, res) => {
 
 // Handle edit form submission
 app.post('/flights/edit/:id', async (req, res) => {
-    const { flightNo, airline, origin, destination, departureTime, arrivalTime, aircraftType, seatCap } = req.body;
+    console.log('Edit form submission:', req.body);
+    const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, aircraftType, seatCap } = req.body;
     try {
         await Flight.findOneAndUpdate(
             { _id: req.params.id},
@@ -84,7 +86,9 @@ app.post('/flights/edit/:id', async (req, res) => {
                 airline, 
                 origin, 
                 destination, 
+                departureDay,
                 departureTime, 
+                arrivalDay,
                 arrivalTime, 
                 aircraftType,
                 seatCap
@@ -225,4 +229,3 @@ function formatDateTime(date) {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
