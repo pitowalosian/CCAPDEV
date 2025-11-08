@@ -38,11 +38,16 @@
             $('.depDay').on('click', function(){
                     let choice = $(this).text().trim();
                     $('#depDay').text(choice);
+                    $('#departureDay').val(choice);
+                    console.log("Selected departure day:", choice);
+                    console.log("Hidden input value:", $('#departureDay').val());
+
             });
 
             $('.arrDay').on('click', function(){
                     let choice = $(this).text().trim();
                     $('#arrDay').text(choice);
+                    $('#arrivalDay').val(choice);
             });
         });
     </script>

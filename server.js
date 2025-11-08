@@ -35,6 +35,8 @@ app.get('/', async (req, res) => {
 app.post('/add-flights', async (req, res) => {
     try {
         const newFlight = new Flight(req.body);
+        newFlight.departureTime = `${newFlight.departureDay} ${newFlight.departureTime}`;
+        newFlight.arrivalTime = `${newFlight.arrivalDay} ${newFlight.arrivalTime}`;
         await newFlight.save();
         res.redirect('/flights?status=added'); // redirect with success flag
     } catch (error) {
