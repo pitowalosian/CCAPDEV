@@ -17,11 +17,15 @@ const PackageSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  baggage: { //will fix this when i figure out how baggage will work T_T
-    type: String, 
-    default: 'No Extra Baggage' 
-  },
   baggageWeight: {
+    type: Number,
+    default: 0
+  },
+  freeBaggageAllowance: {
+    type: Number,
+    default: 20
+  },
+  excessBaggageWeight: {
     type: Number,
     default: 0
   }

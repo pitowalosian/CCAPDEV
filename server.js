@@ -112,6 +112,21 @@ app.post('/flights/delete/:id', async (req, res) => {
     }
 });
 
+// Display booking form
+app.get('/book', async (req, res) => {
+    try {
+        const flights = await Flight.find().lean();
+        res.render('book', { 
+            title: 'Book Flight',
+            flights
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error loading booking form');
+    }
+});
+
+
 // List all reservations
 app.get('/reservations', async (req, res) => {
     try {
