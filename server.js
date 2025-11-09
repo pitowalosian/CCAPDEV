@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // List all flights
 app.get('/', async (req, res) => {
     const flights = await Flight.find().lean();
-    res.render('flights', { title: 'Flight Management', flights });
+    res.render('flights/search', { title: 'Flight Search', flights });
 });
 
 // Route to handle adding a new flight
@@ -126,7 +126,6 @@ app.get('/book', async (req, res) => {
     }
 });
 
-
 // List all reservations
 app.get('/reservations', async (req, res) => {
     try {
@@ -209,6 +208,28 @@ app.post('/reservations/delete/:id', async (req, res) => {
     }
 });
 
+app.get('/flights/search', async (req, res) => {
+    try {
+        const { date } = req.query;
+
+        if (!date) {
+            return res.render('flights/search', { title: 'Search Flights', flights: [] });
+        }
+
+        const inputDate = new Date(date);
+        
+        const weekdayOptions = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayOfWeek = weekdayOptions[inputDate.getDay()];
+
+        const flights = await Flight.find({ departureDay: dayOfWeek }).lean();
+
+        res.render('flights/search', { title: 'Search Flights', flights, date });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error searching for flights');
+    }
+})
+
 Handlebars.registerHelper("equals", function (a, b, options) {
   console.log("=== DEBUG: equals helper called ===");
   console.log("a:", a);
@@ -226,19 +247,6 @@ Handlebars.registerHelper("equals", function (a, b, options) {
   // Otherwise, it's inline — just return true/false
   return a === b;
 });
-
-
-// Helper function to format date to 'YYYY-MM-DDTHH:MM' for datetime-local input
-function formatDateTime(date) {
-    const dt = new Date(date);
-    const year = dt.getFullYear();
-    const month = String(dt.getMonth() + 1).padStart(2, '0');
-    const day = String(dt.getDate()).padStart(2, '0');
-    const hours = String(dt.getHours()).padStart(2, '0');
-    const minutes = String(dt.getMinutes()).padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-}
-
 
 // Start the server
 app.listen(PORT, () => {

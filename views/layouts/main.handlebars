@@ -1,68 +1,256 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flight Management</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
+        <title>Flight Search</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.1/dist/css/bootstrap-datepicker3.min.css">
+    </head>
 
-<body class="bg-secondary-subtle text-bg-dark">
-    <main class="container-fluid px-5 mt-4">
-        {{{body}}}   
-    </main>
+    <body class="bg-secondary-subtle text-bg-dark">
+        <main class="container-fluid px-5 mt-4">
+            {{{body}}}   
+        </main>
 
-    <div class="text-center pb-3 text-secondary">
-        <small>© 2025 jetBlue Airlines — All Rights Reserved</small>
-    </div>
+        <div class="text-center pb-3 text-secondary">
+            <small>© 2025 jetBlue Airlines — All Rights Reserved</small>
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            const msg = $('.form-msg');
-            const title = $('#title');
-            const flightList = $('#flight-list');
-            if (msg.length) {
-                title.removeClass('mt-5');
-                setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#searchCont').hide();
+                $('#resultsText').hide();
+                
+                // Set minimum dates
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const minDate = `${year}-${month}-${day}`;
+                $('#depdate').attr('min', minDate);
+                $('#depdate').on('change', function(){
+                    let depdate = $(this).val();
+                    $('#retdate').attr('min', depdate); 
+                })
+                
+                // Swap Button 
+                $('#swap').click(function() {
+                    // Get origin and destination values
+                    var origin = $('#origin').text().trim();            
+                    var destination = $('#destination').text().trim();  
 
-                msg.on('closed.bs.alert', function () {
-                    title.addClass('mt-5');
+                    // Swap
+                    $('#origin').text(destination);  
+                    $('#destination').text(origin);  
                 });
-            } else {
-                $('#title').addClass('mt-5');
-            }
 
-            const depDay = $('#departureDay').val();
-            const arrDay = $('#arrivalDay').val();
+                // Toggle Dark Button
+                $('#toggleDark').click(function() {
+                    var currentTheme = $('html').attr('data-bs-theme');         // Get current theme
+                    var newTheme = currentTheme === 'dark' ? 'light' : 'dark';  // Check if current theme is dark or light then change
+                    $('html').attr('data-bs-theme', newTheme);                  // Insert new theme to page 
 
-            if (depDay) {
-                $('#editDepDay').text(depDay);
-                $('#editDepartureDay').val(depDay);
-            }
+                    // Toggle classes to change bootstrap elements in light/dark mode
+                    $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
+                    $('#navbarNav').toggleClass('text-dark-emphasis text-primary-emphasis');
+                    $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
+                    $('body').toggleClass('text-bg-dark text-bg-light');
+                    $('body').toggleClass('bg-secondary-subtle bg-light');
+                    $('#form').toggleClass('bg-dark-subtle bg-primary');
+                    $('form').toggleClass('bg-dark-subtle bg-primary');
+                    $('#swap').toggleClass('btn-primary btn-outline-light');
+                    $('#origin').toggleClass('btn-outline-secondary btn-light');
+                    $('#destination').toggleClass('btn-outline-secondary btn-light');
+                    $('#search').toggleClass('btn-primary btn-outline-light');
+                });
 
-            if (arrDay) {
-                $('#editArrDay').text(arrDay);
-                $('#editArrDay').val(arrDay);
-            } 
-            $('.depDay').on('click', function(){
+                // Origin and Destination dropdowns
+                $('.origin').on('click', function(){
                     let choice = $(this).text().trim();
-                    $('#depDay').text(choice);
-                    $('#editDepDay').text(choice);
-                    $('#departureDay').val(choice);
-                    $('#editDepartureDay').val(choice);
-            });
-
-            $('.arrDay').on('click', function(){
+                    $('#origin').text(choice);
+                });
+                $('.destination').on('click', function(){
                     let choice = $(this).text().trim();
-                    $('#arrDay').text(choice);
-                    $('#editArrDay').text(choice);
-                    $('#arrivalDay').val(choice);
-                    $('#editArrivalDay').val(choice);
+                    $('#destination').text(choice);
+                });
+
+                // Check form inputs
+                $('#search').click(function(event) {
+                    // Get input values
+                    let passcount = $('#passcount').val().trim();
+                    let origin = $('#origin').text().toLowerCase().trim();
+                    let destination = $('#destination').text().toLowerCase().trim();
+                    let depdate = new Date($('#depdate').val());
+                    let retdate = new Date($('#retdate').val());
+                    
+                    // Error strings
+                    const fillError = `Please fill in all fields except return date.`;
+                    const locError = `Origin and Destination cannot be the same`;
+                    
+                    // Check required fields
+                    if (origin === `Where from?` || destination === `Where to?` || isNaN(depdate.getTime())) {     
+                        event.preventDefault();
+                        $("#errorText").html(fillError);
+                        let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                        formModal.show();
+                    } 
+                    // Check same location
+                    else if (origin && destination && (origin == destination)){       
+                        event.preventDefault();
+                        $("#errorText").html(locError);
+                        let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                        formModal.show();
+                    } 
+                    // Success
+                    else {      
+                        $("#tableBody").empty();
+
+                        // Get all flights by origin and destination
+                        const filteredFlights = flights.filter(f =>
+                            f.origin.trim().toLowerCase().includes(origin) &&
+                            f.destination.trim().toLowerCase().includes(destination)
+                        );
+
+                        $('#resultsText').show();
+                        // Conditions
+                        if (filteredFlights.length === 0) {     // No flights found
+                            $('#noResults').show();
+                            $('#resultsTable').hide();
+                        } else {                                // Success
+                            $('#noResults').hide();
+                            $('#resultsTable').show();
+
+                            // Print filtered flights details
+                            filteredFlights.forEach(f => {
+                            const row = `
+                                <tr>
+                                    <td>${f.airline}</td>
+                                    <td>${f.flightNo}</td>
+                                    <td>${f.depart}</td>
+                                    <td>${f.arrive}</td>
+                                    <td>${f.flightDur}</td>
+                                    <td>${f.price}</td>
+                                    <td><a class="select-btn btn btn-primary" data-origin="${f.origin}" data-destination="${f.destination}">Select</a></td>
+                                </tr>
+                            `;
+                            $('#tableBody').append(row);    // Add to html 
+                        });
+                        }
+                        $('#searchCont').css("scroll-margin-top", "65px");
+                        $('#searchCont').fadeIn(1000);
+                    }
+                });
+
+                // Hide search container on form container mouse enter
+                $('#formContainer').on('mouseenter', function() {
+                    $('#resultsText').fadeOut(1000);
+                    $('#searchCont').fadeOut(1000);
+                    $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
+                });
+
+                $(document).on('click', '.select-btn', function(event) {
+                    const isSelected = $(this).text() === 'Selected';
+                    
+                    // Deselect all buttons
+                    $('.select-btn').removeClass('btn-outline-success').addClass('btn-primary').text('Select');
+
+                    // If clicked button is already selected
+                    if (isSelected) {
+                        const offCanvas = bootstrap.Offcanvas.getInstance(document.getElementById('summaryOffcanvas'));
+                        if (offCanvas) {
+                            offCanvas.hide();
+                        }
+
+                        return;
+                    }
+                    
+                    // Toggle clicked button
+                    $(this)
+                        .removeClass('btn-primary')
+                        .addClass('btn-outline-success')
+                        .text('Selected');
+
+                    const offcanvas = new bootstrap.Offcanvas('#summaryOffcanvas');
+                    offcanvas.show();
+
+                    $('#summaryBody').text(''); // Clear previous summary
+
+                    // Get origin and destination from data attributes
+                    const origin = $(this).data('origin');
+                    const destination = $(this).data('destination');
+
+                    // Get flight details from the same row
+                    const row = $(this).closest('tr');
+                    const airline = row.find('td:eq(0)').text();
+                    const flightNo = row.find('td:eq(1)').text();
+                    const depart = row.find('td:eq(2)').text();
+                    const arrive = row.find('td:eq(3)').text();
+                    const price = row.find('td:eq(5)').text();
+
+                    // Create summary content
+                    const summaryContent = `
+                        <h5>Flight Summary | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
+                        <hr>
+                        <p><strong class="text-info">Airline:</strong> ${airline}</p>
+                        <p><strong class="text-info">Flight Number:</strong> ${flightNo}</p>
+                        <p><strong class="text-info">Departure Time:</strong> ${depart}</p>
+                        <p><strong class="text-info">Arrival Time:</strong> ${arrive}</p>
+                        <p><strong class="text-info">Price:</strong> ${price}</p>
+                        <hr>
+                        <a href="BookFlights.html" class="btn btn-success w-100">Proceed to Booking</a>
+                    `;
+
+                    // Append summary content to offcanvas body
+                    $('#summaryBody').html(summaryContent);
+                });
+
+                const msg = $('.form-msg');
+                const title = $('#title');
+                const flightList = $('#flight-list');
+                if (msg.length) {
+                    title.removeClass('mt-5');
+                    setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
+
+                    msg.on('closed.bs.alert', function () {
+                        title.addClass('mt-5');
+                    });
+                } else {
+                    $('#title').addClass('mt-5');
+                }
+
+                const depDay = $('#departureDay').val();
+                const arrDay = $('#arrivalDay').val();
+
+                if (depDay) {
+                    $('#editDepDay').text(depDay);
+                    $('#editDepartureDay').val(depDay);
+                }
+
+                if (arrDay) {
+                    $('#editArrDay').text(arrDay);
+                    $('#editArrDay').val(arrDay);
+                } 
+                $('.depDay').on('click', function(){
+                        let choice = $(this).text().trim();
+                        $('#depDay').text(choice);
+                        $('#editDepDay').text(choice);
+                        $('#departureDay').val(choice);
+                        $('#editDepartureDay').val(choice);
+                });
+
+                $('.arrDay').on('click', function(){
+                        let choice = $(this).text().trim();
+                        $('#arrDay').text(choice);
+                        $('#editArrDay').text(choice);
+                        $('#arrivalDay').val(choice);
+                        $('#editArrivalDay').val(choice);
+                });
             });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

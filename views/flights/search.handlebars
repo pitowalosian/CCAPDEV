@@ -1,0 +1,173 @@
+<!--Navigation Bar-->
+    <div class="container-fluid fixed-top">
+        <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
+            <a class="navbar-brand" href="#"><img height="40" src="pictures/icon.png"/></a>
+            <ul class="nav nav-pills nav-fill" id="navtabs">
+                <li class="nav-item">
+                    <a class="nav-link active bg-primary" aria-current="page" href="#">Flight Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="BookFlights.html">Book Flights</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Reservations.html">My Reservations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Profile.html">Profile</a>
+                </li>  
+                <li class="nav-item">
+                    <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></label>
+                </li> 
+            </ul>
+        </div>
+    </div>
+<!--Title-->
+    <div class="container-fluid pt-5 mt-5 text-center">
+        <h1 class="display-5 text-center text-primary">Flight Search</h1>
+        <span class="lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
+        <img class="img-fluid transform-middle-y z-2" width="1100" src="pictures/jbu-plane1.png" alt="Plane Icon"><br><br>
+    </div>
+    <!--Form Container-->
+    <div class="d-flex justify-content-center px-5 mx-5" id="formContainer">
+        <div class="position-fluid p-3 shadow-lg rounded-3 d-flex justify-content-center bg-dark-subtle border border-primary" id="form">
+            <!--Search Flights Form-->
+            <form class="align-items-center bg-dark-subtle" id="searchForm">
+                <div class="row align-items-start g-2">
+                    <!--Passenger Count-->
+                    <div class="col-md-auto">
+                        <div class="input-group flex-grow-0">
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                            <input type="number" class="form-control w-auto flex-grow-0" id="passcount" val="1" placeholder="1" min="1" max="30">
+                        </div>
+                    </div>
+                    <!--Origin-->
+                    <div class="col-md-auto">
+                        <div class="input-group align-items-center">
+                            <span class="input-group-text"><i class="bi bi-house-door-fill"></i></span>
+                            <button type="button" class="btn btn-outline-secondary me-2 dropdown-toggle" id="origin" data-bs-toggle="dropdown">Where from? </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item origin" href="#">Manila (MNL) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Cebu (CEB) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Davao (DVO) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Iloilo (ILO) </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item origin" href="#">Tokyo (NRT) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Seoul (ICN) </a></li>
+                                <li><a class="dropdown-item origin" href="#">London (LHR) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Paris (CDG) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Los Angeles (LAX) </a></li>
+                                <li><a class="dropdown-item origin" href="#">Singapore (SIN) </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--Swap Button-->
+                    <div class="col-md-auto">
+                        <button id="swap" type="button" class="btn btn-primary" data-bs-theme="dark"><i class="bi bi-arrow-left-right"></i></button>
+                    </div>
+                    <!--Destination-->
+                    <div class="col-md-auto">
+                        <div class="input-group w-auto align-items-center">
+                            <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                            <button type="button" class="btn btn-outline-secondary me-2 dropdown-toggle" id="destination" data-bs-toggle="dropdown">Where to? </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item destination" href="#">Manila (MNL) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Cebu (CEB) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Davao (DVO) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Iloilo (ILO) </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item destination" href="#">Tokyo (NRT) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Seoul (ICN) </a></li>
+                                <li><a class="dropdown-item destination" href="#">London (LHR) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Paris (CDG) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Los Angeles (LAX) </a></li>
+                                <li><a class="dropdown-item destination" href="#">Singapore (SIN) </a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--Depart Date-->
+                    <div class="col input-group"> 
+                        <span class="input-group-text">Depart:</span>
+                        <input type="date" class="form-control" id="depdate">
+                    </div>
+                    <!--Return Date-->
+                    <div class="col input-group">
+                        <span class="input-group-text">Return:</span>
+                        <input type="date" class="form-control" id="retdate">
+                    </div>
+                    <!--Search Button-->
+                    <div class="col-md-auto">
+                        <a href="#searchCont" id="search" class="btn btn-primary">Search Flights</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--Modal (Form Warnings)-->
+    <div class="modal fade" id="formModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-warning">Warning</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body"> 
+                    <p id="errorText"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+    <p class="display-6 text-center" id="resultsText">Search Results</p>
+    <!--Search Container-->
+    <div id="searchCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary">
+        <!--Results Table-->
+        {{#if flights.length}}
+        <!-- Table when flights exist -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle text-center">
+                <thead class="lead table-primary text-light text-center" id="resultsTable">
+                    <tr>
+                        <th>Airline</th>
+                        <th>Flight Number</th>
+                        <th>Departure Time</th>
+                        <th>Arrival Time</th>
+                        <th>Flight Duration</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="lead">
+                    {{#each flights}}
+                    <tr>
+                        <td>{{airline}}</td>
+                        <td>{{flightNumber}}</td>
+                        <td>{{departureTime}}</td>
+                        <td>{{arrivalTime}}</td>
+                        <td>{{flightDuration}}</td>
+                        <td>${{price}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+            {{#if date}}
+                <p id="noResults" class="lead text-center">No Flights Found</p>
+            {{/if}}
+        {{/if}}
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="summaryOffcanvas" aria-labelledby="summaryOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="text-primary offcanvas-title" id="summaryOffcanvasLabel">Selected Flight Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="summaryBody">
+                <!--Summary handled by JQuery-->
+            </div>
+        </div>
+    </div>
+    <br>
