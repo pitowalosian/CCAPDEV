@@ -288,443 +288,444 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        let adults = 1;
-        let children = 0;
-        let infants = 0;
-    
-        let passCount = adults + children + infants;
-        let tripTypeCost = 0;
-        let travelClassCost = 0;
-
-        //cost equivalent of passengers depending on type
-        const adultCost = 4000;
-        const childCost = 2000;
-        const infantCost = 1000;
-
-        //default show economy seat selection
-        $('#firstClass, #firstSeatMap, #businessClass, #businessSeatMap, #epClass, #epSeatMap').hide();
-        $('.available-color').addClass('text-success');
-        $('.available-color').removeClass('text-info opacity-75 text-primary text-warning');
-        $('#economyClass').show();
-        $('#economySeatMap').show();
-
-        let selectedSeats = [];
-        seatMap();
-
-        function seatMap() {
-            
-            // First Class
-            for (let i = 0; i < 2; i++) {
-                let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
-
-
-                // leftmost seats
-                for (let j = 0; j < 1; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0 disabled">
-                                        <i class="seat bi bi-square-fill" data-row="${i+1}" data-col="${j+1}" data-class="FA"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-                
-                // middle seats
-                for (let j = 0; j < 2; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="FB"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-                
-                // rightmost seats
-                for (let j = 0; j < 1; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="FC"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                $('#firstSeatMap').append(row);
-            }
-
-            // Business
-            for (let i = 0; i < 5; i++) {
-                let row = $('<div class="d-flex justify-content-center g-0 mb-1"></div>');
-
-                // left pair
-                for (let j = 0; j < 2; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BA"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-
-                // middle trio
-                for (let j = 0; j < 3; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BB"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-                
-                // right pair
-                for (let j = 0; j < 2; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BC"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                $('#businessSeatMap').append(row);
-            }
-
-            // Premium Economy
-            for (let i = 0; i < 6; i++) {
-                let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
-
-                // left pair
-                for (let j = 0; j < 2; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PA"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-                
-                // middle seats
-                for (let j = 0; j < 4; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PB"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-                
-                // right pair
-                for (let j = 0; j < 2; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PC"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                $('#epSeatMap').append(row);
-            }
-
-            // Economy
-            for (let i = 0; i < 10; i ++) {
-                let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
-
-                // left trio
-                for (let j = 0; j < 3; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EA"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-
-                // middle trio
-                for (let j = 0; j < 3; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EB"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                // aisle 
-                row.append(`<div class="col-1"></div>`);
-                
-                // right trio
-                for (let j = 0; j < 3; j++) {
-                    let seat = `<div class="col-auto">
-                                    <button class="btn border-0">
-                                        <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EC"></i>
-                                    </button>
-                                </div>`;
-                    row.append(seat);
-                }
-
-                $('#economySeatMap').append(row);
-            }
-
-            // Seat on hover
-            $('.seat').hover(function(e) {
-                e.preventDefault();
-                $(this).toggleClass('opacity-75 opacity-50');
-            });
-            
-            // Seat on click
-            $('.seat').click(function(e) {
-                e.preventDefault();
-                $(this).toggleClass('text-danger');
-
-                let row = $(this).data('row');
-                let col = $(this).data('col');
-                let seatClass = $(this).data('class');
-                let seatCode = seatClass + row + col;
-
-                if ($(this).hasClass('text-danger')) {
-                    selectedSeats.push(seatCode); // add if selected
-                } else {
-                    selectedSeats = selectedSeats.filter(s => s !== seatCode); // remove if unselected
-                }
-            });
-            
-        }
-
-        $('#toggleDark').click(function() {
-            var currentTheme = $('html').attr('data-bs-theme');
-            var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            $('html').attr('data-bs-theme', newTheme);
-
-            $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
-            $('#navbarNav').toggleClass('text-dark-emphasis text-primary-emphasis');
-            $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
-            $('body').toggleClass('text-bg-dark text-bg-light');
-            $('body').toggleClass('bg-secondary-subtle bg-light');
-        });
-
-        $('.dropdown-item').click(function(){
-            let choice = $(this).text().trim(); 
-            let cost = parseInt($(this).attr('value')) || 0; //get cost
-            
-            //find the button with this choice
-            if (['Round-trip', 'One-way', 'Multi-city'].includes(choice)) {
-                buttonClicked = '#button1';
-                tripTypeCost = cost;
-            } else {
-                buttonClicked = '#button3'
-                travelClassCost = cost;
-            }
-
-            $(buttonClicked).text(choice); //replace button text
-            
-            if (buttonClicked == '#button3') {
-                $('#firstClass').hide();
-                $('#firstSeatMap').hide();
-                $('#businessClass').hide();
-                $('#businessSeatMap').hide();
-                $('#epClass').hide();
-                $('#epSeatMap').hide();
-                $('#economyClass').hide();
-                $('#economySeatMap').hide();
-                $('#seatSelection').show();
-                
-                switch (choice) {
-                    case "First Class": 
-                        $('.available-color').addClass('text-primary');
-                        $('.available-color').removeClass('text-info opacity-75 text-warning text-success');
-                        $('#firstClass').show();
-                        $('#firstSeatMap').show();
-                        break;
-                    case "Business":
-                        $('.available-color').addClass('text-info opacity-75');
-                        $('.available-color').removeClass('text-primary text-warning text-success');
-                        $('#businessClass').show();
-                        $('#businessSeatMap').show();
-                        break;
-                    case "Premium Economy":
-                        $('.available-color').addClass('text-warning');
-                        $('.available-color').removeClass('text-info opacity-75 text-primary text-success');
-                        $('#epClass').show();
-                        $('#epSeatMap').show();
-                        break;
-                    case "Economy":
-                        $('.available-color').addClass('text-success');
-                        $('.available-color').removeClass('text-info opacity-75 text-primary text-warning');
-                        $('#economyClass').show();
-                        $('#economySeatMap').show();
-                        break;
-                }
-            }
-        });
-
-        $('.passengersCount').click(function(){
-            let passCountModal = new bootstrap.Modal(document.getElementById('passengersCount'));
-            passCountModal.show();
-        });
-
-        $('#submitPassCount').click(function(){
-            adults = parseInt($('#adultCount').val() || 0); //if input empty, return 0
-            children = parseInt($('#childrenCount').val() || 0);
-            infants = parseInt($('#infantCount').val() || 0);
-            let passCount = adults + children + infants;
-
-            if (passCount > 20) {
-                $('#errorText').text("Passengers cannot exceed 20.");
-                return;
-            } else if (passCount < 1) {
-                $('#errorText').text("There must be at least 1 passenger.");
-                return;
-            } else if (adults == 0) {
-                $('#errorText').text("There must be at least 1 adult passenger.");
-                return;
-            } else {
-                $('#errorText').text("");
-            }
-
-            $('#button2').text(passCount + ' Traveller' + (passCount > 1 ? 's' : ''));
-            
-            let passCountInstance = bootstrap.Modal.getInstance(document.getElementById('passengersCount')); //get same modal instance
-            passCountInstance.hide(); //close modal
-        });
-
-        $('#baggage').change(function(){
-            if ($(this).is(':checked')) {
-                $('#weight').val(5); // default set to 5kg
-            } else {
-                $('#weight').val('');
-            }
-
-        });
-
-        $('#submitForm').click(function(){
-
-            $('#error').empty();
-            const errorsArray = [];
-
-            let passName = $("#fullName").val().trim();
-            let email = $("#emailAdd").val().trim();
-            let phoneNum = $("#phoneNum").val().trim();
-            let passNum = $("#passNum").val().trim();
-
-            let tripType = $("#button1").text().trim();
-            let passCount = parseInt($('#button2').text());
-            let travelClass = $("#button3").text().trim();
-            let mealOption = $("#meal option:selected").text().trim();
-            let extraBaggage = $("#baggage").is(":checked");
-            let baggageWeight = parseInt($("#weight").val()) || 0;
-            let availed = '';
-
-            //costs
-            let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
-            let mealCost = parseInt($("#meal option:selected").val());
-            let baggageCost = extraBaggage ? (baggageWeight / 5) * 250: 0;
-            let typeCost = tripTypeCost;
-            let classCost = travelClassCost;
-
-            const finalTypeCost = typeCost * passCount;
-            const finalClassCost = classCost * passCount;
-
-            if (extraBaggage) {
-                if (baggageWeight > 0) {
-                    availed =  `Yes (${baggageWeight} kg)`;
-                }
-            } else {
-                availed = "No";
-            }
-
-            //validation rules
-            if (!/^[a-zA-Z ]{2,}$/.test(passName)) {
-                errorsArray.push("Name must include at least two letters and contain only letters.");
-            } 
-            
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                errorsArray.push("Please enter a valid email address.");
-            } 
-            
-            if (!/^\d{11}$/.test(phoneNum)){
-                errorsArray.push("Please enter a valid phone number.");
-            }
-            
-            if (!/^P\d{7}$/.test(passNum)) {
-                errorsArray.push("Please enter a valid passport number.");
-            }
-            
-            if (selectedSeats.length != passCount) {
-                errorsArray.push(`You can only select ${passCount} seat${passCount > 1 ? 's' : ''}.`);
-            }
-
-            if (errorsArray.length > 0) {
-                $('#error').html(`<div class="error">${errorsArray.join('<br>')}</div>`);
-                return;
-            } else {
-                $('#error').text('');
-            }
-
-
-            //summary string
-            let summary =`<b>Passenger Name:</b> ${passName} <br>
-            <b>Email: </b> ${email} <br>
-            <b>Phone Number: </b> ${phoneNum} <br>
-            <b>Passport Number: </b> ${passNum} <br>
-            <hr>
-
-            <b>Trip Type: </b> ${tripType} <br>
-            <b>Number of Passengers: </b> ${passCount} (${adults} adult${adults != 1 ? 's' : ''}, 
-            ${children} child${children != 1 ? 'ren':''}, 
-            ${infants} infant${infants != 1 ? 's':''}) <br>
-            <b>Travel Class: </b> ${travelClass} <br>
-
-            <hr>
-
-            <b>Meal Option: </b> ${mealOption} <br>
-            <b>Availed for extra baggage: </b> ${availed} <br>
-            <b>Seat Number/s: </b> ${selectedSeats.join(', ')} <br>
-
-            <hr>
-
-            <b>Trip Type Cost: </b> ${tripTypeCost} <br>
-            <b>Passenger/s Cost: </b> ${passCost} <br>
-            <b>Travel Class Cost: </b> ${travelClassCost} <br>
-            <b>Meal Cost: </b> ${mealCost} <br>
-            <b>Baggage Cost: </b> ${baggageCost} <br>
-
-            <br>`;
-
-            let total = tripTypeCost + travelClassCost + passCost + mealCost + baggageCost;
-            let totalString = total.toLocaleString();
-
-            $('#summaryText').html(summary);
-            $('#totalCost').html(totalString);
-
-            let summaryModal = new bootstrap.Modal(document.getElementById('summary'));
-            summaryModal.show();
-        });
+        $(document).ready(function() {
+            let adults = 1;
+            let children = 0;
+            let infants = 0;
         
-    });
+            let passCount = adults + children + infants;
+            let tripTypeCost = 0;
+            let travelClassCost = 0;
+
+            //cost equivalent of passengers depending on type
+            const adultCost = 4000;
+            const childCost = 2000;
+            const infantCost = 1000;
+
+            //default show economy seat selection
+            $('#firstClass, #firstSeatMap, #businessClass, #businessSeatMap, #epClass, #epSeatMap').hide();
+            $('.available-color').addClass('text-success');
+            $('.available-color').removeClass('text-info opacity-75 text-primary text-warning');
+            $('#economyClass').show();
+            $('#economySeatMap').show();
+
+            let selectedSeats = [];
+            seatMap();
+
+            function seatMap() {
+                
+                // First Class
+                for (let i = 0; i < 2; i++) {
+                    let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
+
+
+                    // leftmost seats
+                    for (let j = 0; j < 1; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0 disabled">
+                                            <i class="seat bi bi-square-fill" data-row="${i+1}" data-col="${j+1}" data-class="FA"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+                    
+                    // middle seats
+                    for (let j = 0; j < 2; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="FB"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+                    
+                    // rightmost seats
+                    for (let j = 0; j < 1; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-primary" data-row="${i+1}" data-col="${j+1}" data-class="FC"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    $('#firstSeatMap').append(row);
+                }
+
+                // Business
+                for (let i = 0; i < 5; i++) {
+                    let row = $('<div class="d-flex justify-content-center g-0 mb-1"></div>');
+
+                    // left pair
+                    for (let j = 0; j < 2; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BA"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+
+                    // middle trio
+                    for (let j = 0; j < 3; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BB"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+                    
+                    // right pair
+                    for (let j = 0; j < 2; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-info opacity-75" data-row="${i+1}" data-col="${j+1}" data-class="BC"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    $('#businessSeatMap').append(row);
+                }
+
+                // Premium Economy
+                for (let i = 0; i < 6; i++) {
+                    let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
+
+                    // left pair
+                    for (let j = 0; j < 2; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PA"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+                    
+                    // middle seats
+                    for (let j = 0; j < 4; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PB"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+                    
+                    // right pair
+                    for (let j = 0; j < 2; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-warning" data-row="${i+1}" data-col="${j+1}" data-class="PC"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    $('#epSeatMap').append(row);
+                }
+
+                // Economy
+                for (let i = 0; i < 10; i ++) {
+                    let row = $('<div class="d-flex justify-content-center g-0 m-1"></div>');
+
+                    // left trio
+                    for (let j = 0; j < 3; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EA"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+
+                    // middle trio
+                    for (let j = 0; j < 3; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EB"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    // aisle 
+                    row.append(`<div class="col-1"></div>`);
+                    
+                    // right trio
+                    for (let j = 0; j < 3; j++) {
+                        let seat = `<div class="col-auto">
+                                        <button class="btn border-0">
+                                            <i class="seat bi bi-square-fill text-success" data-row="${i+1}" data-col="${j+1}" data-class="EC"></i>
+                                        </button>
+                                    </div>`;
+                        row.append(seat);
+                    }
+
+                    $('#economySeatMap').append(row);
+                }
+
+                // Seat on hover
+                $('.seat').hover(function(e) {
+                    e.preventDefault();
+                    $(this).toggleClass('opacity-75 opacity-50');
+                });
+                
+                // Seat on click
+                $('.seat').click(function(e) {
+                    e.preventDefault();
+                    $(this).toggleClass('text-danger');
+
+                    let row = $(this).data('row');
+                    let col = $(this).data('col');
+                    let seatClass = $(this).data('class');
+                    let seatCode = seatClass + row + col;
+
+                    if ($(this).hasClass('text-danger')) {
+                        selectedSeats.push(seatCode); // add if selected
+                    } else {
+                        selectedSeats = selectedSeats.filter(s => s !== seatCode); // remove if unselected
+                    }
+                });
+                
+            }
+
+            $('#toggleDark').click(function() {
+                var currentTheme = $('html').attr('data-bs-theme');
+                var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                $('html').attr('data-bs-theme', newTheme);
+
+                $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
+                $('#navbarNav').toggleClass('text-dark-emphasis text-primary-emphasis');
+                $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
+                $('body').toggleClass('text-bg-dark text-bg-light');
+                $('body').toggleClass('bg-secondary-subtle bg-light');
+            });
+
+            $('.dropdown-item').click(function(){
+                let choice = $(this).text().trim(); 
+                let cost = parseInt($(this).attr('value')) || 0; //get cost
+                
+                //find the button with this choice
+                if (['Round-trip', 'One-way', 'Multi-city'].includes(choice)) {
+                    buttonClicked = '#button1';
+                    tripTypeCost = cost;
+                } else {
+                    buttonClicked = '#button3'
+                    travelClassCost = cost;
+                }
+
+                $(buttonClicked).text(choice); //replace button text
+                
+                if (buttonClicked == '#button3') {
+                    $('#firstClass').hide();
+                    $('#firstSeatMap').hide();
+                    $('#businessClass').hide();
+                    $('#businessSeatMap').hide();
+                    $('#epClass').hide();
+                    $('#epSeatMap').hide();
+                    $('#economyClass').hide();
+                    $('#economySeatMap').hide();
+                    $('#seatSelection').show();
+                    
+                    switch (choice) {
+                        case "First Class": 
+                            $('.available-color').addClass('text-primary');
+                            $('.available-color').removeClass('text-info opacity-75 text-warning text-success');
+                            $('#firstClass').show();
+                            $('#firstSeatMap').show();
+                            break;
+                        case "Business":
+                            $('.available-color').addClass('text-info opacity-75');
+                            $('.available-color').removeClass('text-primary text-warning text-success');
+                            $('#businessClass').show();
+                            $('#businessSeatMap').show();
+                            break;
+                        case "Premium Economy":
+                            $('.available-color').addClass('text-warning');
+                            $('.available-color').removeClass('text-info opacity-75 text-primary text-success');
+                            $('#epClass').show();
+                            $('#epSeatMap').show();
+                            break;
+                        case "Economy":
+                            $('.available-color').addClass('text-success');
+                            $('.available-color').removeClass('text-info opacity-75 text-primary text-warning');
+                            $('#economyClass').show();
+                            $('#economySeatMap').show();
+                            break;
+                    }
+                }
+            });
+
+            $('.passengersCount').click(function(){
+                let passCountModal = new bootstrap.Modal(document.getElementById('passengersCount'));
+                passCountModal.show();
+            });
+
+            $('#submitPassCount').click(function(){
+                adults = parseInt($('#adultCount').val() || 0); //if input empty, return 0
+                children = parseInt($('#childrenCount').val() || 0);
+                infants = parseInt($('#infantCount').val() || 0);
+                let passCount = adults + children + infants;
+
+                if (passCount > 20) {
+                    $('#errorText').text("Passengers cannot exceed 20.");
+                    return;
+                } else if (passCount < 1) {
+                    $('#errorText').text("There must be at least 1 passenger.");
+                    return;
+                } else if (adults == 0) {
+                    $('#errorText').text("There must be at least 1 adult passenger.");
+                    return;
+                } else {
+                    $('#errorText').text("");
+                }
+
+                $('#button2').text(passCount + ' Traveller' + (passCount > 1 ? 's' : ''));
+                
+                let passCountInstance = bootstrap.Modal.getInstance(document.getElementById('passengersCount')); //get same modal instance
+                passCountInstance.hide(); //close modal
+            });
+
+            $('#baggage').change(function(){
+                if ($(this).is(':checked')) {
+                    $('#weight').val(5); // default set to 5kg
+                } else {
+                    $('#weight').val('');
+                }
+
+            });
+
+            $('#submitForm').click(function(){
+
+                $('#error').empty();
+                const errorsArray = [];
+
+                let passName = $("#fullName").val().trim();
+                let email = $("#emailAdd").val().trim();
+                let phoneNum = $("#phoneNum").val().trim();
+                let passNum = $("#passNum").val().trim();
+
+                let tripType = $("#button1").text().trim();
+                let passCount = parseInt($('#button2').text());
+                let travelClass = $("#button3").text().trim();
+                let mealOption = $("#meal option:selected").text().trim();
+                let extraBaggage = $("#baggage").is(":checked");
+                let baggageWeight = parseInt($("#weight").val()) || 0;
+                let availed = '';
+
+                //costs
+                let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
+                let mealCost = parseInt($("#meal option:selected").val());
+                let baggageCost = extraBaggage ? (baggageWeight / 5) * 250: 0;
+                let typeCost = tripTypeCost;
+                let classCost = travelClassCost;
+
+                const finalTypeCost = typeCost * passCount;
+                const finalClassCost = classCost * passCount;
+
+                if (extraBaggage) {
+                    if (baggageWeight > 0) {
+                        availed =  `Yes (${baggageWeight} kg)`;
+                    }
+                } else {
+                    availed = "No";
+                }
+
+                //validation rules
+                if (!/^[a-zA-Z ]{2,}$/.test(passName)) {
+                    errorsArray.push("Name must include at least two letters and contain only letters.");
+                } 
+                
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    errorsArray.push("Please enter a valid email address.");
+                } 
+                
+                if (!/^\d{11}$/.test(phoneNum)){
+                    errorsArray.push("Please enter a valid phone number.");
+                }
+                
+                if (!/^P\d{7}$/.test(passNum)) {
+                    errorsArray.push("Please enter a valid passport number.");
+                }
+                
+                if (selectedSeats.length != passCount) {
+                    errorsArray.push(`You can only select ${passCount} seat${passCount > 1 ? 's' : ''}.`);
+                }
+
+                if (errorsArray.length > 0) {
+                    $('#error').html(`<div class="error">${errorsArray.join('<br>')}</div>`);
+                    return;
+                } else {
+                    $('#error').text('');
+                }
+
+
+                //summary string
+                let summary =`<b>Passenger Name:</b> ${passName} <br>
+                <b>Email: </b> ${email} <br>
+                <b>Phone Number: </b> ${phoneNum} <br>
+                <b>Passport Number: </b> ${passNum} <br>
+                <hr>
+
+                <b>Trip Type: </b> ${tripType} <br>
+                <b>Number of Passengers: </b> ${passCount} (${adults} adult${adults != 1 ? 's' : ''}, 
+                ${children} child${children != 1 ? 'ren':''}, 
+                ${infants} infant${infants != 1 ? 's':''}) <br>
+                <b>Travel Class: </b> ${travelClass} <br>
+
+                <hr>
+
+                <b>Meal Option: </b> ${mealOption} <br>
+                <b>Availed for extra baggage: </b> ${availed} <br>
+                <b>Seat Number/s: </b> ${selectedSeats.join(', ')} <br>
+
+                <hr>
+
+                <b>Trip Type Cost: </b> ${tripTypeCost} <br>
+                <b>Passenger/s Cost: </b> ${passCost} <br>
+                <b>Travel Class Cost: </b> ${travelClassCost} <br>
+                <b>Meal Cost: </b> ${mealCost} <br>
+                <b>Baggage Cost: </b> ${baggageCost} <br>
+
+                <br>`;
+
+                let total = tripTypeCost + travelClassCost + passCost + mealCost + baggageCost;
+                let totalString = total.toLocaleString();
+
+                $('#summaryText').html(summary);
+                $('#totalCost').html(totalString);
+
+                let summaryModal = new bootstrap.Modal(document.getElementById('summary'));
+                summaryModal.show();
+            });
+            
+        });
 
 </script>
     
