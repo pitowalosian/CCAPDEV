@@ -4,13 +4,19 @@
         <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link" href="/flights">Flight Management</a>
+                <a class="nav-link" href="/">Flight Search</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/book">Book Flights</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/reservations">My Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
             </li>
         </ul>
     </div>
@@ -41,7 +47,8 @@
                     <select class="form-control" name="flightId" id="flightId" required>
                         <option value="">Choose a flight...</option>
                         {{#each flights}}
-                        <option value="{{this._id}}">
+                        <option value="{{this._id}}"
+                            {{#equals this._id ../selectedFlightId}}selected{{/equals}}>
                             {{this.airline}} {{this.flightNo}} - {{this.origin}} to {{this.destination}}
                         </option>
                         {{/each}}
@@ -114,11 +121,11 @@
                         <div class="mb-3">
                             <label for="meal" class="form-label">Meal Options</label>
                             <select class="form-select" id="meal" name="meal">
-                                <option value="Standard (included)" selected>Standard (included)</option>
-                                <option value="Vegetarian">Vegetarian</option>
-                                <option value="Vegan">Vegan</option>
-                                <option value="Halal">Halal</option>
-                                <option value="Kosher">Kosher</option>
+                                <option value="0" selected>Standard (included)</option>
+                                <option value="200">Vegetarian</option>
+                                <option value="250">Vegan</option>
+                                <option value="300">Halal</option>
+                                <option value="350">Kosher</option>
                             </select>
                         </div>
                     </div>
@@ -139,7 +146,7 @@
                             <div class="mt-2">
                                 <small class="text-muted">
                                     Free Allowance: 20kg <br>
-                                    Excess baggage: ₱250 per kg over free allowance
+                                    Excess baggage: ₱500 per kg over free allowance
                                 </small>
                             </div>
                             
@@ -299,6 +306,7 @@
             let passCount = adults + children + infants;
             let tripTypeCost = 0;
             let travelClassCost = 0;
+            let currentBaggageCost = 0;
 
             //cost equivalent of passengers depending on type
             const adultCost = 4000;
@@ -587,6 +595,22 @@
                 passCountModal.show();
             });
 
+            $('#baggageWeight').on('input', function() {
+                const baggageWeight = parseFloat($(this).val()) || 0;
+                
+                if (baggageWeight > 20) {
+                    const excessWeight = Math.ceil(baggageWeight - 20);
+                    currentBaggageCost = excessWeight * 500;
+                    
+                    $('#excessWeight').text(excessWeight);
+                    $('#excessCost').text(currentBaggageCost.toLocaleString());
+                    $('#excessBaggageInfo').show();
+                } else {
+                    currentBaggageCost = 0; //if no excess, 0
+                    $('#excessBaggageInfo').hide();
+                }
+            });
+
             $('#submitPassCount').click(function(){
                 adults = parseInt($('#adultCount').val() || 0); //if input empty, return 0
                 children = parseInt($('#childrenCount').val() || 0);
@@ -612,15 +636,6 @@
                 passCountInstance.hide(); //close modal
             });
 
-            $('#baggage').change(function(){
-                if ($(this).is(':checked')) {
-                    $('#weight').val(5); // default set to 5kg
-                } else {
-                    $('#weight').val('');
-                }
-
-            });
-
             $('#submitForm').click(function(){
 
                 $('#error').empty();
@@ -628,36 +643,32 @@
 
                 let passName = $("#fullName").val().trim();
                 let email = $("#emailAdd").val().trim();
-                let phoneNum = $("#phoneNum").val().trim();
+                let phoneNum = $("#phoneNumInput").val().trim();
                 let passNum = $("#passNum").val().trim();
 
+                let flightId = $("#flightId").val().trim();
                 let tripType = $("#button1").text().trim();
                 let passCount = parseInt($('#button2').text());
                 let travelClass = $("#button3").text().trim();
                 let mealOption = $("#meal option:selected").text().trim();
-                let extraBaggage = $("#baggage").is(":checked");
-                let baggageWeight = parseInt($("#weight").val()) || 0;
-                let availed = '';
+                let baggageWeight = parseInt($("#baggageWeight").val()) || 0;
 
                 //costs
                 let passCost = (adults * adultCost) + (children * childCost) + (infants *infantCost);
                 let mealCost = parseInt($("#meal option:selected").val());
-                let baggageCost = extraBaggage ? (baggageWeight / 5) * 250: 0;
+                let baggageCost = currentBaggageCost;
                 let typeCost = tripTypeCost;
                 let classCost = travelClassCost;
 
                 const finalTypeCost = typeCost * passCount;
                 const finalClassCost = classCost * passCount;
 
-                if (extraBaggage) {
-                    if (baggageWeight > 0) {
-                        availed =  `Yes (${baggageWeight} kg)`;
-                    }
-                } else {
-                    availed = "No";
+                //validation rules
+
+                if (!flightId) { 
+                    errorsArray.push("Please select a flight.");
                 }
 
-                //validation rules
                 if (!/^[a-zA-Z ]{2,}$/.test(passName)) {
                     errorsArray.push("Name must include at least two letters and contain only letters.");
                 } 
@@ -673,9 +684,15 @@
                 if (!/^P\d{7}$/.test(passNum)) {
                     errorsArray.push("Please enter a valid passport number.");
                 }
+
+                if (baggageWeight <= 0) {
+                    errorsArray.push("Please enter baggage weight.")
+                } else if (baggageWeight > 50) {
+                    errorsArray.push("Baggage weight cannot exceed 50kg.")
+                }
                 
                 if (selectedSeats.length != passCount) {
-                    errorsArray.push(`You can only select ${passCount} seat${passCount > 1 ? 's' : ''}.`);
+                    errorsArray.push(`Please select ${passCount} seat${passCount > 1 ? 's' : ''}.`);
                 }
 
                 if (errorsArray.length > 0) {
@@ -702,7 +719,7 @@
                 <hr>
 
                 <b>Meal Option: </b> ${mealOption} <br>
-                <b>Availed for extra baggage: </b> ${availed} <br>
+                <b>Baggage Weight: </b> ${baggageWeight}kg <br>
                 <b>Seat Number/s: </b> ${selectedSeats.join(', ')} <br>
 
                 <hr>
@@ -725,6 +742,17 @@
                 summaryModal.show();
             });
             
+            $('#submitSummary').click(function(){
+                $('#phoneNumHidden').val($('#phoneNumInput').val());
+                $('#selectedSeat').val(selectedSeats.join(', '));
+                $('#tripType').val($('#button1').text().trim());
+                $('#travelClass').val($('#button3').text().trim());
+                $('#adults').val(adults);
+                $('#children').val(children);
+                $('#infants').val(infants);
+                $('#passengerInfo').submit();
+            });
+
         });
 
 </script>
