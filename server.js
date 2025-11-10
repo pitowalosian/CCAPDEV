@@ -147,9 +147,11 @@ app.post('/flights/delete/:id', async (req, res) => {
 app.get('/book', async (req, res) => {
     try {
         const flights = await Flight.find().lean();
+        const selectedFlightId = req.query.flightId;
         res.render('book', { 
-            title: 'Book Flight',
-            flights
+            title: 'Book Flights',
+            flights,
+            selectedFlightId
         });
     } catch (error) {
         console.log(error);
