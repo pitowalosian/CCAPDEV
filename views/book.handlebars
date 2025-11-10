@@ -304,8 +304,8 @@
             let infants = 0;
         
             let passCount = adults + children + infants;
-            let tripTypeCost = 0;
-            let travelClassCost = 0;
+            let tripTypeCost = 3000; //auto selected option is round-trip
+            let travelClassCost = 10000; //auto selected option is economy
             let currentBaggageCost = 0;
 
             //cost equivalent of passengers depending on type
@@ -636,7 +636,8 @@
                 passCountInstance.hide(); //close modal
             });
 
-            $('#submitForm').click(function(){
+            $('#submitForm').click(function(e){
+                e.preventDefault();
 
                 $('#error').empty();
                 const errorsArray = [];
@@ -724,11 +725,11 @@
 
                 <hr>
 
-                <b>Trip Type Cost: </b> ${tripTypeCost} <br>
-                <b>Passenger/s Cost: </b> ${passCost} <br>
-                <b>Travel Class Cost: </b> ${travelClassCost} <br>
-                <b>Meal Cost: </b> ${mealCost} <br>
-                <b>Baggage Cost: </b> ${baggageCost} <br>
+                <b>Trip Type Cost: </b> ₱${finalTypeCost} <br>
+                <b>Passenger/s Cost: </b> ₱${passCost} <br>
+                <b>Travel Class Cost: </b> ₱${finalClassCost} <br>
+                <b>Meal Cost: </b> ₱${mealCost} <br>
+                <b>Extra Baggage Cost: </b> ₱${baggageCost} <br>
 
                 <br>`;
 
