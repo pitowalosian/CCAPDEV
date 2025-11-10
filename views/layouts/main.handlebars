@@ -23,8 +23,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#searchCont').hide();
-                $('#resultsText').hide();
                 
                 // Set minimum dates
                 const today = new Date();
@@ -36,7 +34,7 @@
                 $('#depdate').on('change', function(){
                     let depdate = $(this).val();
                     $('#retdate').attr('min', depdate); 
-                })
+                });
                 
                 // Swap Button 
                 $('#swap').click(function() {
@@ -46,7 +44,23 @@
 
                     // Swap
                     $('#origin').text(destination);  
-                    $('#destination').text(origin);  
+                    $('#destination').text(origin); 
+
+                    const origVal = $('#searchOrig').val();
+                    $('#searchOrig').val($('#searchDest').val());
+                    $('#searchDest').val(origVal); 
+                });
+
+                // Origin and Destination dropdowns
+                $('.origin').on('click', function(){
+                    const choice = $(this).text().trim();
+                    $('#origin').text(choice);
+                    $('#searchOrig').val(choice);
+                });
+                $('.destination').on('click', function(){
+                    const choice = $(this).text().trim();
+                    $('#destination').text(choice);
+                    $('#searchDest').val(choice);
                 });
 
                 // Toggle Dark Button
@@ -67,16 +81,6 @@
                     $('#origin').toggleClass('btn-outline-secondary btn-light');
                     $('#destination').toggleClass('btn-outline-secondary btn-light');
                     $('#search').toggleClass('btn-primary btn-outline-light');
-                });
-
-                // Origin and Destination dropdowns
-                $('.origin').on('click', function(){
-                    let choice = $(this).text().trim();
-                    $('#origin').text(choice);
-                });
-                $('.destination').on('click', function(){
-                    let choice = $(this).text().trim();
-                    $('#destination').text(choice);
                 });
 
                 // Check form inputs
@@ -109,72 +113,35 @@
                     // Success
                     else {      
                         $("#tableBody").empty();
-
-                        // Get all flights by origin and destination
-                        const filteredFlights = flights.filter(f =>
-                            f.origin.trim().toLowerCase().includes(origin) &&
-                            f.destination.trim().toLowerCase().includes(destination)
-                        );
-
-                        $('#resultsText').show();
-                        // Conditions
-                        if (filteredFlights.length === 0) {     // No flights found
-                            $('#noResults').show();
-                            $('#resultsTable').hide();
-                        } else {                                // Success
-                            $('#noResults').hide();
-                            $('#resultsTable').show();
-
-                            // Print filtered flights details
-                            filteredFlights.forEach(f => {
-                            const row = `
-                                <tr>
-                                    <td>${f.airline}</td>
-                                    <td>${f.flightNo}</td>
-                                    <td>${f.depart}</td>
-                                    <td>${f.arrive}</td>
-                                    <td>${f.flightDur}</td>
-                                    <td>${f.price}</td>
-                                    <td><a class="select-btn btn btn-primary" data-origin="${f.origin}" data-destination="${f.destination}">Select</a></td>
-                                </tr>
-                            `;
-                            $('#tableBody').append(row);    // Add to html 
-                        });
-                        }
-                        $('#searchCont').css("scroll-margin-top", "65px");
+                        $('#resultsText').fadeIn(1000);
                         $('#searchCont').fadeIn(1000);
                     }
                 });
 
                 // Hide search container on form container mouse enter
-                $('#formContainer').on('mouseenter', function() {
-                    $('#resultsText').fadeOut(1000);
-                    $('#searchCont').fadeOut(1000);
-                    $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
-                });
+                //$('#formContainer').on('mouseenter', function() {
+                  //  $('#resultsText').fadeOut(1000);
+                   // $('#searchCont').fadeOut(1000);
+                   // $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
+                //});
 
-                $(document).on('click', '.select-btn', function(event) {
+                let dSelected = null;
+                let rSelected = null;
+
+                $(document).on('click', '.select-btn', function() {
                     const isSelected = $(this).text() === 'Selected';
+                    const type = $(this).data('type'); // departure or return
+                    const row = $(this).closest('tr');
                     
-                    // Deselect all buttons
-                    $('.select-btn').removeClass('btn-outline-success').addClass('btn-primary').text('Select');
-
-                    // If clicked button is already selected
-                    if (isSelected) {
-                        const offCanvas = bootstrap.Offcanvas.getInstance(document.getElementById('summaryOffcanvas'));
-                        if (offCanvas) {
-                            offCanvas.hide();
-                        }
-
-                        return;
-                    }
+                    const flight = {
+                        airline: row.find('td:eq(0)').text(),
+                        flightNo: row.find('td:eq(1)').text(),
+                        depart: row.find('td:eq(2)').text(),
+                        arrive: row.find('td:eq(3)').text(),
+                        price: row.find('td:eq(4)').text()
+                    };
                     
-                    // Toggle clicked button
-                    $(this)
-                        .removeClass('btn-primary')
-                        .addClass('btn-outline-success')
-                        .text('Selected');
-
+                    
                     const offcanvas = new bootstrap.Offcanvas('#summaryOffcanvas');
                     offcanvas.show();
 
@@ -184,29 +151,81 @@
                     const origin = $(this).data('origin');
                     const destination = $(this).data('destination');
 
-                    // Get flight details from the same row
-                    const row = $(this).closest('tr');
-                    const airline = row.find('td:eq(0)').text();
-                    const flightNo = row.find('td:eq(1)').text();
-                    const depart = row.find('td:eq(2)').text();
-                    const arrive = row.find('td:eq(3)').text();
-                    const price = row.find('td:eq(5)').text();
+                    if (type === 'depart') {
+                        dSelected = flight;
+                        $('.depart-flight .select-btn').removeClass('btn-outline-success').addClass('btn-primary').text('Select');
+                        $(this).removeClass('btn-primary').addClass('btn-outline-success').text('Selected');
 
-                    // Create summary content
-                    const summaryContent = `
-                        <h5>Flight Summary | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
-                        <hr>
-                        <p><strong class="text-info">Airline:</strong> ${airline}</p>
-                        <p><strong class="text-info">Flight Number:</strong> ${flightNo}</p>
-                        <p><strong class="text-info">Departure Time:</strong> ${depart}</p>
-                        <p><strong class="text-info">Arrival Time:</strong> ${arrive}</p>
-                        <p><strong class="text-info">Price:</strong> ${price}</p>
-                        <hr>
-                        <a href="BookFlights.html" class="btn btn-success w-100">Proceed to Booking</a>
-                    `;
+                        // Create summary content
+                        let dSummaryContent = `
+                            <h5>Flight Summary | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
+                            <hr>
+                            <p><strong class="text-primary">Airline:</strong> ${dSelected.airline}</p>
+                            <p><strong class="text-primary">Flight Number:</strong> ${dSelected.flightNo}</p>
+                            <p><strong class="text-primary">Departure Time:</strong> ${dSelected.depart}</p>
+                            <p><strong class="text-primary">Arrival Time:</strong> ${dSelected.arrive}</p>
+                            <p><strong class="text-primary">Price:</strong> ${dSelected.price}</p>
+                            <hr>
+                            <a href="BookFlights.html" class="btn btn-success w-100">Proceed to Booking</a>
+                        `;
 
-                    // Append summary content to offcanvas body
-                    $('#summaryBody').html(summaryContent);
+                        // Append summary content to offcanvas body
+                        $('#summaryBody').html(dSummaryContent);
+                    } else {
+                        rSelected = flight;
+                        $('.return-flight .select-btn').removeClass('btn-outline-success').addClass('btn-primary').text('Select');
+                        $(this).removeClass('btn-primary').addClass('btn-outline-success').text('Selected');
+
+                        // Create summary content
+                        const rSummaryContent = `
+                            <h5>Returning Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
+                            <hr>
+                            <p><strong class="text-primary">Airline:</strong> ${rSelected.airline}</p>
+                            <p><strong class="text-primary">Flight Number:</strong> ${rSelected.flightNo}</p>
+                            <p><strong class="text-primary">Departure Time:</strong> ${rSelected.depart}</p>
+                            <p><strong class="text-primary">Arrival Time:</strong> ${rSelected.arrive}</p>
+                            <p><strong class="text-primary">Price:</strong> ${rSelected.price}</p>
+                            <hr>
+                            <a href="BookFlights.html" class="btn btn-success w-100">Proceed to Booking</a>
+                        `;
+
+                        // Append summary content to offcanvas body
+                        $('#summaryBody').html(rSummaryContent);
+                    }
+
+                    if (dSelected && rSelected) {
+                        const offcanvas = new bootstrap.Offcanvas('#summaryOffcanvas');
+                        offcanvas.show();
+
+                        $('#summaryBody').html(`
+                            <h5>Departure Flight | <small>${$('#origin').text().trim()} <i class="text-primary bi bi-airplane-fill"></i> ${$('#destination').text().trim()}</small></h5>
+                            <hr>
+                            <p><strong class="text-primary">Airline:</strong> ${dSelected.airline}</p>
+                            <p><strong class="text-primary">Flight Number:</strong> ${dSelected.flightNo}</p>
+                            <p><strong class="text-primary">Departure Time:</strong> ${dSelected.depart}</p>
+                            <p><strong class="text-primary">Arrival Time:</strong> ${dSelected.arrive}</p>
+                            <p><strong class="text-primary">Price:</strong> ${dSelected.price}</p>
+                            <hr>
+                            <h5>Return Flight | <small>${$('#destination').text().trim()} <i class="text-primary bi bi-airplane-fill"></i> ${$('#origin').text().trim()}</small></h5>
+                            <hr>
+                            <p><strong class="text-primary">Airline:</strong> ${rSelected.airline}</p>
+                            <p><strong class="text-primary">Flight Number:</strong> ${rSelected.flightNo}</p>
+                            <p><strong class="text-primary">Departure Time:</strong> ${rSelected.depart}</p>
+                            <p><strong class="text-primary">Arrival Time:</strong> ${rSelected.arrive}</p>
+                            <p><strong class="text-primary">Price:</strong> ${rSelected.price}</p>
+                            <hr>
+                            <a href="BookFlights.html" class="btn btn-success w-100">Proceed to Booking</a>
+                        `);
+                    }
+
+                    // If clicked button is already selected
+                    if (isSelected) {
+                        const offCanvas = bootstrap.Offcanvas.getInstance(document.getElementById('summaryOffcanvas'));
+                        if (offCanvas) {
+                            offCanvas.hide();
+                        }
+                        return;
+                    }
                 });
 
                 const msg = $('.form-msg');
@@ -223,6 +242,7 @@
                     $('#title').addClass('mt-5');
                 }
 
+                // Handle departure and arrival day dropdowns in flight management
                 const depDay = $('#departureDay').val();
                 const arrDay = $('#arrivalDay').val();
 

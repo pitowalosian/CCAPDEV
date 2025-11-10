@@ -27,8 +27,39 @@ app.use(express.urlencoded({ extended: true }));
 
 // List all flights
 app.get('/', async (req, res) => {
-    const flights = await Flight.find().lean();
-    res.render('flights/search', { title: 'Flight Search', flights });
+    try {
+        const { origin, destination, depdate, retdate } = req.query;
+
+        if (!depdate) {
+            return res.render('search', { title: 'Search Flights', flights: [], date: null, showResults: false });
+        }
+
+        const departureDate = new Date(depdate);
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dDayOfWeek = days[departureDate.getDay()];
+        
+        let depQuery = {
+                origin, destination, departureDay: dDayOfWeek
+        };
+        const flights = await Flight.find(depQuery).lean();
+
+        let returnFlights = [];
+        let rDayOfWeek = null;
+
+        if (retdate) {
+            const returnDate = new Date(retdate);
+            if (!isNaN(returnDate.getTime())) {
+                rDayOfWeek = days[returnDate.getDay()];
+                const returnQuery = { origin: destination, destination: origin, departureDay: rDayOfWeek };
+                returnFlights = await Flight.find(returnQuery).lean();
+            }
+        }
+        
+        res.render('search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, showResults: true });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Error searching for flights');
+    }
 });
 
 // Route to handle adding a new flight
@@ -210,20 +241,24 @@ app.post('/reservations/delete/:id', async (req, res) => {
 
 app.get('/flights/search', async (req, res) => {
     try {
-        const { date } = req.query;
+        const { origin, destination, depdate } = req.query;
 
-        if (!date) {
-            return res.render('flights/search', { title: 'Search Flights', flights: [] });
+        if (!depdate) {
+            return res.render('search', { title: 'Search Flights', flights: [], date: null });
         }
 
-        const inputDate = new Date(date);
+        const inputDate = new Date(depdate);
         
-        const weekdayOptions = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const dayOfWeek = weekdayOptions[inputDate.getDay()];
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayOfWeek = days[inputDate.getDay()];
 
-        const flights = await Flight.find({ departureDay: dayOfWeek }).lean();
+        const query = {
+            origin, destination, departureDay: dayOfWeek
+        };
 
-        res.render('flights/search', { title: 'Search Flights', flights, date });
+        const flights = await Flight.find(query).lean();
+
+        res.render('search', { title: 'Search Flights', flights, date: depdate, dayOfWeek });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error searching for flights');
