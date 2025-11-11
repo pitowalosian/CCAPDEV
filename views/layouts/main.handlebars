@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
-        <title>Flight Search</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.1/dist/css/bootstrap-datepicker3.min.css">
@@ -119,11 +118,11 @@
                 });
 
                 // Hide search container on form container mouse enter
-                //$('#formContainer').on('mouseenter', function() {
-                  //  $('#resultsText').fadeOut(1000);
-                   // $('#searchCont').fadeOut(1000);
-                   // $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
-                //});
+                $('#formContainer').on('mouseenter', function() {
+                    $('#resultsText').fadeOut(1000);
+                    $('#searchCont').fadeOut(1000);
+                    $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
+                });
 
                 let dSelected = null;
                 let rSelected = null;
@@ -140,7 +139,6 @@
                         arrive: row.find('td:eq(3)').text(),
                         price: row.find('td:eq(4)').text()
                     };
-                    
                     
                     const offcanvas = new bootstrap.Offcanvas('#summaryOffcanvas');
                     offcanvas.show();
@@ -164,7 +162,7 @@
                             <p><strong class="text-primary">Flight Number:</strong> ${dSelected.flightNo}</p>
                             <p><strong class="text-primary">Departure Time:</strong> ${dSelected.depart}</p>
                             <p><strong class="text-primary">Arrival Time:</strong> ${dSelected.arrive}</p>
-                            <p><strong class="text-primary">Price:</strong> ${dSelected.price}</p>
+                            <p><strong class="text-primary">Base Price:</strong> ${dSelected.price}</p>
                             <hr>
                             <a href="/book" class="btn btn-success w-100">Proceed to Booking</a>
                         `;
@@ -184,7 +182,7 @@
                             <p><strong class="text-primary">Flight Number:</strong> ${rSelected.flightNo}</p>
                             <p><strong class="text-primary">Departure Time:</strong> ${rSelected.depart}</p>
                             <p><strong class="text-primary">Arrival Time:</strong> ${rSelected.arrive}</p>
-                            <p><strong class="text-primary">Price:</strong> ${rSelected.price}</p>
+                            <p><strong class="text-primary">Base Price:</strong> ${rSelected.price}</p>
                             <hr>
                             <a href="/book" class="btn btn-success w-100">Proceed to Booking</a>
                         `;
@@ -197,30 +195,33 @@
                         const offcanvas = new bootstrap.Offcanvas('#summaryOffcanvas');
                         offcanvas.show();
 
-                        $('#summaryBody').html(`
-                            <h5>Departure Flight | <small>${$('#origin').text().trim()} <i class="text-primary bi bi-airplane-fill"></i> ${$('#destination').text().trim()}</small></h5>
+                        const drSummaryContent = `
+                            <h5>Departing Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
                             <hr>
                             <p><strong class="text-primary">Airline:</strong> ${dSelected.airline}</p>
                             <p><strong class="text-primary">Flight Number:</strong> ${dSelected.flightNo}</p>
                             <p><strong class="text-primary">Departure Time:</strong> ${dSelected.depart}</p>
                             <p><strong class="text-primary">Arrival Time:</strong> ${dSelected.arrive}</p>
-                            <p><strong class="text-primary">Price:</strong> ${dSelected.price}</p>
+                            <p><strong class="text-primary">Base Price:</strong> ${dSelected.price}</p>
                             <hr>
-                            <h5>Return Flight | <small>${$('#destination').text().trim()} <i class="text-primary bi bi-airplane-fill"></i> ${$('#origin').text().trim()}</small></h5>
+                            <h5>Returning Flight | <small>${destination} <i class="text-primary bi bi-airplane-fill"></i> ${origin}</small></h5>
                             <hr>
                             <p><strong class="text-primary">Airline:</strong> ${rSelected.airline}</p>
                             <p><strong class="text-primary">Flight Number:</strong> ${rSelected.flightNo}</p>
                             <p><strong class="text-primary">Departure Time:</strong> ${rSelected.depart}</p>
                             <p><strong class="text-primary">Arrival Time:</strong> ${rSelected.arrive}</p>
-                            <p><strong class="text-primary">Price:</strong> ${rSelected.price}</p>
+                            <p><strong class="text-primary">Base Price:</strong> ${rSelected.price}</p>
                             <hr>
                             <a href="/book" class="btn btn-success w-100">Proceed to Booking</a>
-                        `);
+                        `;
+
+                        $('#summaryBody').html(drSummaryContent);   
                     }
 
                     // If clicked button is already selected
                     if (isSelected) {
                         const offCanvas = bootstrap.Offcanvas.getInstance(document.getElementById('summaryOffcanvas'));
+                        $(this).removeClass('btn-outline-success').addClass('btn-primary').text('Select');
                         if (offCanvas) {
                             offCanvas.hide();
                         }

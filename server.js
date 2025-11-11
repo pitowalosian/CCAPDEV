@@ -54,8 +54,8 @@ app.get('/', async (req, res) => {
                 returnFlights = await Flight.find(returnQuery).lean();
             }
         }
-        
-        res.render('search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, showResults: true });
+
+        res.render('search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, showResults: true, formsubmitted: true});
     } catch (err) {
         console.log(err);
         res.status(500).send('Error searching for flights');
@@ -240,32 +240,6 @@ app.post('/reservations/delete/:id', async (req, res) => {
         res.redirect('/reservations?status=error');
     }
 });
-
-app.get('/flights/search', async (req, res) => {
-    try {
-        const { origin, destination, depdate } = req.query;
-
-        if (!depdate) {
-            return res.render('search', { title: 'Search Flights', flights: [], date: null });
-        }
-
-        const inputDate = new Date(depdate);
-        
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const dayOfWeek = days[inputDate.getDay()];
-
-        const query = {
-            origin, destination, departureDay: dayOfWeek
-        };
-
-        const flights = await Flight.find(query).lean();
-
-        res.render('search', { title: 'Search Flights', flights, date: depdate, dayOfWeek });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error searching for flights');
-    }
-})
 
 Handlebars.registerHelper("equals", function (a, b, options) {
   console.log("=== DEBUG: equals helper called ===");

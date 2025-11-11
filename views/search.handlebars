@@ -7,7 +7,7 @@
                     <a class="nav-link active bg-primary" aria-current="page" href="#">Flight Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="BookFlights.html">Book Flights</a>
+                    <a class="nav-link" href="/book">Book Flights</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="Reservations.html">My Reservations</a>
@@ -122,86 +122,91 @@
         </div>
     </div>
     <br><br><br>
-    <p class="display-6 text-center" id="resultsText">Search Results</p>
-    <!--Search Container-->
-    {{#equals showResults true}}
-    <div id="searchCont" class="position-fluid bg-dark-subtle p-3 border-top border-bottom border-primary">
-        <!--Results Table-->
-        {{#if flights.length}}
-        <!-- Table when flights exist -->
-        <div class="table-responsive">
-            <table class="table table-hover align-middle text-center">
-                <thead class="lead table-primary text-light text-center" id="resultsTable">
-                    <tr>
-                        <th>Airline</th>
-                        <th>Flight Number</th>
-                        <th>Departure Time</th>
-                        <th>Arrival Time</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <p class="lead text-center">Select your departing flight</p>
-                <tbody id="tableBody" class="lead">
-                    {{#each flights}}
-                    <tr>
-                        <td>{{airline}}</td>
-                        <td>{{flightNo}}</td>
-                        <td>{{departureTime}}</td>
-                        <td>{{arrivalTime}}</td>
-                        <td>${{price}}</td>
-                        <td>
-                            <button class="btn btn-primary select-btn" data-origin="{{../origin}}" data-destination="{{../destination}}">Select</button>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-        {{else}}
-            {{#equals showResults false}}
-                <p id="noResults" class="lead text-center">No departing flights found</p>
-            {{/equals}}
-        {{/if}}
-    {{/equals}}
-    {{#equals showResults true}}
-        {{#if returnFlights.length}}
-            <!-- Table when flights exist -->
-            <div class="table-responsive">
-                <table class="table table-hover align-middle text-center">
-                    <thead class="lead table-primary text-light text-center" id="resultsTable">
-                        <tr>
-                            <th>Airline</th>
-                            <th>Flight Number</th>
-                            <th>Departure Time</th>
-                            <th>Arrival Time</th>
-                            <th>Price</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <p class="lead text-center">Select your returning flight</p>
-                    <tbody id="tableBody" class="lead">
-                        {{#each returnFlights}}
-                        <tr>
-                            <td>{{airline}}</td>
-                            <td>{{flightNo}}</td>
-                            <td>{{departureTime}}</td>
-                            <td>{{arrivalTime}}</td>
-                            <td>${{price}}</td>
-                            <td>
-                                <button class="btn btn-primary select-btn" data-origin="{{../destination}}" data-destination="{{../origin}}">Select</button>
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
+    {{#if formsubmitted}}
+        <p class="display-6 text-center" id="resultsText">Search Results</p>
+        <!--Search Container-->
+        {{#if showResults}}
+            <div id="searchCont" class="position-fluid bg-dark-subtle border-top border-bottom border-primary w-auto p-3 mx-5 shadow-lg">
+                <!--Results Table-->
+                {{#if flights.length}}
+                    <!-- Table when flights exist -->
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle text-center">
+                            <thead class="lead table-primary text-light text-center" id="resultsTable">
+                                <tr>
+                                    <th>Airline</th>
+                                    <th>Flight Number</th>
+                                    <th>Departure Time</th>
+                                    <th>Arrival Time</th>
+                                    <th>Base Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <p class="lead text-center text-primary-emphasis">Select your departing flight</p>
+                            <tbody id="tableBody" class="lead">
+                                {{#each flights}}
+                                <tr>
+                                    <td>{{airline}}</td>
+                                    <td>{{flightNo}}</td>
+                                    <td>{{departureTime}}</td>
+                                    <td>{{arrivalTime}}</td>
+                                    <td>${{price}}</td>
+                                    <td>
+                                        <button class="btn btn-primary select-btn" data-type="depart" data-origin="{{origin}}" data-destination="{{destination}}">Select</button>
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr class="text-success-emphasis">
+                    {{#if returnFlights.length}}
+                        <!-- Table when flights exist -->
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle text-center">
+                                <thead class="lead table-primary text-light text-center" id="resultsTable">
+                                    <tr>
+                                        <th>Airline</th>
+                                        <th>Flight Number</th>
+                                        <th>Departure Time</th>
+                                        <th>Arrival Time</th>
+                                        <th>Base Price</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <p class="lead text-center text-primary-emphasis">Select your returning flight</p>
+                                <tbody id="tableBody" class="lead">
+                                    {{#each returnFlights}}
+                                    <tr>
+                                        <td>{{airline}}</td>
+                                        <td>{{flightNo}}</td>
+                                        <td>{{departureTime}}</td>
+                                        <td>{{arrivalTime}}</td>
+                                        <td>${{price}}</td>
+                                        <td>
+                                            <button class="btn btn-primary select-btn" data-type="return" data-origin="{{destination}}" data-destination="{{origin}}">Select</button>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    {{else}}
+                        {{#if rDate}}
+                            {{#unless returnFlights.length}}
+                                <p id="noResults" class="lead text-center text-muted">No returning flights found for {{rDate}}</p>
+                            {{/unless}}
+                        {{/if}}
+                    {{/if}}
+                {{else}}
+                    {{#unless flights.length}}
+                        <p id="noResults" class="lead text-center text-muted">No departing flights found for {{dDate}}</p>
+                    {{/unless}}
+                {{/if}}
             </div>
-        {{else}}
-            {{#equals showResults false}}
-                <p id="noResults" class="lead text-center">No returning flights found</p>
-            {{/equals}}
         {{/if}}
-    {{/equals}}
+    {{/if}}
+    <!--Offcanvas Summary-->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="summaryOffcanvas" aria-labelledby="summaryOffcanvasLabel">
         <div class="offcanvas-header">
             <h5 class="text-primary offcanvas-title" id="summaryOffcanvasLabel">Selected Flight Details</h5>
