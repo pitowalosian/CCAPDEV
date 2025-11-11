@@ -39,6 +39,13 @@
             <input type="hidden" name="infants" id="infants" value="0">
             <input type="hidden" name="seat" id="selectedSeat" required>
             <input type="hidden" name="phoneNum" id="phoneNumHidden" value="">
+            <input type="hidden" name="baggage" id="baggageHidden" value="0">
+            <input type="hidden" name="passengerCost" id="passengerCostHidden" value="">
+            <input type="hidden" name="tripTypeCost" id="tripTypeCostHidden" value="0">
+            <input type="hidden" name="travelClassCost" id="travelClassCostHidden" value="0">
+            <input type="hidden" name="mealCost" id="mealCostHidden" value="0">
+            <input type="hidden" name="baggageCost" id="baggageCostHidden" value="0">
+            <input type="hidden" name="totalPrice" id="totalPriceHidden" value="0">
 
             {{! flight selection }}
             <div class="row justify-content-center mb-4">
@@ -746,11 +753,22 @@
             $('#submitSummary').click(function(){
                 $('#phoneNumHidden').val($('#phoneNumInput').val());
                 $('#selectedSeat').val(selectedSeats.join(', '));
+
                 $('#tripType').val($('#button1').text().trim());
                 $('#travelClass').val($('#button3').text().trim());
+
                 $('#adults').val(adults);
                 $('#children').val(children);
                 $('#infants').val(infants);
+                
+                $('#baggageHidden').val($('#baggageWeight').val());
+                $('#passengerCostHidden').val(passCost);
+                $('#tripTypeCostHidden').val(tripTypeCost);
+                $('#travelClassCostHidden').val(travelClassCost);
+                $('#mealCostHidden').val(mealCost);
+                $('#baggageCostHidden').val(baggageCost);
+                $('#totalPriceHidden').val(total);
+
                 $('#passengerInfo').submit();
             });
 

@@ -185,7 +185,28 @@ app.get('/reservations/new', async (req, res) => {
 // Handle new reservation submission
 app.post('/reservations', async (req, res) => {
     try {
-        const { passengerName, passengerEmail, passport, flightId, seat, meal, baggage } = req.body;
+        const { 
+            passengerName, 
+            passengerEmail, 
+            passport, 
+            phoneNum,
+            flight: flightId, 
+            seat, 
+            meal, 
+            baggage,
+            tripType,
+            travelClass,
+            adults,
+            children,
+            infants,
+            
+            //costs
+            passengerCost,
+            tripTypeCost,
+            travelClassCost,
+            mealCost,
+            baggageCost,
+            totalPrice } = req.body;
         const bookingId = `BKG-${shortid.generate().toUpperCase()}`;
 
         const newReservation = new Reservation({
