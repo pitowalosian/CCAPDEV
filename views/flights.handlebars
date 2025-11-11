@@ -36,14 +36,17 @@
     <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
         <form class="text-start" action="/add-flights" method="POST">
             <div class="row mb-3">
-                <div class="col-md-6">
-                <label class="form-label">Flight Number</label>
-                <input type="text" class="form-control" placeholder="e.g. PR 102" name="flightNo">
+                <h3 class="text-primary-emphasis display-6 text-center mb-3">Add New Flight</h3>
             </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Flight Number</label>
+                    <input type="text" class="form-control" placeholder="e.g. PR 102" name="flightNo">
+                </div>
 
-            <div class="col-md-6">
-                <label class="form-label">Airline</label>
-                <input type="text" class="form-control" placeholder="e.g. Philippine Airlines" name="airline">
+                <div class="col-md-6">
+                    <label class="form-label">Airline</label>
+                    <input type="text" class="form-control" placeholder="e.g. Philippine Airlines" name="airline">
                 </div>
             </div>
 
@@ -59,7 +62,7 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-3">
                     <label class="form-label">Departure Day | Time</label>
                     <div class="input-group">
                         <button id="depDay" class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Day</button>
@@ -76,7 +79,7 @@
                     </div>
                 </div>
                 <input type="hidden" name="departureDay" id="departureDay">
-                <div class="col-md-6">
+                <div class="col-3">
                     <label class="form-label">Arrival Day | Time</label>
                     <div class="input-group">
                         <button id="arrDay" class="btn btn-outline-secondary dropdown-toggle w-50" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select Day</button>
@@ -93,6 +96,13 @@
                     </div>
                 </div>
                 <input type="hidden" name="arrivalDay" id="arrivalDay">
+                <div class="col-md-4 w-50">
+                    <label class="form-label">Base Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">₱</span>
+                        <input type="number" class="form-control" placeholder="e.g. 3500" name="price">
+                    </div>
+                </div>
             </div>
 
             <div class="row mb-3">
@@ -127,6 +137,7 @@
             <th class="p-2">Destination</th>
             <th class="p-2">Departure</th>
             <th class="p-2">Arrival</th>
+            <th class="p-2">Base Price</th>
             <th class="p-2">Aircraft</th>
             <th class="p-2">Seats</th>
             <th class="p-2 w-auto text-center">Actions</th>
@@ -141,6 +152,7 @@
             <td class="p-2">{{this.destination}}</td>
             <td class="p-2">{{this.departureDay}} | {{this.departureTime}}</td>
             <td class="p-2">{{this.arrivalDay}} | {{this.arrivalTime}}</td>
+            <td class="p-2">₱{{this.price}}</td>
             <td class="p-2">{{this.aircraftType}}</td>
             <td class="p-2">{{this.seatCap}}</td>
             <td class="p-2 w-auto text-center">

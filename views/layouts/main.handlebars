@@ -148,6 +148,8 @@
                     // Get origin and destination from data attributes
                     const origin = $(this).data('origin');
                     const destination = $(this).data('destination');
+                    const depdate = $(this).data('depart');
+                    const retdate = $(this).data('return');
 
                     if (type === 'depart') {
                         dSelected = flight;
@@ -156,7 +158,7 @@
 
                         // Create summary content
                         let dSummaryContent = `
-                            <h5>Flight Summary | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
+                            <h5>Departing Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination} at ${depdate}</small></h5>
                             <hr>
                             <p><strong class="text-primary">Airline:</strong> ${dSelected.airline}</p>
                             <p><strong class="text-primary">Flight Number:</strong> ${dSelected.flightNo}</p>
@@ -176,7 +178,7 @@
 
                         // Create summary content
                         const rSummaryContent = `
-                            <h5>Returning Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
+                            <h5>Returning Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination} at ${retdate}</small></h5>
                             <hr>
                             <p><strong class="text-primary">Airline:</strong> ${rSelected.airline}</p>
                             <p><strong class="text-primary">Flight Number:</strong> ${rSelected.flightNo}</p>
@@ -196,7 +198,7 @@
                         offcanvas.show();
 
                         const drSummaryContent = `
-                            <h5>Departing Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination}</small></h5>
+                            <h5>Departing Flight | <small>${origin} <i class="text-primary bi bi-airplane-fill"></i> ${destination} at ${depdate}</small></h5>
                             <hr>
                             <p><strong class="text-primary">Airline:</strong> ${dSelected.airline}</p>
                             <p><strong class="text-primary">Flight Number:</strong> ${dSelected.flightNo}</p>
@@ -204,7 +206,7 @@
                             <p><strong class="text-primary">Arrival Time:</strong> ${dSelected.arrive}</p>
                             <p><strong class="text-primary">Base Price:</strong> ${dSelected.price}</p>
                             <hr>
-                            <h5>Returning Flight | <small>${destination} <i class="text-primary bi bi-airplane-fill"></i> ${origin}</small></h5>
+                            <h5>Returning Flight | <small>${destination} <i class="text-primary bi bi-airplane-fill"></i> ${origin} at ${retdate}</small></h5>
                             <hr>
                             <p><strong class="text-primary">Airline:</strong> ${rSelected.airline}</p>
                             <p><strong class="text-primary">Flight Number:</strong> ${rSelected.flightNo}</p>

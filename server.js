@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware to parse URL-encoded bodies (for form submissions)
 app.use(express.urlencoded({ extended: true }));
 
-// List all flights
+// Show main page
 app.get('/', async (req, res) => {
     try {
         const { origin, destination, depdate, retdate } = req.query;
@@ -108,7 +108,7 @@ app.get('/flights/edit/:id', async (req, res) => {
 // Handle edit form submission
 app.post('/flights/edit/:id', async (req, res) => {
     console.log('Edit form submission:', req.body);
-    const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, aircraftType, seatCap } = req.body;
+    const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
     try {
         await Flight.findOneAndUpdate(
             { _id: req.params.id},
@@ -121,6 +121,7 @@ app.post('/flights/edit/:id', async (req, res) => {
                 departureTime, 
                 arrivalDay,
                 arrivalTime, 
+                price,
                 aircraftType,
                 seatCap
             } }, 

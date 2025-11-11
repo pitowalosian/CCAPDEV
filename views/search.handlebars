@@ -126,7 +126,7 @@
         <p class="display-6 text-center" id="resultsText">Search Results</p>
         <!--Search Container-->
         {{#if showResults}}
-            <div id="searchCont" class="position-fluid bg-dark-subtle border-top border-bottom border-primary w-auto p-3 mx-5 shadow-lg">
+            <div id="searchCont" class=" bg-dark-subtle border-top border-bottom border-primary w-auto p-3 mx-5 shadow-lg">
                 <!--Results Table-->
                 {{#if flights.length}}
                     <!-- Table when flights exist -->
@@ -150,9 +150,10 @@
                                     <td>{{flightNo}}</td>
                                     <td>{{departureTime}}</td>
                                     <td>{{arrivalTime}}</td>
-                                    <td>${{price}}</td>
+                                    <td>₱{{price}}</td>
                                     <td>
-                                        <button class="btn btn-primary select-btn" data-type="depart" data-origin="{{origin}}" data-destination="{{destination}}">Select</button>
+                                        <button class="btn btn-primary select-btn" data-type="depart" 
+                                            data-origin="{{origin}}" data-destination="{{destination}}" data-depart="{{../dDate}}" data-return="{{../rDate}}">Select</button>
                                     </td>
                                 </tr>
                                 {{/each}}
@@ -182,9 +183,10 @@
                                         <td>{{flightNo}}</td>
                                         <td>{{departureTime}}</td>
                                         <td>{{arrivalTime}}</td>
-                                        <td>${{price}}</td>
+                                        <td>₱{{price}}</td>
                                         <td>
-                                            <button class="btn btn-primary select-btn" data-type="return" data-origin="{{destination}}" data-destination="{{origin}}">Select</button>
+                                            <button class="btn btn-primary select-btn" data-type="return" 
+                                                data-origin="{{destination}}" data-destination="{{origin}}" data-depart="{{../dDate}}" data-return="{{../rDate}}">Select</button>
                                         </td>
                                     </tr>
                                     {{/each}}
