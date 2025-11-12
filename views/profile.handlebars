@@ -1,0 +1,134 @@
+<div class="container text-center pt-3 mt-5">
+    {{#equals status "added"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto" role="alert">
+            <i class="bi bi-check-circle"></i> User added successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{else}}
+        {{#equals status "updated"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto" role="alert">
+            <i class="bi bi-check-circle"></i> User updated successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{else}}
+            {{#equals status "deleted"}}
+            <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto" role="alert">
+                <i class="bi bi-check-circle"></i> User deleted successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{else}}
+                {{#equals status "error"}}
+                <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> Error. Please try again.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {{/equals}}
+            {{/equals}}
+        {{/equals}}
+    {{/equals}}
+
+    <h1 class="display-5 text-primary mt-5">User Management</h1>
+    <p class="lead">Add, update, or delete users</p>
+</div>
+
+<div class="container-fluid my-4 w-75">
+    <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
+        <form class="text-start" action="/profile" method="POST">
+            <h3 class="text-primary-emphasis display-6 text-center mb-3">Add New User</h3>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="fullname" placeholder="e.g. Juan Dela Cruz">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" placeholder="e.g. juan@gmail.com">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Passport</label>
+                    <input type="text" class="form-control" name="passport" placeholder="e.g. P1234567">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone" placeholder="e.g. +63 912 345 6789">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" name="address" placeholder="e.g. Manila, Philippines">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" name="dob">
+                </div>
+            </div>
+            <div class="text-end mt-4">
+                <button type="submit" class="btn btn-outline-light me-2">
+                    <i class="bi bi-plus-circle"></i> Create User
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="userList" class="container-fluid mt-3">
+    <h2 class="text-primary text-center display-6 mb-3">All Users</h2>
+    {{#if users.length}}
+    <div class="table-responsive bg-dark-subtle border border-primary rounded-4 shadow-lg p-4">
+        <table class="table table-hover text-center align-middle table-borderless mb-0">
+            <thead class="table-info opacity-75 text-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Passport</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>DOB</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr class="border-bottom border-secondary">
+                    <td>{{fullname}}</td>
+                    <td>{{email}}</td>
+                    <td>{{passport}}</td>
+                    <td>{{phone}}</td>
+                    <td>{{address}}</td>
+                    <td>{{dob}}</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-3">
+                            <form action="/profile/edit/{{_id}}" method="GET" class="m-0">
+                                <button type="submit" class="btn btn-primary px-3">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </button>
+                            </form>
+                            <form action="/profile/delete/{{_id}}" method="POST" class="m-0">
+                                <button type="submit" class="btn btn-danger px-3">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{else}}
+        <p class="text-center lead text-muted">No users found.</p>
+    {{/if}}
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    const msg = $('.form-msg');
+    const title = $('#title');
+    if (msg.length) {
+        setTimeout(() => { msg.alert('close'); }, 3000);
+    }
+});
+</script>

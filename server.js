@@ -3,6 +3,7 @@ const path = require('path');
 const exphbs = require('express-handlebars');
 const Flight = require('./models/Flight');
 const Reservation = require('./models/Reservation');
+const User = require('./models/User');
 const shortid = require('shortid');
 const mongoose = require('mongoose');
 const Handlebars = require('handlebars');
@@ -264,6 +265,56 @@ app.post('/reservations/delete/:id', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.redirect('/reservations?status=error');
+    }
+});
+
+// list users
+app.get('/profile', async (req, res) => {
+    try {
+        const users = await User.find().lean();
+        const status = req.query.status || '';
+        res.render('profile', { title: 'User Management', users, status });
+    } catch (error) {
+        console.log(error);
+        res.render('profile', { title: 'User Management', users: [], status: 'error' });
+    }
+});
+
+// new user
+app.post('/profile', async (req, res) => {
+    try {
+        const newUser = new User(req.body);
+        await newUser.save();
+        res.redirect('/profile?status=added');
+    } catch (err) {
+        console.log(err);
+        res.redirect('/profile?status=error');
+    }
+});
+
+// edit user
+app.get('/profile/edit/:id', async (req, res) => {
+    const user = await User.findById(req.params.id).lean();
+    res.render('profile', { user, editing: true });
+});
+
+// update user
+app.post('/profile/edit/:id', async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.params.id, req.body);
+        res.redirect('/profile?status=updated');
+    } catch (err) {
+        res.redirect('/profile?status=error');
+    }
+});
+
+// delete user
+app.post('/profile/delete/:id', async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.redirect('/profile?status=deleted');
+    } catch (err) {
+        res.redirect('/profile?status=error');
     }
 });
 
