@@ -286,6 +286,39 @@ Handlebars.registerHelper("equals", function (a, b, options) {
 });
 
 // Start the server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    
+    const flightCount = await Flight.countDocuments();
+
+    if (flightCount === 0) {
+        await Flight.insertMany([
+            // Manila → Cebu
+            { flightNo: 'PR101', airline: 'Philippine Airlines', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Monday', departureTime: '08:00', arrivalDay: 'Monday', arrivalTime: '09:30', aircraftType: 'Airbus A320', seatCap: 180, price: 1500 },
+            { flightNo: '5J201', airline: 'Cebu Pacific', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Tuesday', departureTime: '10:00', arrivalDay: 'Tuesday', arrivalTime: '11:30', aircraftType: 'Boeing 737', seatCap: 180, price: 1450 },
+            { flightNo: 'PR103', airline: 'Philippine Airlines', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Friday', departureTime: '14:00', arrivalDay: 'Friday', arrivalTime: '15:30', aircraftType: 'Airbus A321', seatCap: 200, price: 1550 },
+
+            // Cebu → Manila
+            { flightNo: 'PR104', airline: 'Philippine Airlines', origin: 'Cebu (CEB)', destination: 'Manila (MNL)', departureDay: 'Monday', departureTime: '10:30', arrivalDay: 'Monday', arrivalTime: '12:00', aircraftType: 'Airbus A320', seatCap: 180, price: 1500 },
+            { flightNo: '5J202', airline: 'Cebu Pacific', origin: 'Cebu (CEB)', destination: 'Manila (MNL)', departureDay: 'Tuesday', departureTime: '12:30', arrivalDay: 'Tuesday', arrivalTime: '14:00', aircraftType: 'Boeing 737', seatCap: 180, price: 1450 },
+            { flightNo: 'PR105', airline: 'Philippine Airlines', origin: 'Cebu (CEB)', destination: 'Manila (MNL)', departureDay: 'Friday', departureTime: '16:00', arrivalDay: 'Friday', arrivalTime: '17:30', aircraftType: 'Airbus A321', seatCap: 200, price: 1550 },
+
+            // Manila → Davao
+            { flightNo: 'PR201', airline: 'Philippine Airlines', origin: 'Manila (MNL)', destination: 'Davao (DVO)', departureDay: 'Wednesday', departureTime: '09:00', arrivalDay: 'Wednesday', arrivalTime: '11:30', aircraftType: 'Airbus A321', seatCap: 200, price: 2500 },
+            { flightNo: '5J301', airline: 'Cebu Pacific', origin: 'Manila (MNL)', destination: 'Davao (DVO)', departureDay: 'Thursday', departureTime: '13:30', arrivalDay: 'Thursday', arrivalTime: '16:00', aircraftType: 'Airbus A320', seatCap: 180, price: 2400 },
+
+            // Davao → Manila
+            { flightNo: 'PR202', airline: 'Philippine Airlines', origin: 'Davao (DVO)', destination: 'Manila (MNL)', departureDay: 'Wednesday', departureTime: '14:00', arrivalDay: 'Wednesday', arrivalTime: '16:30', aircraftType: 'Airbus A321', seatCap: 200, price: 2500 },
+            { flightNo: '5J302', airline: 'Cebu Pacific', origin: 'Davao (DVO)', destination: 'Manila (MNL)', departureDay: 'Thursday', departureTime: '17:30', arrivalDay: 'Thursday', arrivalTime: '20:00', aircraftType: 'Airbus A320', seatCap: 180, price: 2400 },
+
+            // Manila → Iloilo
+            { flightNo: 'PR301', airline: 'Philippine Airlines', origin: 'Manila (MNL)', destination: 'Iloilo (ILO)', departureDay: 'Saturday', departureTime: '07:00', arrivalDay: 'Saturday', arrivalTime: '08:15', aircraftType: 'Airbus A320', seatCap: 180, price: 1300 },
+            { flightNo: '5J401', airline: 'Cebu Pacific', origin: 'Manila (MNL)', destination: 'Iloilo (ILO)', departureDay: 'Sunday', departureTime: '09:45', arrivalDay: 'Sunday', arrivalTime: '11:00', aircraftType: 'Boeing 737', seatCap: 180, price: 1250 },
+
+            // Iloilo → Manila
+            { flightNo: 'PR302', airline: 'Philippine Airlines', origin: 'Iloilo (ILO)', destination: 'Manila (MNL)', departureDay: 'Saturday', departureTime: '12:00', arrivalDay: 'Saturday', arrivalTime: '13:15', aircraftType: 'Airbus A320', seatCap: 180, price: 1300 },
+            { flightNo: '5J402', airline: 'Cebu Pacific', origin: 'Iloilo (ILO)', destination: 'Manila (MNL)', departureDay: 'Sunday', departureTime: '13:30', arrivalDay: 'Sunday', arrivalTime: '14:45', aircraftType: 'Boeing 737', seatCap: 180, price: 1250 },
+        ]);
+        console.log('Sample flights inserted into the database.');
+    }
 });
