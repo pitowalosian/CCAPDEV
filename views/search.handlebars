@@ -4,16 +4,16 @@
             <a class="navbar-brand" href="#"><img height="40" src="pictures/icon.png"/></a>
             <ul class="nav nav-pills nav-fill" id="navtabs">
                 <li class="nav-item">
-                    <a class="nav-link active bg-primary" aria-current="page" href="#">Flight Search</a>
+                    <a class="nav-link active bg-primary" aria-current="page" href="/search">Flight Search</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/book">Book Flights</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Reservations.html">My Reservations</a>
+                    <a class="nav-link" href="/reservations">My Reservations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Profile.html">Profile</a>
+                    <a class="nav-link" href="/profile">Profile</a>
                 </li>  
                 <li class="nav-item">
                     <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></label>
@@ -21,7 +21,7 @@
             </ul>
         </div>
     </div>
-<!--Title-->
+    <!--Title-->
     <div class="container-fluid pt-5 mt-5 text-center">
         <h1 class="display-5 text-center text-primary">Flight Search</h1>
         <span class="lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
@@ -126,13 +126,13 @@
         <p class="display-6 text-center" id="resultsText">Search Results</p>
         <!--Search Container-->
         {{#if showResults}}
-            <div id="searchCont" class=" bg-dark-subtle border-top border-bottom border-primary w-auto p-3 mx-5 shadow-lg">
+            <div id="searchCont" class=" bg-dark-subtle border border-primary rounded-3 w-auto p-3 mx-5 shadow-lg">
                 <!--Results Table-->
                 {{#if flights.length}}
                     <!-- Table when flights exist -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle text-center">
-                            <thead class="lead table-primary text-light text-center" id="resultsTable">
+                            <thead class="lead table-info opacity-75 text-light text-center" id="resultsTable">
                                 <tr>
                                     <th>Airline</th>
                                     <th>Flight Number</th>
@@ -165,7 +165,7 @@
                         <!-- Table when flights exist -->
                         <div class="table-responsive">
                             <table class="table table-hover align-middle text-center">
-                                <thead class="lead table-primary text-light text-center" id="resultsTable">
+                                <thead class="lead table-info opacity-75 text-light text-center" id="resultsTable">
                                     <tr>
                                         <th>Airline</th>
                                         <th>Flight Number</th>
@@ -221,3 +221,175 @@
         </div>
     </div>
     <br>
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Set minimum dates
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const minDate = `${year}-${month}-${day}`;
+            $('#depdate').attr('min', minDate);
+            $('#depdate').on('change', function(){
+                let depdate = $(this).val();
+                $('#retdate').attr('min', depdate); 
+            });
+            
+            // Swap Button 
+            $('#swap').click(function() {
+                // Get origin and destination values
+                var origin = $('#origin').text().trim();            
+                var destination = $('#destination').text().trim();  
+
+                // Swap
+                $('#origin').text(destination);  
+                $('#destination').text(origin); 
+
+                const origVal = $('#searchOrig').val();
+                $('#searchOrig').val($('#searchDest').val());
+                $('#searchDest').val(origVal); 
+            });
+
+            // Origin and Destination dropdowns
+            $('.origin').on('click', function(){
+                const choice = $(this).text().trim();
+                $('#origin').text(choice);
+                $('#searchOrig').val(choice);
+            });
+            $('.destination').on('click', function(){
+                const choice = $(this).text().trim();
+                $('#destination').text(choice);
+                $('#searchDest').val(choice);
+            });
+            // Check form inputs
+            $('#search').click(function(event) {
+                // Get input values
+                let passcount = $('#passcount').val().trim();
+                let origin = $('#origin').text().toLowerCase().trim();
+                let destination = $('#destination').text().toLowerCase().trim();
+                let depdate = new Date($('#depdate').val());
+                let retdate = new Date($('#retdate').val());
+                
+                // Error strings
+                const fillError = `Please fill in all fields except return date.`;
+                const locError = `Origin and Destination cannot be the same`;
+                
+                // Check required fields
+                if (origin === `Where from?` || destination === `Where to?` || isNaN(depdate.getTime())) {     
+                    event.preventDefault();
+                    $("#errorText").html(fillError);
+                    let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                    formModal.show();
+                } 
+                // Check same location
+                else if (origin && destination && (origin == destination)){       
+                    event.preventDefault();
+                    $("#errorText").html(locError);
+                    let formModal = new bootstrap.Modal(document.getElementById('formModal'));
+                    formModal.show();
+                } 
+                // Success
+                else {      
+                    $("#tableBody").empty();
+                    $('#resultsText').fadeIn(1000);
+                    $('#searchCont').fadeIn(1000);
+                }
+            });
+
+            // Hide search container on form container mouse enter
+            $('#formContainer').on('mouseenter', function() {
+                $('#resultsText').fadeOut(1000);
+                $('#searchCont').fadeOut(1000);
+                $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
+            });
+
+            // Keep selected flights
+            let selectedFlights = { depart: null, return: null };
+
+            function getFlightDetails(row) {
+                return {
+                    airline: row.find('td:eq(0)').text(),
+                    flightNo: row.find('td:eq(1)').text(),
+                    depart: row.find('td:eq(2)').text(),
+                    arrive: row.find('td:eq(3)').text(),
+                    price: row.find('td:eq(4)').text()
+                };
+            }
+
+            function renderSummary(depart, ret, origin, destination, depdate, retdate) {
+                let summaryHTML = '';
+
+                if (depart) {
+                    summaryHTML += `
+                        <h5>Departing Flight | <small>${origin} 
+                            <i class="text-primary bi bi-airplane-fill"></i> ${destination} on ${depdate}</small></h5>
+                        <hr>
+                        <p><strong class="text-primary">Airline:</strong> ${depart.airline}</p>
+                        <p><strong class="text-primary">Flight Number:</strong> ${depart.flightNo}</p>
+                        <p><strong class="text-primary">Departure Time:</strong> ${depart.depart}</p>
+                        <p><strong class="text-primary">Arrival Time:</strong> ${depart.arrive}</p>
+                        <p><strong class="text-primary">Base Price:</strong> ${depart.price}</p>
+                        <hr>
+                    `;
+                }
+
+                if (ret) {
+                    summaryHTML += `
+                        <h5>Returning Flight | <small>${destination} 
+                            <i class="text-primary bi bi-airplane-fill"></i> ${origin} on ${retdate}</small></h5>
+                        <hr>
+                        <p><strong class="text-primary">Airline:</strong> ${ret.airline}</p>
+                        <p><strong class="text-primary">Flight Number:</strong> ${ret.flightNo}</p>
+                        <p><strong class="text-primary">Departure Time:</strong> ${ret.depart}</p>
+                        <p><strong class="text-primary">Arrival Time:</strong> ${ret.arrive}</p>
+                        <p><strong class="text-primary">Base Price:</strong> ${ret.price}</p>
+                        <hr>
+                    `;
+                }
+
+                summaryHTML += `<a href="/book" class="btn btn-success w-100">Proceed to Booking</a>`;
+                $('#summaryBody').html(summaryHTML);
+            }
+
+            $(document).on('click', '.select-btn', function() {
+                const $btn = $(this);
+                const isSelected = $btn.text() === 'Selected';
+                const type = $btn.data('type');
+                const row = $btn.closest('tr');
+                const flight = getFlightDetails(row);
+
+                const origin = $btn.data('origin');
+                const destination = $btn.data('destination');
+                const depdate = $btn.data('depart');
+                const retdate = $btn.data('return');
+
+                // Toggle button styles
+                $(`.select-btn[data-type="${type}"]`)
+                    .removeClass('btn-outline-success')
+                    .addClass('btn-primary')
+                    .text('Select');
+
+                if (isSelected) {
+                    $btn.removeClass('btn-outline-success').addClass('btn-primary').text('Select');
+                    const offCanvas = bootstrap.Offcanvas.getInstance('#summaryOffcanvas');
+                    if (offCanvas) offCanvas.hide();
+                    selectedFlights[type] = null;
+                    return;
+                }
+
+                $btn.removeClass('btn-primary').addClass('btn-outline-success').text('Selected');
+                selectedFlights[type] = flight;
+
+                // Update summary
+                renderSummary(selectedFlights.depart, selectedFlights.return, origin, destination, depdate, retdate);
+
+                // Show offcanvas
+                const offcanvas = new bootstrap.Offcanvas('#summaryOffcanvas');
+                offcanvas.show();
+            });
+        });
+    </script>

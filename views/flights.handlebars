@@ -128,52 +128,52 @@
     <h2 class="text-primary text-center display-6 mb-3">All Flights</h2>
     {{#if flights.length}}
     <div class="table-responsive bg-dark-subtle border border-primary rounded-4 shadow-lg p-4">
-        <table class="table table-hover table-striped-columns text-center lead align-middle table-borderless mb-0">
-        <thead class="table-primary text-dark rounded-top">
-            <tr>
-            <th class="p-2">Flight No.</th>
-            <th class="p-2">Airline</th>
-            <th class="p-2">Origin</th>
-            <th class="p-2">Destination</th>
-            <th class="p-2">Departure</th>
-            <th class="p-2">Arrival</th>
-            <th class="p-2">Base Price</th>
-            <th class="p-2">Aircraft</th>
-            <th class="p-2">Seats</th>
-            <th class="p-2 w-auto text-center">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each flights}}
-            <tr class="border-bottom border-secondary">
-            <td class="p-2">{{this.flightNo}}</td>
-            <td class="p-2">{{this.airline}}</td>
-            <td class="p-2">{{this.origin}}</td>
-            <td class="p-2">{{this.destination}}</td>
-            <td class="p-2">{{this.departureDay}} | {{this.departureTime}}</td>
-            <td class="p-2">{{this.arrivalDay}} | {{this.arrivalTime}}</td>
-            <td class="p-2">₱{{this.price}}</td>
-            <td class="p-2">{{this.aircraftType}}</td>
-            <td class="p-2">{{this.seatCap}}</td>
-            <td class="p-2 w-auto text-center">
-                <div class="d-flex justify-content-center gap-3" role="group" aria-label="Actions">
-                <form action="/flights/edit/{{_id}}" method="GET" class="m-0">
-                    <button type="submit" class="btn btn-primary align-items-center px-3">
-                    <i class="bi bi-pencil-square"></i>
-                    <span>Edit</span>
-                    </button>
-                </form>
-                <form action="/flights/delete/{{_id}}" method="POST" class="m-0">
-                    <button type="submit" class="btn btn-danger align-items-center px-3">
-                    <i class="bi bi-trash"></i>
-                    <span>Delete</span>
-                    </button>
-                </form>
-                </div>
-            </td>
-            </tr>
-            {{/each}}
-        </tbody>
+        <table class="table table-hover text-center lead align-middle table-borderless mb-0">
+            <thead class="table-info opacity-75 text-dark rounded-top">
+                <tr>
+                    <th class="p-2">Flight No.</th>
+                    <th class="p-2">Airline</th>
+                    <th class="p-2">Origin</th>
+                    <th class="p-2">Destination</th>
+                    <th class="p-2">Departure</th>
+                    <th class="p-2">Arrival</th>
+                    <th class="p-2">Base Price</th>
+                    <th class="p-2">Aircraft</th>
+                    <th class="p-2">Seats</th>
+                    <th class="p-2 w-auto text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each flights}}
+                <tr class="border-bottom border-secondary">
+                    <td class="p-2">{{this.flightNo}}</td>
+                    <td class="p-2">{{this.airline}}</td>
+                    <td class="p-2">{{this.origin}}</td>
+                    <td class="p-2">{{this.destination}}</td>
+                    <td class="p-2">{{this.departureDay}} | {{this.departureTime}}</td>
+                    <td class="p-2">{{this.arrivalDay}} | {{this.arrivalTime}}</td>
+                    <td class="p-2">₱{{this.price}}</td>
+                    <td class="p-2">{{this.aircraftType}}</td>
+                    <td class="p-2">{{this.seatCap}}</td>
+                    <td class="p-2 w-auto text-center">
+                        <div class="d-flex justify-content-center gap-3" role="group" aria-label="Actions">
+                            <form action="/flights/edit/{{_id}}" method="GET" class="m-0">
+                                <button type="submit" class="btn btn-primary align-items-center px-3">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span>Edit</span>
+                                </button>
+                            </form>
+                            <form action="/flights/delete/{{_id}}" method="POST" class="m-0">
+                                <button type="submit" class="btn btn-danger align-items-center px-3">
+                                    <i class="bi bi-trash"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
         </table>
     {{else}}
         <p class="text-center lead text-muted">No flights found.</p>
@@ -181,3 +181,50 @@
     </div>
 </div>
 <br>
+<!-- Scripts -->
+<script>
+    $(document).ready(function() {
+        const msg = $('.form-msg');
+        const title = $('#title');
+        const flightList = $('#flight-list');
+        if (msg.length) {
+            title.removeClass('mt-5');
+            setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
+
+            msg.on('closed.bs.alert', function () {
+                title.addClass('mt-5');
+            });
+        } else {
+            $('#title').addClass('mt-5');
+        }
+
+        // Handle departure and arrival day dropdowns in flight management
+        const depDay = $('#departureDay').val();
+        const arrDay = $('#arrivalDay').val();
+
+        if (depDay) {
+            $('#editDepDay').text(depDay);
+            $('#editDepartureDay').val(depDay);
+        }
+
+        if (arrDay) {
+            $('#editArrDay').text(arrDay);
+            $('#editArrDay').val(arrDay);
+        } 
+        $('.depDay').on('click', function(){
+                let choice = $(this).text().trim();
+                $('#depDay').text(choice);
+                $('#editDepDay').text(choice);
+                $('#departureDay').val(choice);
+                $('#editDepartureDay').val(choice);
+        });
+
+        $('.arrDay').on('click', function(){
+                let choice = $(this).text().trim();
+                $('#arrDay').text(choice);
+                $('#editArrDay').text(choice);
+                $('#arrivalDay').val(choice);
+                $('#editArrivalDay').val(choice);
+        });
+    });
+</script>
