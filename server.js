@@ -3,7 +3,7 @@ const path = require('path');
 const exphbs = require('express-handlebars');
 const Flight = require('./models/Flight');
 const Reservation = require('./models/Reservation');
-const User = require('./models/User');
+const User = require("./models/User");
 const shortid = require('shortid');
 const mongoose = require('mongoose');
 const Handlebars = require('handlebars');
@@ -269,53 +269,35 @@ app.post('/reservations/delete/:id', async (req, res) => {
 });
 
 // list users
-app.get('/profile', async (req, res) => {
-    try {
-        const users = await User.find().lean();
-        const status = req.query.status || '';
-        res.render('profile', { title: 'User Management', users, status });
-    } catch (error) {
-        console.log(error);
-        res.render('profile', { title: 'User Management', users: [], status: 'error' });
-    }
-});
-
-// new user
-app.post('/profile', async (req, res) => {
-    try {
-        const newUser = new User(req.body);
-        await newUser.save();
-        res.redirect('/profile?status=added');
-    } catch (err) {
-        console.log(err);
-        res.redirect('/profile?status=error');
-    }
+app.get("/profile", async (req, res) => {
+    const users = await User.find().lean();
+    res.render("profile-list", { title: "User Management", users });
 });
 
 // edit user
-app.get('/profile/edit/:id', async (req, res) => {
+app.get("/profile/edit/:id", async (req, res) => {
     const user = await User.findById(req.params.id).lean();
-    res.render('profile', { user, editing: true });
+    res.render("profile", { title: "Edit User", user });
 });
 
 // update user
-app.post('/profile/edit/:id', async (req, res) => {
-    try {
-        await User.findByIdAndUpdate(req.params.id, req.body);
-        res.redirect('/profile?status=updated');
-    } catch (err) {
-        res.redirect('/profile?status=error');
+app.post("/profile/update/:id", async (req, res) => {
+    const { firstname, lastname, email, password } = req.body;
+
+    const updateData = { firstname, lastname, email };
+
+    if (password && password.trim() !== "") {
+        updateData.password = password;
     }
+
+    await User.findByIdAndUpdate(req.params.id, updateData);
+    res.redirect("/profile");
 });
 
 // delete user
 app.post('/profile/delete/:id', async (req, res) => {
-    try {
-        await User.findByIdAndDelete(req.params.id);
-        res.redirect('/profile?status=deleted');
-    } catch (err) {
-        res.redirect('/profile?status=error');
-    }
+    await User.findByIdAndDelete(req.params.id);
+    res.redirect('/profile');
 });
 
 Handlebars.registerHelper("equals", function (a, b, options) {

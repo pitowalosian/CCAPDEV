@@ -1,0 +1,28 @@
+<div class="container mt-4">
+    <h2>User Management</h2>
+
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th style="width: 150px;">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {{#each users}}
+            <tr>
+                <td>{{firstname}} {{lastname}}</td>
+                <td>{{email}}</td>
+                <td>
+                    <a href="/profile/edit/{{_id}}" class="btn btn-primary btn-sm">Edit</a>
+                    <form action="/profile/delete/{{_id}}" method="POST" style="display:inline;">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
