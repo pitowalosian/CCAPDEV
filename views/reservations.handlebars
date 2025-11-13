@@ -1,38 +1,35 @@
-<body class="bg-secondary-subtle text-bg-dark">
-{{!-- Navigation bar --}}
+<!-- NAVBAR -->
 <div class="container-fluid fixed-top">
-    <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
-        <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
-        <ul class="nav nav-pills nav-fill">
-            <li class="nav-item">
-                <a class="nav-link" href="/search?userId={{userId}}">Flight Search</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/book?userId={{userId}}">Book Flights</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/reservations?userId={{userId}}">My Reservations</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/profile?userId={{userId}}">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a>
-            </li>
-            <li class="nav-item">
-                <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
-            </li>
-        </ul>
-    </div>
-</div>
-  <!-- HEADER -->
-  <div class="container text-center pt-5 mt-5">
-    <h1 class="display-5 text-primary mt-5">My Reservations</h1>
-    <p class="lead">View your current and past bookings</p>
+  <div class="navbar fixed-top bg-dark-subtle text-dark-emphasis border-bottom border-primary" id="navbarNav">
+    <a class="navbar-brand" href="#"><img height="40" src="/pictures/icon.png"/></a>
+    <ul class="nav nav-pills nav-fill" id="navtabs">
+      <li class="nav-item">
+        <a class="nav-link" href="/search">Flight Search</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/book">Book Flights</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active bg-primary" aria-current="page" href="/reservations">My Reservations</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/profile">Profile</a>
+      </li>
+      <li class="nav-item">
+        <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
+      </li>
+    </ul>
   </div>
+</div>
 
-  <!-- TABLE -->
- <div class="container mt-4 mb-5">
+<!-- HEADER -->
+<div class="container text-center pt-5 mt-5">
+  <h1 class="display-5 text-primary mt-5">My Reservations</h1>
+  <p class="lead">View your current and past bookings</p>
+</div>
+
+<!-- TABLE -->
+<div class="container mt-4 mb-5">
   <div class="table-responsive bg-dark-subtle border border-primary rounded-3 shadow p-3">
     <table class="table table-hover align-middle mb-0">
       <thead class="table-primary text-dark">
@@ -49,23 +46,23 @@
       </thead>
       <tbody id="reservationTable">
         {{#each reservations}}
-        <tr data-booking='{
-            "id":"{{bookingId}}",
-            "passenger":"{{passengerName}}",
-            "email":"{{passengerEmail}}",
-            "passport":"{{passport}}",
-            "flight":"{{flight.flightNo}}",
-            "airline":"{{flight.airline}}",
-            "origin":"{{flight.origin}}",
-            "destination":"{{flight.destination}}",
-            "departure":"{{flight.departureTime}}",
-            "arrival":"{{flight.arrivalTime}}",
-            "meal":"{{package.meal}}",
-            "seat":"{{package.seat}}",
-            "baggage":"{{package.baggage}}",
-            "price":"₱{{flight.price}}",
-            "status":"{{status}}"
-        }'>
+        <tr
+          data-id="{{bookingId}}"
+          data-passenger="{{passengerName}}"
+          data-email="{{passengerEmail}}"
+          data-passport="{{passport}}"
+          data-flight="{{flight.flightNo}}"
+          data-airline="{{flight.airline}}"
+          data-origin="{{flight.origin}}"
+          data-destination="{{flight.destination}}"
+          data-departure="{{flight.departureTime}}"
+          data-arrival="{{flight.arrivalTime}}"
+          data-meal="{{package.meal}}"
+          data-seat="{{package.seat}}"
+          data-baggage="{{package.baggage}}"
+          data-price="₱{{flight.price}}"
+          data-status="{{status}}"
+        >
           <td>{{bookingId}}</td>
           <td>{{passengerName}}</td>
           <td>{{flight.flightNo}}</td>
@@ -84,8 +81,7 @@
             {{/equals}}
           </td>
           <td class="d-flex gap-1">
-      
-            {{#if (equals status "Cancelled")}}
+            {{#equals status "Cancelled"}}
               <button class="btn btn-outline-primary btn-sm" disabled>
                 <i class="bi bi-pencil"></i> Edit
               </button>
@@ -93,20 +89,18 @@
               <a href="/reservations/edit/{{_id}}" class="btn btn-outline-primary btn-sm">
                 <i class="bi bi-pencil"></i> Edit
               </a>
-            {{/if}}
+            {{/equals}}
 
-            
-            {{#if (equals status "Cancelled")}}
-             
+            {{#equals status "Cancelled"}}
+              <!-- do nothing -->
             {{else}}
               <form action="/reservations/delete/{{_id}}" method="POST" style="display:inline-block;">
                 <button class="btn btn-outline-danger btn-sm">
                   <i class="bi bi-x-circle"></i> Cancel
                 </button>
               </form>
-            {{/if}}
+            {{/equals}}
 
-            
             <button class="btn btn-outline-secondary btn-sm viewDetails">
               <i class="bi bi-eye"></i> View Details
             </button>
@@ -118,7 +112,7 @@
   </div>
 </div>
 
-
+<!-- DETAILS MODAL -->
 <div class="modal fade" id="detailsModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content bg-dark-subtle border border-primary">
@@ -136,78 +130,85 @@
   </div>
 </div>
 
-
-  <!-- MODAL -->
-  <div class="modal fade" id="detailsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content bg-dark-subtle border border-primary">
-        <div class="modal-header">
-          <h5 class="modal-title text-primary">Reservation Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div id="bookingDetails" class="text-light"></div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCRIPTS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      // Dark mode toggle
-      $('#toggleDark').click(function() {
-        var currentTheme = $('html').attr('data-bs-theme');
-        var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        $('html').attr('data-bs-theme', newTheme);
-        $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
-        $('body').toggleClass('text-bg-dark text-bg-light');
-        $('body').toggleClass('bg-secondary-subtle bg-light');
-        $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
-      });
-
-      // View Details modal
-      $('.viewDetails').click(function() {
-        const bookingData = $(this).closest('tr').data('booking');
-        const detailsHTML = `
-          <div class="row">
-            <div class="col-md-6">
-              <p><strong>Booking ID:</strong> ${bookingData.id}</p>
-              <p><strong>Passenger Name:</strong> ${bookingData.passenger}</p>
-              <p><strong>Email:</strong> ${bookingData.email}</p>
-              <p><strong>Passport Number:</strong> ${bookingData.passport}</p>
-            </div>
-            <div class="col-md-6">
-              <p><strong>Airline:</strong> ${bookingData.airline}</p>
-              <p><strong>Flight Number:</strong> ${bookingData.flight}</p>
-              <p><strong>Origin:</strong> ${bookingData.origin}</p>
-              <p><strong>Destination:</strong> ${bookingData.destination}</p>
-            </div>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-md-6">
-              <p><strong>Departure:</strong> ${bookingData.departure}</p>
-              <p><strong>Arrival:</strong> ${bookingData.arrival}</p>
-              <p><strong>Seat:</strong> ${bookingData.seat}</p>
-            </div>
-            <div class="col-md-6">
-              <p><strong>Meal Option:</strong> ${bookingData.meal}</p>
-              <p><strong>Extra Baggage:</strong> ${bookingData.baggage}</p>
-              <p><strong>Total Price:</strong> ${bookingData.price || 'N/A'}</p>
-            </div>
-          </div>
-          <hr>
-          <p><strong>Status:</strong> <span class="badge ${bookingData.status === 'Confirmed' ? 'bg-success' : (bookingData.status === 'Pending' ? 'bg-warning text-dark' : 'bg-danger')}">${bookingData.status}</span></p>
-        `;
-        $('#bookingDetails').html(detailsHTML);
-        new bootstrap.Modal(document.getElementById('detailsModal')).show();
-      });
+<!-- SCRIPTS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Dark mode toggle
+    $('#toggleDark').click(function() {
+      var currentTheme = $('html').attr('data-bs-theme');
+      var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      $('html').attr('data-bs-theme', newTheme);
+      $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
+      $('body').toggleClass('text-bg-dark text-bg-light');
+      $('body').toggleClass('bg-secondary-subtle bg-light');
+      $('#toggleDark').toggleClass('bi-sun-fill bi-moon-fill');
     });
-  </script>
-</body>
-</html>
+
+    // View Details modal
+    $('.viewDetails').click(function() {
+      const row = $(this).closest('tr');
+      const bookingData = {
+        id: row.data('id'),
+        passenger: row.data('passenger'),
+        email: row.data('email'),
+        passport: row.data('passport'),
+        flight: row.data('flight'),
+        airline: row.data('airline'),
+        origin: row.data('origin'),
+        destination: row.data('destination'),
+        departure: row.data('departure'),
+        arrival: row.data('arrival'),
+        meal: row.data('meal'),
+        seat: row.data('seat'),
+        baggage: row.data('baggage'),
+        price: row.data('price'),
+        status: row.data('status')
+      };
+
+      const detailsHTML = `
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Booking ID:</strong> ${bookingData.id}</p>
+            <p><strong>Passenger Name:</strong> ${bookingData.passenger}</p>
+            <p><strong>Email:</strong> ${bookingData.email}</p>
+            <p><strong>Passport Number:</strong> ${bookingData.passport}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Airline:</strong> ${bookingData.airline}</p>
+            <p><strong>Flight Number:</strong> ${bookingData.flight}</p>
+            <p><strong>Origin:</strong> ${bookingData.origin}</p>
+            <p><strong>Destination:</strong> ${bookingData.destination}</p>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Departure:</strong> ${bookingData.departure}</p>
+            <p><strong>Arrival:</strong> ${bookingData.arrival}</p>
+            <p><strong>Seat:</strong> ${bookingData.seat}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Meal Option:</strong> ${bookingData.meal}</p>
+            <p><strong>Extra Baggage:</strong> ${bookingData.baggage}</p>
+            <p><strong>Total Price:</strong> ${bookingData.price || 'N/A'}</p>
+          </div>
+        </div>
+        <hr>
+        <p><strong>Status:</strong> 
+          <span class="badge ${
+            bookingData.status === 'Confirmed' ? 'bg-success' :
+            bookingData.status === 'Pending' ? 'bg-warning text-dark' :
+            'bg-danger'
+          }">
+            ${bookingData.status}
+          </span>
+        </p>
+      `;
+
+      $('#bookingDetails').html(detailsHTML);
+      new bootstrap.Modal(document.getElementById('detailsModal')).show();
+    });
+  });
+</script>

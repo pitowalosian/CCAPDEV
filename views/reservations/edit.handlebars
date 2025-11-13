@@ -47,9 +47,19 @@
                         id="status" 
                         name="status"
                     >
-                        <option value="Confirmed" {{#if (equals reservation.status 'Confirmed')}}selected{{/if}}>Confirmed</option>
-                        <option value="Pending" {{#if (equals reservation.status 'Pending')}}selected{{/if}}>Pending</option>
-                        <option value="Cancelled" {{#if (equals reservation.status 'Cancelled')}}selected{{/if}}>Cancelled</option>
+                        <option value="Confirmed" 
+                        {{#equals reservation.status "Confirmed"}}selected{{/equals}}>
+                        Confirmed
+                        </option>
+                        <option value="Pending" 
+                        {{#equals reservation.status "Pending"}}selected{{/equals}}>
+                        Pending
+                        </option>
+                        <option value="Cancelled" 
+                        {{#equals reservation.status "Cancelled"}}selected{{/equals}}>
+                        Cancelled
+                        </option>
+
                     </select>
                 </div>
             </div>
