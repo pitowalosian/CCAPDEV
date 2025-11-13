@@ -333,8 +333,15 @@ app.get("/logout", (req, res) => {
 app.get("/profile", async (req, res) => {
     const userId = req.query.userId;
     if (!userId) return res.redirect("/login");
-    const users = await User.find().lean();
-    res.render("profile/list", { title: "User Management", users, userId });
+    
+    const user = await User.findById(userId).lean();
+    if (user.isAdmin) {
+        const users = await User.find().lean();
+        res.render("profile/list", { title: "User Management", users, userId });
+    } else {
+        res.render(`profile/edit`, { title: "Edit Profile", user });
+    }
+    
 });
 
 // edit
@@ -390,7 +397,7 @@ app.listen(PORT, async () => {
         await User.insertMany([
             { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123", isAdmin: true },
             { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword", isAdmin: false },
-            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: true }
+            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: false }
         ]);
         console.log("Sample users inserted.");
     }
