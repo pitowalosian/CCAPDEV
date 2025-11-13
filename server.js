@@ -291,17 +291,6 @@ app.use(
     })
 );
 
-// profile page require login
-app.get("/profile", async (req, res) => {
-
-    if (!req.session.user) {
-        return res.redirect("/login");
-    }
-
-    const users = await User.find().lean();
-    res.render("profile/list", { title: "User Management", users });
-});
-
 // registration 
 app.get("/register", (req, res) => {
     res.render("profile/register", { title: "Register" });
@@ -312,10 +301,10 @@ app.post("/register", async (req, res) => {
 
     try {
         await User.create({ firstname, lastname, email, password });
-        res.redirect("/login?registered=true");
+        return res.redirect("/login?registered=true");
     } catch (err) {
         console.error(err);
-        res.redirect("/register?error=true");
+        return res.redirect("/register?error=true");
     }
 });
 
@@ -328,60 +317,55 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
-    if (!user) return res.redirect("/login?error=true");
-
-    if (user.password !== password) {
+    if (!user || user.password !== password) {
         return res.redirect("/login?error=true");
     }
 
-    //save user session
-    req.session.user = {
-        id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email
-    };
-
-    res.redirect("/profile");
+    res.redirect(`/profile?userId=${user._id}`);
 });
 
 //logout
 app.get("/logout", (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
+    res.redirect("/login");
 });
 
 // list users
 app.get("/profile", async (req, res) => {
+    const userId = req.query.userId;
+    if (!userId) return res.redirect("/login");
     const users = await User.find().lean();
-    res.render("profile/list", { title: "User Management", users });
+    res.render("profile/list", { title: "User Management", users, userId });
 });
 
-// edit user
+// edit
 app.get("/profile/edit/:id", async (req, res) => {
+    const userId = req.query.userId;
+    if (!userId) return res.redirect("/login");
     const user = await User.findById(req.params.id).lean();
-    res.render("profile/edit", { title: "Edit User", user });
+    res.render("profile/edit", { title: "Edit User", user, userId });
 });
 
-// update user
+// update
 app.post("/profile/update/:id", async (req, res) => {
+    const userId = req.query.userId;
     const { firstname, lastname, email, password } = req.body;
 
     const updateData = { firstname, lastname, email };
     if (password && password.trim() !== "") {
         updateData.password = password;
     }
+
     await User.findByIdAndUpdate(req.params.id, updateData);
-    res.redirect("/profile");
+    res.redirect(`/profile?userId=${userId}`);
 });
 
-// delete user
+// delete
 app.post('/profile/delete/:id', async (req, res) => {
+    const userId = req.query.userId;
     await User.findByIdAndDelete(req.params.id);
-    res.redirect('/profile');
+    res.redirect(`/profile?userId=${userId}`);
 });
+
 
 Handlebars.registerHelper("equals", function (a, b, options) {
   if (a === b) return options.fn(this);
