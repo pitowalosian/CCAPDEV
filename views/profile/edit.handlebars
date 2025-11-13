@@ -1,24 +1,25 @@
 <div class="container mt-4">
     <h2>Edit User</h2>
+
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">
         <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
             <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Flight Search</a>
+                    <a class="nav-link" href="/search?userId={{userId}}">Flight Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/book">Book Flights</a>
+                    <a class="nav-link" href="/book?userId={{userId}}">Book Flights</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/reservations">My Reservations</a>
+                    <a class="nav-link" href="/reservations?userId={{userId}}">My Reservations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
+                    <a class="nav-link active" aria-current="page" href="/profile?userId={{userId}}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
+                    <a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a>
                 </li>
                 <li class="nav-item">
                     <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -27,7 +28,7 @@
         </div>
     </div>
 
-    <form action="/profile/update/{{user._id}}" method="POST" class="card p-4 shadow-sm mt-3">
+    <form action="/profile/update/{{user._id}}?userId={{userId}}" method="POST" class="card p-4 shadow-sm mt-3">
 
         <div class="mb-3">
             <label class="form-label">First Name</label>
@@ -50,6 +51,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
-        <a href="/profile" class="btn btn-secondary mt-2">Back</a>
+
+        <a href="/profile?userId={{userId}}" class="btn btn-secondary mt-2">Back</a>
     </form>
 </div>

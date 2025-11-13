@@ -158,13 +158,6 @@ app.get('/book', async (req, res) => {
         const selectedDepart = flights.find(f => f.flightNo === depart);
         const selectedReturn = flights.find(f => f.flightNo === ret) || null;
 
-
-        // let selectedFlight = null;
-
-        // if (selectedFlightNo) {
-        //     selectedFlight = flights.find(f => f.flightNo === selectedFlightNo);
-        // }
-
         res.render('book', {
             title: 'Book Flights',
             flights,
@@ -291,17 +284,6 @@ app.use(
     })
 );
 
-// profile page require login
-app.get("/profile", async (req, res) => {
-
-    if (!req.session.user) {
-        return res.redirect("/login");
-    }
-
-    const users = await User.find().lean();
-    res.render("profile/list", { title: "User Management", users });
-});
-
 // registration 
 app.get("/register", (req, res) => {
     res.render("profile/register", { title: "Register" });
@@ -312,10 +294,10 @@ app.post("/register", async (req, res) => {
 
     try {
         await User.create({ firstname, lastname, email, password });
-        res.redirect("/login?registered=true");
+        return res.redirect("/login?registered=true");
     } catch (err) {
         console.error(err);
-        res.redirect("/register?error=true");
+        return res.redirect("/register?error=true");
     }
 });
 
@@ -328,60 +310,62 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
-    if (!user) return res.redirect("/login?error=true");
-
-    if (user.password !== password) {
+    if (!user || user.password !== password) {
         return res.redirect("/login?error=true");
     }
 
-    //save user session
-    req.session.user = {
-        id: user._id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email
-    };
-
-    res.redirect("/profile");
+    res.redirect(`/profile?userId=${user._id}`);
 });
 
 //logout
 app.get("/logout", (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
+    res.redirect("/login");
 });
 
 // list users
 app.get("/profile", async (req, res) => {
-    const users = await User.find().lean();
-    res.render("profile/list", { title: "User Management", users });
+    const userId = req.query.userId;
+    if (!userId) return res.redirect("/login");
+    
+    const user = await User.findById(userId).lean();
+    if (user.isAdmin) {
+        const users = await User.find().lean();
+        res.render("profile/list", { title: "User Management", users, userId });
+    } else {
+        res.render(`profile/edit`, { title: "Edit Profile", user });
+    }
+    
 });
 
-// edit user
+// edit
 app.get("/profile/edit/:id", async (req, res) => {
+    const userId = req.query.userId;
+    if (!userId) return res.redirect("/login");
     const user = await User.findById(req.params.id).lean();
-    res.render("profile/edit", { title: "Edit User", user });
+    res.render("profile/edit", { title: "Edit User", user, userId });
 });
 
-// update user
+// update
 app.post("/profile/update/:id", async (req, res) => {
+    const userId = req.query.userId;
     const { firstname, lastname, email, password } = req.body;
 
     const updateData = { firstname, lastname, email };
     if (password && password.trim() !== "") {
         updateData.password = password;
     }
+
     await User.findByIdAndUpdate(req.params.id, updateData);
-    res.redirect("/profile");
+    res.redirect(`/profile?userId=${userId}`);
 });
 
-// delete user
+// delete
 app.post('/profile/delete/:id', async (req, res) => {
+    const userId = req.query.userId;
     await User.findByIdAndDelete(req.params.id);
-    res.redirect('/profile');
+    res.redirect(`/profile?userId=${userId}`);
 });
+
 
 Handlebars.registerHelper("equals", function (a, b, options) {
   if (a === b) return options.fn(this);
@@ -404,9 +388,9 @@ app.listen(PORT, async () => {
     const userCount = await User.countDocuments();
     if (userCount === 0) {
         await User.insertMany([
-            { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123" },
-            { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword" },
-            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123" }
+            { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123", isAdmin: true },
+            { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword", isAdmin: false },
+            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: false }
         ]);
         console.log("Sample users inserted.");
     }

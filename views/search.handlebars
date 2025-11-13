@@ -4,16 +4,16 @@
         <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/search">Flight Search</a>
+                <a class="nav-link active" aria-current="page" href="/search?userId={{userId}}">Flight Search</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/book">Book Flights</a>
+                <a class="nav-link" href="/book?userId={{userId}}">Book Flights</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/reservations">My Reservations</a>
+                <a class="nav-link" href="/reservations?userId={{userId}}">My Reservations</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/profile">Profile</a>
+                <a class="nav-link" href="/profile?userId={{userId}}">Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
@@ -41,7 +41,7 @@
                     <div class="col-md-auto">
                         <div class="input-group flex-grow-0">
                             <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                            <input type="number" class="form-control w-auto flex-grow-0" id="passcount" val="1" placeholder="1" min="1" max="30">
+                            <input type="number" class="form-control w-auto flex-grow-0" id="passcount" value="1" placeholder="1" min="1" max="30">
                         </div>
                     </div>
                     <!--Origin-->
@@ -304,13 +304,6 @@
                 }
             });
 
-            // Hide search container on form container mouse enter
-            $('#formContainer').on('mouseenter', function() {
-                $('#resultsText').fadeOut(1000);
-                $('#searchCont').fadeOut(1000);
-                $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
-            });
-
             // Keep selected flights
             let selectedFlights = { depart: null, return: null };
 
@@ -356,8 +349,14 @@
                 }
 
                 const queryParams = new URLSearchParams();
+                const passcount = $('#passcount').val()?.trim() || 0;
+                console.log('passcount:', passcount);
+
                 if (depart) queryParams.append('depart', depart.flightNo);
                 if (ret) queryParams.append('return', ret.flightNo);
+                queryParams.append('passcount', passcount);
+
+                console.log(queryParams.toString());
 
                 summaryHTML += `<a href="/book?${queryParams.toString()}" class="btn btn-success w-100">Proceed to Booking</a>`;
                 $('#summaryBody').html(summaryHTML);
