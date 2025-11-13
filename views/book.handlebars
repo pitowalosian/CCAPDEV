@@ -295,7 +295,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitSummary">Proceed to Checkout</button>
+                <a href="#" class="btn btn-primary" id="submitSummary">View Reservations</button>
             </div>
         </div>
     </div>
@@ -750,7 +750,9 @@
                 summaryModal.show();
             });
             
-            $('#submitSummary').click(function(){
+            $('#submitSummary').click(function(e){
+                e.preventDefault();
+
                 $('#phoneNumHidden').val($('#phoneNumInput').val());
                 $('#selectedSeat').val(selectedSeats.join(', '));
 
@@ -770,6 +772,9 @@
                 $('#totalPriceHidden').val(total);
 
                 $('#passengerInfo').submit();
+
+                let summaryModal = bootstrap.Modal.getInstance(document.getElementById('summary'));
+                summaryModal.hide();
             });
 
         });
