@@ -1,78 +1,245 @@
-<div class="text-center">
-    <h2 class="display-5 mb-4">Edit Reservation {{reservation.bookingId}}</h2>
+<div class="container-fluid fixed-top">
+    <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
+        <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item"><a class="nav-link" href="/search?userId={{userId}}">Flight Search</a></li>
+            <li class="nav-item"><a class="nav-link" href="/book?userId={{userId}}">Book Flights</a></li>
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="/reservations?userId={{userId}}">My Reservations</a></li>
+            <li class="nav-item"><a class="nav-link" href="/profile?userId={{userId}}">Profile</a></li>
+            <li class="nav-item"><a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a></li>
+            <li class="nav-item"><button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button></li>
+        </ul>
+    </div>
 </div>
 
-<div class="container-fluid my-4">
+<div class="container text-center pt-5 mt-5">
+    <h2 class="display-5 text-primary mt-5">Edit Reservation</h2>
+    <p class="lead">Update your seat, meal, or baggage</p>
+</div>
+
+<div class="container my-4">
     <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
-        <form class="text-start" action="/reservations/edit/{{reservation._id}}" method="POST">
-            
+        
+        <form id="editForm" class="text-start" action="/reservations/edit/{{reservation._id}}" method="POST">
+            <input type="hidden" name="status" value="{{reservation.status}}">
+            <input type="hidden" name="seat" id="selectedSeatInput" value="{{reservation.package.seat}}">
+
             <div class="row mb-3">
+                <h4 class="text-primary-emphasis mb-3">Passenger Details</h4>
                 <div class="col-md-6">
-                    <label class="form-label" for="seat">Seat</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="seat" 
-                        name="seat" 
-                        value="{{reservation.package.seat}}"
-                    >
+                    <label class="form-label">Booking ID</label>
+                    <input type="text" class="form-control" value="{{reservation.bookingId}}" disabled>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label" for="meal">Meal</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="meal"
-                        name="meal" 
-                        value="{{reservation.package.meal}}"
-                    >
+                    <label class="form-label">Passenger Name</label>
+                    <input type="text" class="form-control" value="{{reservation.passengerName}}" disabled>
+                </div>
+            </div>
+            <hr>
+            <div class="row mb-3">
+                <h4 class="text-primary-emphasis mb-3">Package Options</h4>
+                <div class="col-md-6">
+                    <label class="form-label">Meal Preference</label>
+                    <select class="form-select" name="meal">
+                        <option value="Standard (included)" {{#equals reservation.package.meal "Standard (included)"}}selected{{/equals}}>Standard (included)</option>
+                        <option value="Vegetarian" {{#equals reservation.package.meal "Vegetarian"}}selected{{/equals}}>Vegetarian</option>
+                        <option value="Vegan" {{#equals reservation.package.meal "Vegan"}}selected{{/equals}}>Vegan</option>
+                        <option value="Halal" {{#equals reservation.package.meal "Halal"}}selected{{/equals}}>Halal</option>
+                        <option value="Kosher" {{#equals reservation.package.meal "Kosher"}}selected{{/equals}}>Kosher</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Baggage Weight (kg)</label>
+                    <input type="number" class="form-control" name="baggage" value="{{reservation.package.baggageWeight}}" min="0" max="50" step="0.1">
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label" for="baggage">Baggage</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="baggage" 
-                        name="baggage" 
-                        value="{{reservation.package.baggage}}"
-                    >
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label" for="status">Status</label>
-                    <select 
-                        class="form-select" 
-                        id="status" 
-                        name="status"
-                    >
-                        <option value="Confirmed" 
-                        {{#equals reservation.status "Confirmed"}}selected{{/equals}}>
-                        Confirmed
-                        </option>
-                        <option value="Pending" 
-                        {{#equals reservation.status "Pending"}}selected{{/equals}}>
-                        Pending
-                        </option>
-                        <option value="Cancelled" 
-                        {{#equals reservation.status "Cancelled"}}selected{{/equals}}>
-                        Cancelled
-                        </option>
+            <hr>
+            
+            <div class="row justify-content-center mb-4">
+                <div class="col-12 text-center">
+                    <h4 class="text-primary-emphasis">Seat Selection</h4>
+                    <p class="text-muted">
+                        Current Class: <strong class="text-primary">{{reservation.travelClass}}</strong><br>
+                        <small>You can only switch seats within your booked class.</small>
+                    </p>
+                    
+                    <div class="container d-flex justify-content-center mb-3">
+                        <div class="row gap-3">
+                            <div class="col-auto"><i class="bi bi-x-square-fill text-secondary"></i> Unavailable</div>
+                            <div class="col-auto"><i class="bi bi-square-fill text-danger"></i> Selected</div>
+                            <div class="col-auto"><i class="bi bi-square-fill text-success"></i> Available</div>
+                        </div>
+                    </div>
 
-                    </select>
+                    <div id="seatMapContainer" class="d-flex flex-column align-items-center w-100">
+                    </div>
                 </div>
             </div>
 
             <div class="text-end mt-4">
-                <button type="submit" class="btn btn-outline-light me-2">
+                <button type="submit" class="btn btn-primary me-2" id="saveBtn">
                     <i class="bi bi-save"></i> Save Changes
                 </button>
-                <a href="/reservations" class="btn btn-outline-danger">
+                <a href="/reservations?userId={{userId}}" class="btn btn-outline-danger">
                     <i class="bi bi-x-circle"></i> Cancel
                 </a>
             </div>
-
+            <p id="errorText" class="text-danger text-end mt-2"></p>
         </form>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        
+        const userClass = "{{reservation.travelClass}}"; 
+        const currentSeatString = "{{reservation.package.seat}}"; 
+        const totalPassengers = {{reservation.adults}} + {{reservation.children}} + {{reservation.infants}};
+        
+        let selectedSeats = currentSeatString ? currentSeatString.split(',').map(s => s.trim()).filter(s => s !== "") : [];
+
+        const reservedSeats = [
+            {{#each reservedSeats}}
+                "{{this}}",
+            {{/each}}
+        ];
+
+        switch(userClass) {
+            case "First Class": 
+                generateFirstClass(); 
+                break;
+            case "Business": 
+                generateBusinessClass(); 
+                break;
+            case "Premium Economy": 
+                generatePremiumEconomy(); 
+                break;
+            case "Economy": 
+            default: 
+                generateEconomy(); 
+                break;
+        }
+
+        markSeats();
+
+        $('.seat').click(function(e) {
+            e.preventDefault();
+            if ($(this).hasClass('text-secondary') || $(this).parent().hasClass('disabled')) return;
+
+            let row = $(this).data('row');
+            let col = $(this).data('col');
+            let seatClass = $(this).data('class');
+            let seatCode = seatClass + row + col;
+
+            if (selectedSeats.includes(seatCode)) {
+                selectedSeats = selectedSeats.filter(s => s !== seatCode);
+                $(this).removeClass('text-danger');
+            } else {
+                if (selectedSeats.length >= totalPassengers) {
+                    alert(`You can only select ${totalPassengers} seat(s). Please deselect a seat first.`);
+                    return;
+                }
+                selectedSeats.push(seatCode);
+                $(this).addClass('text-danger');
+            }
+            $('#selectedSeatInput').val(selectedSeats.join(', '));
+        });
+
+        $('#saveBtn').click(function(e) {
+            if (selectedSeats.length !== totalPassengers) {
+                e.preventDefault();
+                $('#errorText').text(`Please select exactly ${totalPassengers} seat(s).`);
+            }
+        });
+
+        function markSeats() {
+            $('.seat').each(function() {
+                let row = $(this).data('row');
+                let col = $(this).data('col');
+                let seatClass = $(this).data('class');
+                let seatCode = seatClass + row + col;
+
+                if (reservedSeats.includes(seatCode)) {
+                    $(this).removeClass('text-success text-primary text-warning text-info opacity-75');
+                    $(this).addClass('text-secondary bi-x-square-fill');
+                    $(this).removeClass('bi-square-fill');
+                    $(this).parent().addClass('disabled').css('pointer-events', 'none');
+                } else if (selectedSeats.includes(seatCode)) {
+                    $(this).addClass('text-danger').removeClass('opacity-75');
+                }
+            });
+        }
+
+        function generateFirstClass() {
+            for (let i = 0; i < 2; i++) {
+                let row = $('<div class="d-flex justify-content-center g-0 m-1 w-100"></div>');
+                for (let j = 0; j < 1; j++) row.append(seatHTML(i+1, j+1, 'FA'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 2; j++) row.append(seatHTML(i+1, j+1, 'FB'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 1; j++) row.append(seatHTML(i+1, j+1, 'FC'));
+                $('#seatMapContainer').append(row);
+            }
+        }
+
+        function generateBusinessClass() {
+            for (let i = 0; i < 5; i++) {
+                let row = $('<div class="d-flex justify-content-center g-0 mb-1 w-100"></div>');
+                for (let j = 0; j < 2; j++) row.append(seatHTML(i+1, j+1, 'BA'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 3; j++) row.append(seatHTML(i+1, j+1, 'BB'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 2; j++) row.append(seatHTML(i+1, j+1, 'BC'));
+                $('#seatMapContainer').append(row);
+            }
+        }
+
+        function generatePremiumEconomy() {
+            for (let i = 0; i < 6; i++) {
+                let row = $('<div class="d-flex justify-content-center g-0 m-1 w-100"></div>');
+                for (let j = 0; j < 2; j++) row.append(seatHTML(i+1, j+1, 'PA'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 4; j++) row.append(seatHTML(i+1, j+1, 'PB'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 2; j++) row.append(seatHTML(i+1, j+1, 'PC'));
+                $('#seatMapContainer').append(row);
+            }
+        }
+
+        function generateEconomy() {
+            for (let i = 0; i < 10; i ++) {
+                let row = $('<div class="d-flex justify-content-center g-0 m-1 w-100"></div>');
+                for (let j = 0; j < 3; j++) row.append(seatHTML(i+1, j+1, 'EA'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 3; j++) row.append(seatHTML(i+1, j+1, 'EB'));
+                row.append(`<div class="col-1"></div>`);
+                for (let j = 0; j < 3; j++) row.append(seatHTML(i+1, j+1, 'EC'));
+                $('#seatMapContainer').append(row);
+            }
+        }
+
+        function seatHTML(r, c, code) {
+            let color = 'text-success';
+            if (code.startsWith('F')) color = 'text-primary';
+            if (code.startsWith('B')) color = 'text-info opacity-75';
+            if (code.startsWith('P')) color = 'text-warning';
+            
+            return `<div class="col-auto">
+                <button class="btn border-0">
+                    <i class="seat bi bi-square-fill ${color}" 
+                       data-row="${r}" data-col="${c}" data-class="${code}"></i>
+                </button>
+            </div>`;
+        }
+
+        $('#toggleDark').click(function() {
+            var currentTheme = $('html').attr('data-bs-theme');
+            var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            $('html').attr('data-bs-theme', newTheme);
+            $('#navbarNav').toggleClass('bg-dark-subtle bg-primary-subtle');
+            $('body').toggleClass('text-bg-dark text-bg-light').toggleClass('bg-secondary-subtle bg-light');
+        });
+    });
+</script>

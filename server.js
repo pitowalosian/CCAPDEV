@@ -197,8 +197,22 @@ app.get('/book', async (req, res) => {
 // List all reservations
 app.get('/reservations', async (req, res) => {
     try {
-        const reservations = await Reservation.find().populate('flight').lean();
         const userId = req.query.userId;
+        
+        const rawReservations = await Reservation.find().lean();
+        
+        const flights = await Flight.find().lean();
+
+        const reservations = rawReservations.map(r => {
+            
+            const flightDetails = flights.find(f => f.flightNo === r.flight) || {};
+            
+            return {
+                ...r,
+                flightDetails: flightDetails 
+            };
+        });
+
         res.render('reservations', { title: 'Reservations List', reservations, userId });
     } catch (error) {
         console.error(error);
@@ -318,13 +332,38 @@ app.post('/reservations', async (req, res) => {
     return res.redirect('/reservations?status=error');
   }
 });
-// Edit reservation
+
+// Edit reservation form
 app.get('/reservations/edit/:id', async (req, res) => {
     try {
-        const reservation = await Reservation.findById(req.params.id).populate('flight').lean();
         const userId = req.query.userId;
+        const reservation = await Reservation.findById(req.params.id).lean();
+        
         if (!reservation) return res.status(404).send('Reservation not found');
-        res.render('reservations/edit', { title: 'Edit Reservation', reservation, userId });
+
+        const flightNo = reservation.flight;
+
+        const allReservations = await Reservation.find({ 
+            flight: flightNo, 
+            status: { $ne: 'Cancelled' } 
+        }).lean();
+
+        const reservedSeats = allReservations
+            .filter(r => r._id.toString() !== reservation._id.toString()) // Don't block own seats
+            .flatMap(r => {
+                if (r.package && r.package.seat) {
+                    return r.package.seat.split(',').map(s => s.trim());
+                }
+                return [];
+            });
+
+        res.render('reservations/edit', { 
+            title: 'Edit Reservation', 
+            reservation, 
+            userId,
+            reservedSeats
+        });
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Error retrieving reservation');
@@ -333,9 +372,16 @@ app.get('/reservations/edit/:id', async (req, res) => {
 
 app.post('/reservations/edit/:id', async (req, res) => {
     const { seat, meal, baggage, status } = req.body;
+    
     try {
         await Reservation.findByIdAndUpdate(req.params.id, {
-            $set: { 'package.seat': seat, 'package.meal': meal, 'package.baggage': baggage, status }
+            $set: { 
+                'package.seat': seat, 
+                'package.meal': meal, 
+                'package.baggageWeight': baggage, 
+                
+                status 
+            }
         });
         res.redirect('/reservations?status=updated');
     } catch (err) {
