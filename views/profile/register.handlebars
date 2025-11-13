@@ -1,5 +1,5 @@
-<div class="container mt-4">
-    <h2>User Management</h2>
+<div class="container mt-4 w-50">
+    <h2>Create Account</h2>
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">
         <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
@@ -27,28 +27,36 @@
         </div>
     </div>
 
-    <table class="table table-striped mt-3">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th style="width: 150px;">Actions</th>
-            </tr>
-        </thead>
+    {{#if error}}
+        <div class="alert alert-danger">Registration failed. Try again.</div>
+    {{/if}}
 
-        <tbody>
-            {{#each users}}
-            <tr>
-                <td>{{firstname}} {{lastname}}</td>
-                <td>{{email}}</td>
-                <td>
-                    <a href="/profile/edit/{{_id}}" class="btn btn-primary btn-sm">Edit</a>
-                    <form action="/profile/delete/{{_id}}" method="POST" style="display:inline;">
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+    <form action="/register" method="POST">
+
+        <div class="mb-3">
+            <label class="form-label">First Name</label>
+            <input name="firstname" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Last Name</label>
+            <input name="lastname" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input name="email" type="email" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input name="password" type="password" class="form-control" required>
+        </div>
+
+        <button class="btn btn-success w-100">Register</button>
+
+        <div class="mt-3">
+            Already have an account? <a href="/login">Login here</a>
+        </div>
+    </form>
 </div>

@@ -268,6 +268,78 @@ app.post('/reservations/delete/:id', async (req, res) => {
     }
 });
 
+//require login
+const session = require("express-session");
+app.use(
+    session({
+        secret: "simpleSecret123",
+        resave: false,
+        saveUninitialized: false
+    })
+);
+
+// profile page require login
+app.get("/profile", async (req, res) => {
+
+    if (!req.session.user) {
+        return res.redirect("/login");
+    }
+
+    const users = await User.find().lean();
+    res.render("profile/list", { title: "User Management", users });
+});
+
+// registration 
+app.get("/register", (req, res) => {
+    res.render("profile/register", { title: "Register" });
+});
+
+app.post("/register", async (req, res) => {
+    const { firstname, lastname, email, password } = req.body;
+
+    try {
+        await User.create({ firstname, lastname, email, password });
+        res.redirect("/login?registered=true");
+    } catch (err) {
+        console.error(err);
+        res.redirect("/register?error=true");
+    }
+});
+
+//login 
+app.get("/login", (req, res) => {
+    res.render("profile/login", { title: "Login" });
+});
+
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) return res.redirect("/login?error=true");
+
+    if (user.password !== password) {
+        return res.redirect("/login?error=true");
+    }
+
+    //save user session
+    req.session.user = {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email
+    };
+
+    res.redirect("/profile");
+});
+
+//logout
+app.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/login");
+    });
+});
+
 // list users
 app.get("/profile", async (req, res) => {
     const users = await User.find().lean();
