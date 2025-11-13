@@ -1,24 +1,25 @@
 <div class="container mt-4">
     <h2>User Management</h2>
+
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">
         <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
             <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Flight Search</a>
+                    <a class="nav-link" href="/search?userId={{userId}}">Flight Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/book">Book Flights</a>
+                    <a class="nav-link" href="/book?userId={{userId}}">Book Flights</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/reservations">My Reservations</a>
+                    <a class="nav-link" href="/reservations?userId={{userId}}">My Reservations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
+                    <a class="nav-link active" aria-current="page" href="/profile?userId={{userId}}">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
+                    <a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a>
                 </li>
                 <li class="nav-item">
                     <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -42,8 +43,9 @@
                 <td>{{firstname}} {{lastname}}</td>
                 <td>{{email}}</td>
                 <td>
-                    <a href="/profile/edit/{{_id}}" class="btn btn-primary btn-sm">Edit</a>
-                    <form action="/profile/delete/{{_id}}" method="POST" style="display:inline;">
+                    <a href="/profile/edit/{{_id}}?userId={{../userId}}" class="btn btn-primary btn-sm">Edit</a>
+
+                    <form action="/profile/delete/{{_id}}?userId={{../userId}}" method="POST" style="display:inline;">
                         <button class="btn btn-danger btn-sm">Delete</button>
                     </form>
                 </td>
