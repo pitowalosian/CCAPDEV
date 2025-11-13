@@ -304,13 +304,6 @@
                 }
             });
 
-            // Hide search container on form container mouse enter
-            $('#formContainer').on('mouseenter', function() {
-                $('#resultsText').fadeOut(1000);
-                $('#searchCont').fadeOut(1000);
-                $('html, body').animate({ scrollTop: 0 }, 'fast'); // scroll to top
-            });
-
             // Keep selected flights
             let selectedFlights = { depart: null, return: null };
 
