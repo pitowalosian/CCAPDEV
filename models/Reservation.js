@@ -48,7 +48,7 @@ const ReservationSchema = new mongoose.Schema({
   passport: String,
   tripType: {
     type: String,
-    enum: ['Round-trip', 'One-way', 'Multi-city'],
+    enum: ['Round-trip', 'One-way'],
     default: 'Round-trip'
   },
   travelClass: {
