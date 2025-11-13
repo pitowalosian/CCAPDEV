@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // Show main page
-app.get('/', async (res) => {
+app.get('/', async (req, res) => {
     res.redirect('/search');
 });
 
