@@ -138,6 +138,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   $(document).ready(function() {
+    
     // Dark mode toggle
     $('#toggleDark').click(function() {
       var currentTheme = $('html').attr('data-bs-theme');
@@ -214,4 +215,13 @@
       new bootstrap.Modal(document.getElementById('detailsModal')).show();
     });
   });
+
+  // Confirm cancel action
+  $('form[action^="/reservations/delete/"]').on('submit', function(e) {
+    const confirmed = confirm('Are you sure you want to cancel this reservation?');
+    if (!confirmed) {
+      e.preventDefault(); // Stop form submission
+    }
+  });
+
 </script>
