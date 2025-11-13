@@ -271,13 +271,13 @@ app.post('/reservations/delete/:id', async (req, res) => {
 // list users
 app.get("/profile", async (req, res) => {
     const users = await User.find().lean();
-    res.render("profile-list", { title: "User Management", users });
+    res.render("profile/list", { title: "User Management", users });
 });
 
 // edit user
 app.get("/profile/edit/:id", async (req, res) => {
     const user = await User.findById(req.params.id).lean();
-    res.render("profile", { title: "Edit User", user });
+    res.render("profile/edit", { title: "Edit User", user });
 });
 
 // update user
@@ -288,7 +288,6 @@ app.post("/profile/update/:id", async (req, res) => {
     if (password && password.trim() !== "") {
         updateData.password = password;
     }
-
     await User.findByIdAndUpdate(req.params.id, updateData);
     res.redirect("/profile");
 });
