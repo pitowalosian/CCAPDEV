@@ -78,7 +78,6 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" value="3000" href="#">Round-trip</a></li>
                                 <li><a class="dropdown-item" value="2000" href="#">One-way</a></li>
-                                <li><a class="dropdown-item" value="5000" href="#">Multi-city</a></li>
                             </ul>
 
                             {{! passenger count }}
@@ -548,7 +547,7 @@
                 let cost = parseInt($(this).attr('value')) || 0; //get cost
                 
                 //find the button with this choice
-                if (['Round-trip', 'One-way', 'Multi-city'].includes(choice)) {
+                if (['Round-trip', 'One-way'].includes(choice)) {
                     buttonClicked = '#button1';
                     tripTypeCost = cost;
                 } else {
