@@ -404,9 +404,9 @@ app.listen(PORT, async () => {
     const userCount = await User.countDocuments();
     if (userCount === 0) {
         await User.insertMany([
-            { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123" },
-            { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword" },
-            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123" }
+            { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123", isAdmin: true },
+            { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword", isAdmin: false },
+            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: true }
         ]);
         console.log("Sample users inserted.");
     }
