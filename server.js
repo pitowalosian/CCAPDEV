@@ -193,51 +193,98 @@ app.get('/reservations/new', async (req, res) => {
     }
 });
 
-// Handle new reservation submission
 app.post('/reservations', async (req, res) => {
-    try {
-        const { 
-            passengerName, 
-            passengerEmail, 
-            passport, 
-            phoneNum,
-            flight: flightNo, 
-            seat, 
-            meal, 
-            baggage,
-            tripType,
-            travelClass,
-            adults,
-            children,
-            infants,
-            
-            //costs
-            passengerCost,
-            tripTypeCost,
-            travelClassCost,
-            mealCost,
-            baggageCost,
-            totalPrice } = req.body;
-        const bookingId = `BKG-${shortid.generate().toUpperCase()}`;
+  try {
+    const {
+      passengerName,
+      passengerEmail,
+      passport,
+      phoneNum,
+      flightNo,
+      seat,
+      meal: mealValue,
+      baggage: baggageRaw,
+      tripType,
+      travelClass,
+      adults: adultsRaw,
+      children: childrenRaw,
+      infants: infantsRaw,
+      passengerCost: passengerCostRaw,
+      tripTypeCost: tripTypeCostRaw,
+      travelClassCost: travelClassCostRaw,
+      mealCost: mealCostRaw,
+      baggageCost: baggageCostRaw,
+      totalPrice: totalPriceRaw
+    } = req.body;
 
-        const newReservation = new Reservation({
-            bookingId,
-            passengerName,
-            passengerEmail,
-            passport,
-            flight: flightNo,
-            package: { seat, meal, baggage },
-            status: 'Confirmed'
-        });
+    const adults = Number(adultsRaw) || 0;
+    const children = Number(childrenRaw) || 0;
+    const infants = Number(infantsRaw) || 0;
+    const totalPassengers = Math.max(1, adults + children + infants);
 
-        await newReservation.save();
-        res.redirect('/reservations?status=added');
-    } catch (error) {
-        console.error(error);
-        res.redirect('/reservations?status=error');
-    }
+    const passengerCostPer = Number(passengerCostRaw) || 0;
+    const tripTypeCostPer = Number(tripTypeCostRaw) || 0;
+    const travelClassCostPer = Number(travelClassCostRaw) || 0;
+    const mealCostPer = Number(mealCostRaw) || 0;
+    const baggageCostClient = Number(baggageCostRaw) || 0;
+
+    const baggageWeight = Number(baggageRaw) || 0;
+    const freeAllowance = 20;
+    const excessWeight = Math.max(0, baggageWeight - freeAllowance);
+    const EXCESS_RATE_PER_KG = 500;
+    const baggageCostCalc = Math.round(excessWeight * EXCESS_RATE_PER_KG);
+
+    const perPassengerSubtotal = passengerCostPer + tripTypeCostPer + travelClassCostPer + mealCostPer;
+    const passengerCostTotal = perPassengerSubtotal * totalPassengers;
+    const tripTypeCostTotal = tripTypeCostPer * totalPassengers;
+    const travelClassCostTotal = travelClassCostPer * totalPassengers;
+    const mealCostTotal = mealCostPer * totalPassengers;
+    const totalPrice = passengerCostTotal + baggageCostCalc;
+
+    const mealMap = {
+      '0': 'Standard (included)',
+      '200': 'Vegetarian',
+      '250': 'Vegan',
+      '300': 'Halal',
+      '350': 'Kosher'
+    };
+    const mealLabel = mealMap[String(mealValue)] || 'Standard (included)';
+    const mealCostUsedPer = mealCostPer;
+
+    const bookingId = `BKG-${shortid.generate().toUpperCase()}`;
+
+    const packageObj = {
+      seat: seat || '',
+      meal: mealLabel,
+      mealCost: mealCostUsedPer,
+      baggageWeight: baggageWeight,
+      freeBaggageAllowance: freeAllowance,
+      excessBaggageWeight: excessWeight
+    };
+
+    const newReservation = new Reservation({
+      bookingId,
+      passengerName,
+      passengerEmail,
+      passport,
+      flight: flightNo,
+      passengerCost: passengerCostTotal,
+      tripTypeCost: tripTypeCostTotal,
+      travelClassCost: travelClassCostTotal,
+      mealCost: mealCostTotal,
+      baggageCost: baggageCostCalc,
+      totalPrice: totalPrice,
+      package: packageObj,
+      status: 'Confirmed'
+    });
+
+    await newReservation.save();
+    return res.redirect('/reservations?status=added');
+  } catch (error) {
+    console.error('Error saving reservation:', error);
+    return res.redirect('/reservations?status=error');
+  }
 });
-
 // Edit reservation
 app.get('/reservations/edit/:id', async (req, res) => {
     try {
