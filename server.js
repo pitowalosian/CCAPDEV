@@ -149,16 +149,24 @@ app.post('/flights/delete/:id', async (req, res) => {
     }
 });
 
-// Display booking form
+// Display booking form with selected flight
 app.get('/book', async (req, res) => {
     try {
         const flights = await Flight.find().lean();
-        const selectedFlightId = req.query.flightId;
-        res.render('book', { 
+        const selectedFlightNo = req.query.flightNo; 
+
+        let selectedFlight = null;
+
+        if (selectedFlightNo) {
+            selectedFlight = flights.find(f => f.flightNo === selectedFlightNo);
+        }
+
+        res.render('book', {
             title: 'Book Flights',
             flights,
-            selectedFlightId
+            selectedFlight,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).send('Error loading booking form');
@@ -195,7 +203,7 @@ app.post('/reservations', async (req, res) => {
             passengerEmail, 
             passport, 
             phoneNum,
-            flight: flightId, 
+            flight: flightNo, 
             seat, 
             meal, 
             baggage,
@@ -219,7 +227,7 @@ app.post('/reservations', async (req, res) => {
             passengerName,
             passengerEmail,
             passport,
-            flight: flightId,
+            flight: flightNo,
             package: { seat, meal, baggage },
             status: 'Confirmed'
         });

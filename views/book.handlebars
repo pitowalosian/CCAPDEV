@@ -50,12 +50,12 @@
             {{! flight selection }}
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8">
-                    <label for="flightId" class="form-label h5">Select Flight *</label>
-                    <select class="form-control" name="flightId" id="flightId" required>
+                    <label for="flightNo" class="form-label h5">Select Flight *</label>
+                    <select class="form-control" name="flightNo" id="flightNo" required>
                         <option value="">Choose a flight...</option>
                         {{#each flights}}
-                        <option value="{{this._id}}"
-                            {{#equals this._id ../selectedFlightId}}selected{{/equals}}>
+                        <option value="{{this.flightNo}}"
+                            {{#equals this.flightNo ../selectedFlight.flightNo}}selected{{/equals}}>
                             {{this.airline}} {{this.flightNo}} - {{this.origin}} to {{this.destination}}
                         </option>
                         {{/each}}
@@ -655,7 +655,7 @@
                 let phoneNum = $("#phoneNumInput").val().trim();
                 let passNum = $("#passNum").val().trim();
 
-                let flightId = $("#flightId").val().trim();
+                let flightNo = $("#flightNo").val().trim();
                 let tripType = $("#button1").text().trim();
                 let passCount = parseInt($('#button2').text());
                 let travelClass = $("#button3").text().trim();
@@ -674,7 +674,7 @@
 
                 //validation rules
 
-                if (!flightId) { 
+                if (!flightNo) { 
                     errorsArray.push("Please select a flight.");
                 }
 
