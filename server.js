@@ -33,10 +33,10 @@ app.get('/', async (req, res) => {
 
 app.get('/search', async (req, res) => {
     try {
-        const { origin, destination, depdate, retdate } = req.query;
+        const { origin, destination, depdate, retdate, userId } = req.query;
 
         if (!depdate) {
-            return res.render('search', { title: 'Search Flights', flights: [], date: null, showResults: false });
+            return res.render('search', { title: 'Search Flights', flights: [], date: null, userId, showResults: false });
         }
 
         const departureDate = new Date(depdate);
@@ -60,7 +60,7 @@ app.get('/search', async (req, res) => {
             }
         }
 
-        res.render('search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, showResults: true, formsubmitted: true});
+        res.render('search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, userId, showResults: true, formsubmitted: true});
     } catch (err) {
         console.log(err);
         res.status(500).send('Error searching for flights');
@@ -83,14 +83,16 @@ app.post('/add-flights', async (req, res) => {
 // List all flights with status handling
 app.get('/flights', async (req, res) => {
     try {
+        const userId = req.query.userId;
         const flights = await Flight.find().lean(); // get all flights
         const status = req.query.status || ''; // read ?status=success or ?status=error
-        res.render('flights', { title: 'Flights List', flights, status }); // send status to handlebars
+        res.render('flights', { title: 'Flights List', flights, userId, status }); // send status to handlebars
     } catch (error) {
         console.error(error);
         res.render('flights', {
             title: 'Flights List',
             flights: [],
+            userId,
             status: 'error'
         });
     }
@@ -100,8 +102,9 @@ app.get('/flights', async (req, res) => {
 app.get('/flights/edit/:id', async (req, res) => {
     try {
         const flight = await Flight.findById(req.params.id).lean();
+        const userId = req.query.userId;
         if (flight) {
-            res.render('flights/edit', { title: 'Edit Flight', flight: flight });
+            res.render('flights/edit', { title: 'Edit Flight', flight: flight, userId });
         } else {
             res.status(404).send('Flight not found'); 
         }
@@ -153,7 +156,7 @@ app.post('/flights/delete/:id', async (req, res) => {
 app.get('/book', async (req, res) => {
     try {
         const flights = await Flight.find().lean();
-        const { depart, return: ret } = req.query;
+        const { depart, return: ret, userId } = req.query;
 
         const selectedDepart = flights.find(f => f.flightNo === depart);
         const selectedReturn = flights.find(f => f.flightNo === ret) || null;
@@ -162,7 +165,8 @@ app.get('/book', async (req, res) => {
             title: 'Book Flights',
             flights,
             selectedDepart,
-            selectedReturn
+            selectedReturn,
+            userId
         });
 
     } catch (error) {
@@ -175,7 +179,8 @@ app.get('/book', async (req, res) => {
 app.get('/reservations', async (req, res) => {
     try {
         const reservations = await Reservation.find().populate('flight').lean();
-        res.render('reservations', { title: 'Reservations List', reservations });
+        const userId = req.query.userId;
+        res.render('reservations', { title: 'Reservations List', reservations, userId });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error loading reservations');
@@ -186,7 +191,8 @@ app.get('/reservations', async (req, res) => {
 app.get('/reservations/new', async (req, res) => {
     try {
         const flights = await Flight.find().lean();
-        res.render('reservations/new', { title: 'New Reservation', flights });
+        const userId = req.query.userId;
+        res.render('reservations/new', { title: 'New Reservation', flights, userId });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error loading new reservation form');
@@ -289,8 +295,9 @@ app.post('/reservations', async (req, res) => {
 app.get('/reservations/edit/:id', async (req, res) => {
     try {
         const reservation = await Reservation.findById(req.params.id).populate('flight').lean();
+        const userId = req.query.userId;
         if (!reservation) return res.status(404).send('Reservation not found');
-        res.render('reservations/edit', { title: 'Edit Reservation', reservation });
+        res.render('reservations/edit', { title: 'Edit Reservation', reservation, userId });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error retrieving reservation');
@@ -333,7 +340,8 @@ app.use(
 
 // registration 
 app.get("/register", (req, res) => {
-    res.render("profile/register", { title: "Register" });
+    const userId = req.query.userId;
+    res.render("profile/register", { title: "Register", userId });
 });
 
 app.post("/register", async (req, res) => {
@@ -379,7 +387,7 @@ app.get("/profile", async (req, res) => {
         const users = await User.find().lean();
         res.render("profile/list", { title: "User Management", users, userId });
     } else {
-        res.render(`profile/edit`, { title: "Edit Profile", user });
+        res.render(`profile/edit`, { title: "Edit Profile", user, userId });
     }
 });
 

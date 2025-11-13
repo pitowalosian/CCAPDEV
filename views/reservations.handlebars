@@ -5,19 +5,19 @@
         <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link" href="/search">Flight Search</a>
+                <a class="nav-link" href="/search?userId={{userId}}">Flight Search</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/book">Book Flights</a>
+                <a class="nav-link" href="/book?userId={{userId}}">Book Flights</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/reservations">My Reservations</a>
+                <a class="nav-link active" aria-current="page" href="/reservations?userId={{userId}}">My Reservations</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/profile">Profile</a>
+                <a class="nav-link" href="/profile?userId={{userId}}">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
+                <a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a>
             </li>
             <li class="nav-item">
                 <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
