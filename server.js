@@ -328,16 +328,6 @@ app.post('/reservations/delete/:id', async (req, res) => {
     }
 });
 
-//require login
-const session = require("express-session");
-app.use(
-    session({
-        secret: "simpleSecret123",
-        resave: false,
-        saveUninitialized: false
-    })
-);
-
 // registration 
 app.get("/register", (req, res) => {
     const userId = req.query.userId;
