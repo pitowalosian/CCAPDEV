@@ -381,7 +381,6 @@ app.get("/profile", async (req, res) => {
     } else {
         res.render(`profile/edit`, { title: "Edit Profile", user });
     }
-    
 });
 
 // edit
