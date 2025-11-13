@@ -153,6 +153,7 @@ app.post('/flights/delete/:id', async (req, res) => {
 });
 
 // Display booking form with selected flight
+// Display booking form with selected flight
 app.get('/book', async (req, res) => {
     try {
         const flights = await Flight.find().lean();
@@ -161,12 +162,30 @@ app.get('/book', async (req, res) => {
         const selectedDepart = flights.find(f => f.flightNo === depart);
         const selectedReturn = flights.find(f => f.flightNo === ret) || null;
 
+        // [NEW] Fetch reserved seats for the current flight
+        let reservedSeats = [];
+        if (selectedDepart) {
+            const reservations = await Reservation.find({ 
+                flight: selectedDepart.flightNo, 
+                status: { $ne: 'Cancelled' } // Ignore cancelled bookings
+            }).lean();
+            
+            // [LOGIC] The DB stores seats as "EA11, EA12". We need to split them into individual codes.
+            reservedSeats = reservations.flatMap(r => {
+                if (r.package && r.package.seat) {
+                    return r.package.seat.split(',').map(s => s.trim());
+                }
+                return [];
+            });
+        }
+
         res.render('book', {
             title: 'Book Flights',
             flights,
             selectedDepart,
             selectedReturn,
-            userId
+            userId,
+            reservedSeats // [NEW] Pass this array to the view
         });
 
     } catch (error) {
@@ -273,7 +292,15 @@ app.post('/reservations', async (req, res) => {
       passengerName,
       passengerEmail,
       passport,
-      flight: flightNo,
+    
+      phoneNum: phoneNum, 
+      tripType: tripType,
+      travelClass: travelClass,
+      adults: adults,
+      children: children,
+      infants: infants,
+
+      flight: flightNo, 
       passengerCost: passengerCostTotal,
       tripTypeCost: tripTypeCostTotal,
       travelClassCost: travelClassCostTotal,

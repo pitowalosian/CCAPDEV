@@ -45,6 +45,10 @@ const ReservationSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  phoneNum: {
+    type: String,
+    required: true
+  },
   passport: String,
   tripType: {
     type: String,
@@ -93,8 +97,7 @@ const ReservationSchema = new mongoose.Schema({
     required: true
   },
   flight: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Flight', 
+    type: String, 
     required: true 
   },
   package: PackageSchema,
