@@ -53,15 +53,19 @@
             {{! flight selection }}
             <div class="row justify-content-center mb-4">
                 <div class="col-md-8">
-                    <label for="flightId" class="form-label h5">Select Flight *</label>
-                    <select class="form-control" name="flightId" id="flightId" required>
+                    <label for="flightNo" class="form-label h5">Select Flight *</label>
+                    <select class="form-control" name="flightNo" id="flightNo" required>
                         <option value="">Choose a flight...</option>
-                        {{#each flights}}
-                        <option value="{{this._id}}"
-                            {{#equals this._id ../selectedFlightId}}selected{{/equals}}>
-                            {{this.airline}} {{this.flightNo}} - {{this.origin}} to {{this.destination}}
-                        </option>
-                        {{/each}}
+                        {{#if selectedDepart}}
+                            <option value="{{selectedDepart.flightNo}}" selected>
+                                {{selectedDepart.airline}} {{selectedDepart.flightNo}} - {{selectedDepart.origin}} to {{selectedDepart.destination}}
+                            </option>
+                        {{/if}}
+                        {{#if selectedReturn}}
+                            <option value="{{selectedReturn.flightNo}}" selected>
+                                {{selectedReturn.airline}} {{selectedReturn.flightNo}} - {{selectedReturn.origin}} to {{selectedReturn.destination}}
+                            </option>
+                        {{/if}}
                     </select>
                 </div>
             </div>
@@ -81,7 +85,6 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" value="3000" href="#">Round-trip</a></li>
                                 <li><a class="dropdown-item" value="2000" href="#">One-way</a></li>
-                                <li><a class="dropdown-item" value="5000" href="#">Multi-city</a></li>
                             </ul>
 
                             {{! passenger count }}
@@ -299,13 +302,14 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitSummary">Proceed to Checkout</button>
+                <a href="#" class="btn btn-primary" id="submitSummary">View Reservations</button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
         $(document).ready(function() {
@@ -550,7 +554,7 @@
                 let cost = parseInt($(this).attr('value')) || 0; //get cost
                 
                 //find the button with this choice
-                if (['Round-trip', 'One-way', 'Multi-city'].includes(choice)) {
+                if (['Round-trip', 'One-way'].includes(choice)) {
                     buttonClicked = '#button1';
                     tripTypeCost = cost;
                 } else {
@@ -657,7 +661,7 @@
                 let phoneNum = $("#phoneNumInput").val().trim();
                 let passNum = $("#passNum").val().trim();
 
-                let flightId = $("#flightId").val().trim();
+                let flightNo = $("#flightNo").val().trim();
                 let tripType = $("#button1").text().trim();
                 let passCount = parseInt($('#button2').text());
                 let travelClass = $("#button3").text().trim();
@@ -676,7 +680,7 @@
 
                 //validation rules
 
-                if (!flightId) { 
+                if (!flightNo) { 
                     errorsArray.push("Please select a flight.");
                 }
 
@@ -753,7 +757,9 @@
                 summaryModal.show();
             });
             
-            $('#submitSummary').click(function(){
+            $('#submitSummary').click(function(e){
+                e.preventDefault();
+
                 $('#phoneNumHidden').val($('#phoneNumInput').val());
                 $('#selectedSeat').val(selectedSeats.join(', '));
 
@@ -773,6 +779,9 @@
                 $('#totalPriceHidden').val(total);
 
                 $('#passengerInfo').submit();
+
+                let summaryModal = bootstrap.Modal.getInstance(document.getElementById('summary'));
+                summaryModal.hide();
             });
 
         });
