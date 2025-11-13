@@ -158,13 +158,6 @@ app.get('/book', async (req, res) => {
         const selectedDepart = flights.find(f => f.flightNo === depart);
         const selectedReturn = flights.find(f => f.flightNo === ret) || null;
 
-
-        // let selectedFlight = null;
-
-        // if (selectedFlightNo) {
-        //     selectedFlight = flights.find(f => f.flightNo === selectedFlightNo);
-        // }
-
         res.render('book', {
             title: 'Book Flights',
             flights,
