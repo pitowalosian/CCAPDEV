@@ -34,7 +34,7 @@
 {{! form }}
 <div class="container mt-4 mb-5 position pt-2 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p1">
     <div class="container mt-4 mb-4 justify-content-center">
-        <form id="passengerInfo" action="/reservations" method="POST">
+        <form id="passengerInfo" action="/reservations?userId={{userId}}" method="POST">
             <input type="hidden" name="tripType" id="tripType" value="Round-trip">
             <input type="hidden" name="travelClass" id="travelClass" value="Economy">
             <input type="hidden" name="adults" id="adults" value="1">
