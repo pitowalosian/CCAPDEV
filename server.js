@@ -153,18 +153,23 @@ app.post('/flights/delete/:id', async (req, res) => {
 app.get('/book', async (req, res) => {
     try {
         const flights = await Flight.find().lean();
-        const selectedFlightNo = req.query.flightNo; 
+        const { depart, return: ret } = req.query;
 
-        let selectedFlight = null;
+        const selectedDepart = flights.find(f => f.flightNo === depart);
+        const selectedReturn = flights.find(f => f.flightNo === ret) || null;
 
-        if (selectedFlightNo) {
-            selectedFlight = flights.find(f => f.flightNo === selectedFlightNo);
-        }
+
+        // let selectedFlight = null;
+
+        // if (selectedFlightNo) {
+        //     selectedFlight = flights.find(f => f.flightNo === selectedFlightNo);
+        // }
 
         res.render('book', {
             title: 'Book Flights',
             flights,
-            selectedFlight,
+            selectedDepart,
+            selectedReturn
         });
 
     } catch (error) {

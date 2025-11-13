@@ -351,7 +351,11 @@
                     `;
                 }
 
-                summaryHTML += `<a href="/book" class="btn btn-success w-100">Proceed to Booking</a>`;
+                const queryParams = new URLSearchParams();
+                if (depart) queryParams.append('depart', depart.flightNo);
+                if (ret) queryParams.append('return', ret.flightNo);
+
+                summaryHTML += `<a href="/book?${queryParams.toString()}" class="btn btn-success w-100">Proceed to Booking</a>`;
                 $('#summaryBody').html(summaryHTML);
             }
 

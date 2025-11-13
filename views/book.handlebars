@@ -53,12 +53,16 @@
                     <label for="flightNo" class="form-label h5">Select Flight *</label>
                     <select class="form-control" name="flightNo" id="flightNo" required>
                         <option value="">Choose a flight...</option>
-                        {{#each flights}}
-                        <option value="{{this.flightNo}}"
-                            {{#equals this.flightNo ../selectedFlight.flightNo}}selected{{/equals}}>
-                            {{this.airline}} {{this.flightNo}} - {{this.origin}} to {{this.destination}}
-                        </option>
-                        {{/each}}
+                        {{#if selectedDepart}}
+                            <option value="{{selectedDepart.flightNo}}" selected>
+                                {{selectedDepart.airline}} {{selectedDepart.flightNo}} - {{selectedDepart.origin}} to {{selectedDepart.destination}}
+                            </option>
+                        {{/if}}
+                        {{#if selectedReturn}}
+                            <option value="{{selectedReturn.flightNo}}" selected>
+                                {{selectedReturn.airline}} {{selectedReturn.flightNo}} - {{selectedReturn.origin}} to {{selectedReturn.destination}}
+                            </option>
+                        {{/if}}
                     </select>
                 </div>
             </div>
