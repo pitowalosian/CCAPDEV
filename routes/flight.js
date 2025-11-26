@@ -32,7 +32,7 @@ router.get('/', isAuthenticated(true), async (req, res) => {
 });
 
 // Display edit form
-router.get('/flights/edit/:id', async (req, res) => {
+router.get('/edit/:id', async (req, res) => {
     try {
         const flight = await Flight.findById(req.query.id).lean();
         const userId = req.session.userId;
@@ -47,7 +47,7 @@ router.get('/flights/edit/:id', async (req, res) => {
 });
 
 // Handle edit form submission
-router.post('/flights/edit/:id', async (req, res) => {
+router.post('/edit/:id', async (req, res) => {
     console.log('Edit form submission:', req.body);
     const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
     try {
@@ -75,7 +75,7 @@ router.post('/flights/edit/:id', async (req, res) => {
 });
 
 // Delete a flight by ID
-router.post('/flights/delete/:id', async (req, res) => {
+router.post('/delete/:id', async (req, res) => {
     try {
         await Flight.findOneAndDelete({_id: req.params.id});
         res.redirect('/flights?status=deleted');

@@ -1,4 +1,4 @@
-
+//mock mongoose
 jest.mock('mongoose', () => {
     const actual = jest.requireActual('mongoose');
     return {
@@ -7,7 +7,7 @@ jest.mock('mongoose', () => {
     };
 });
 
-//mock user
+//mock user model
 jest.mock('../models/User', () => ({
     findOne: jest.fn(),
     create: jest.fn(),
@@ -32,6 +32,8 @@ describe("User Authentication Tests", () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
+
+    //------ VALID TESTS ------
 
     // test 1: register
     test("POST /profile/register creates user and redirects to login", async () => {
@@ -94,7 +96,34 @@ describe("User Authentication Tests", () => {
         expect(res.headers.location).toBe("/profile/Admin");
     });
 
-    // test 4: failed login
+    // test 4: log out
+    test("GET /profile/logout destroys session and redirects to /login", async () => {
+
+        const res = await request(server).get("/profile/logout");
+
+        expect(res.status).toBe(302);
+        expect(res.headers.location).toBe("/login");
+    });
+
+    //------ INVALID TESTS ------
+
+    // test 6: fails cause user is not found
+    test("POST /profile/login returns 401 when user does not exist", async () => {
+
+        User.findOne.mockResolvedValue(null); // simulates no user found
+
+        const res = await request(server)
+            .post("/profile/login")
+            .send({
+                email: "notfound@test.com",
+                password: "whatever"
+            });
+
+        expect(res.status).toBe(401);
+        expect(res.text).toMatch(/Invalid login/i);
+    });
+
+    // test 7: failed login
     test("POST /profile/login rejects incorrect password", async () => {
 
         User.findOne.mockResolvedValue(
@@ -112,13 +141,20 @@ describe("User Authentication Tests", () => {
         expect(res.text).toMatch(/Invalid login/i);
     });
 
-    // test 5: log out
-    test("GET /profile/logout destroys session and redirects to /login", async () => {
+    // test 8: server error
+    test("POST /profile/login returns 500 when DB error happens", async () => {
 
-        const res = await request(server).get("/profile/logout");
+        User.findOne.mockRejectedValue(new Error("DB error"));
 
-        expect(res.status).toBe(302);
-        expect(res.headers.location).toBe("/login");
+        const res = await request(server)
+            .post("/profile/login")
+            .send({
+                email: "broken@test.com",
+                password: "pass"
+            });
+
+        expect(res.status).toBe(500);
+        expect(res.text).toMatch(/Server error/i);
     });
 
 });
