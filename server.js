@@ -37,26 +37,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Show main page
-app.get('/', async (req, res) => {
-    res.redirect('/profile/login');
-});
-
-app.use('/flights', flightRoutes);
-
-app.use('/reservations', reservationRoutes);
-
-app.use('/profile', userRoutes);
-
-Handlebars.registerHelper("equals", function (a, b, options) {
-  if (a === b) return options.fn(this);
-  return options.inverse(this);
-});
-
-// start server
-app.listen(PORT, async () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-
+async function initDB() {
     const flightCount = await Flight.countDocuments();
     if (flightCount === 0) {
         await Flight.insertMany([
@@ -75,5 +56,30 @@ app.listen(PORT, async () => {
         ]);
         console.log("Sample users inserted.");
     }
+}
+
+// Show main page
+app.get('/', async (req, res) => {
+    res.redirect('/profile/login');
 });
 
+app.use('/flights', flightRoutes);
+
+app.use('/reservations', reservationRoutes);
+
+app.use('/profile', userRoutes);
+
+Handlebars.registerHelper("equals", function (a, b, options) {
+  if (a === b) return options.fn(this);
+  return options.inverse(this);
+});
+
+// start server
+if (process.env.NODE_ENV !== 'test') { //for jest testing
+    app.listen(PORT, async () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+        await initDB();
+    });
+}
+
+module.exports = app; 
