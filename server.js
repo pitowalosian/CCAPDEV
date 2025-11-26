@@ -6,7 +6,9 @@ const Reservation = require('./models/Reservation');
 const User = require("./models/User");
 const shortid = require('shortid');
 const mongoose = require('mongoose');
+const session = require("express-session");
 const Handlebars = require('handlebars');
+const userRoutes = require('./routes/user');
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +27,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to parse URL-encoded bodies (for form submissions)
 app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Show main page
 app.get('/', async (req, res) => {
@@ -401,88 +409,7 @@ app.post('/reservations/delete/:id', async (req, res) => {
     }
 });
 
-// registration 
-app.get("/register", (req, res) => {
-    const userId = req.query.userId;
-    res.render("profile/register", { title: "Register", userId });
-});
-
-app.post("/register", async (req, res) => {
-    const { firstname, lastname, email, password } = req.body;
-
-    try {
-        await User.create({ firstname, lastname, email, password });
-        return res.redirect("/login?registered=true");
-    } catch (err) {
-        console.error(err);
-        return res.redirect("/register?error=true");
-    }
-});
-
-//login 
-app.get("/login", (req, res) => {
-    res.render("profile/login", { title: "Login" });
-});
-
-app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user || user.password !== password) {
-        return res.redirect("/login?error=true");
-    }
-
-    res.redirect(`/profile?userId=${user._id}`);
-});
-
-//logout
-app.get("/logout", (req, res) => {
-    res.redirect("/login");
-});
-
-// list users
-app.get("/profile", async (req, res) => {
-    const userId = req.query.userId;
-    if (!userId) return res.redirect("/login");
-    
-    const user = await User.findById(userId).lean();
-    if (user.isAdmin) {
-        const users = await User.find().lean();
-        res.render("profile/list", { title: "User Management", users, userId });
-    } else {
-        res.render(`profile/edit`, { title: "Edit Profile", user, userId });
-    }
-});
-
-// edit
-app.get("/profile/edit/:id", async (req, res) => {
-    const userId = req.query.userId;
-    if (!userId) return res.redirect("/login");
-    const user = await User.findById(req.params.id).lean();
-    res.render("profile/edit", { title: "Edit User", user, userId });
-});
-
-// update
-app.post("/profile/update/:id", async (req, res) => {
-    const userId = req.query.userId;
-    const { firstname, lastname, email, password } = req.body;
-
-    const updateData = { firstname, lastname, email };
-    if (password && password.trim() !== "") {
-        updateData.password = password;
-    }
-
-    await User.findByIdAndUpdate(req.params.id, updateData);
-    res.redirect(`/profile?userId=${userId}`);
-});
-
-// delete
-app.post('/profile/delete/:id', async (req, res) => {
-    const userId = req.query.userId;
-    await User.findByIdAndDelete(req.params.id);
-    res.redirect(`/profile?userId=${userId}`);
-});
-
+app.use('/', userRoutes);
 
 Handlebars.registerHelper("equals", function (a, b, options) {
   if (a === b) return options.fn(this);
