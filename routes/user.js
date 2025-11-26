@@ -77,23 +77,31 @@ router.get("/User", isAuthenticated(false), async (req, res) => {
     }
 });
 
+// edit
+router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId).lean();
+        res.render('profile/edit', { user });
+    } catch (err) {
+        res.status(500).send("Error fetching users.");
+    }
+});
+
 // update
-router.post("/profile/update/", async (req, res) => { 
-    const user = await User.findById(req.session.userId).lean();
+router.post("/profile/update", async (req, res) => { 
+    const user = await User.findById(req.session.userId);
     const { firstname, lastname, email, password } = req.body;
 
+    user.firstname = firstname;
+    user.lastname = lastname;
+    user.email = email;
+    
     if (password && password.trim() !== "") {
         user.password = password;
     }
 
-    await User.findByIdandUpdate(user._id, {
-        $set: {
-            firstname,
-            lastname,
-            email,
-            password
-        }
-    });
+    await user.save();
+    req.session.user = user;
     res.redirect(`/User`);
 });
 
