@@ -7,16 +7,13 @@
             <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link" href="/flights?userId={{userId}}">Flight Management</a>
+                    <a class="nav-link" href="/flights">Flight Management</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/book?userId={{userId}}">Reservation Management</a>
+                    <a class="nav-link active" aria-current="page" href="/profile">User Management</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/profile?userId={{userId}}">User Management</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a>
+                    <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
                 </li>
                 <li class="nav-item">
                     <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -40,7 +37,7 @@
                 <td>{{firstname}} {{lastname}}</td>
                 <td>{{email}}</td>
                 <td>
-                    <a href="/Admin/edit" class="btn btn-primary btn-sm edit-btn" data-id="{{_id}}">Edit</a>
+                    <a href="/profile/Admin/edit" class="btn btn-primary btn-sm edit-btn" data-id="{{_id}}">Edit</a>
 
                     <form action="/profile/delete/{{_id}}?userId={{../userId}}" method="POST" style="display:inline;">
                         <button class="btn btn-danger btn-sm">Delete</button>

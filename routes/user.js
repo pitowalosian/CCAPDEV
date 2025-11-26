@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
-function isAuthenticated(role) {
+function isAuthenticated(role = null) {
     return function (req, res, next) {
         if (req.session.userId && req.session.user.isAdmin === role) {
             return next();
@@ -43,7 +43,7 @@ router.post("/login", async (req, res) => {
     if (user && user.comparePassword(password)) {
         req.session.userId = user._id;
         req.session.user = user;
-        res.redirect('/' + (user.isAdmin ? 'Admin' : 'User'));
+        res.redirect('/profile/' + (user.isAdmin ? 'Admin' : 'User'));
     } else {
         res.status(401).send('Invalid login');
     }
@@ -88,7 +88,7 @@ router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
 });
 
 // update
-router.post("/profile/update", async (req, res) => { 
+router.post("/update", async (req, res) => { 
     const user = await User.findById(req.session.userId);
     const { firstname, lastname, email, password } = req.body;
 
@@ -106,10 +106,10 @@ router.post("/profile/update", async (req, res) => {
 });
 
 // delete
-router.post('/profile/delete/:id', async (req, res) => {
+router.post('/delete/:id', async (req, res) => {
     const userId = req.query.userId;
     await User.findByIdAndDelete(req.params.id);
     res.redirect(`/profile?userId=${userId}`);
 });
 
-module.exports = router;
+module.exports = { router, isAuthenticated };
