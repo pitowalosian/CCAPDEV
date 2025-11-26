@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     isAdmin:   { type: Boolean, default: false }
 });
 
-// 🔐 Pre-save hook to hash password before saving
+// Pre-save hook to hash password before saving
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) return; // Only hash if password is new or modified
     const salt = await bcrypt.genSalt(10);

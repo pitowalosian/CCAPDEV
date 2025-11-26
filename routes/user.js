@@ -24,10 +24,10 @@ router.post("/register", async (req, res) => {
 
     try {
         await User.create({ firstname, lastname, email, password });
-        return res.redirect("/login?registered=true");
+        return res.redirect("/profile/login?registered=true");
     } catch (err) {
         console.error(err);
-        return res.redirect("/register?error=true");
+        return res.redirect("/profile/register?error=true");
     }
 });
 
@@ -39,14 +39,21 @@ router.get("/login", (req, res) => {
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (user && user.comparePassword(password)) {
-        req.session.userId = user._id;
-        req.session.user = user;
-        res.redirect('/profile/' + (user.isAdmin ? 'Admin' : 'User'));
-    } else {
-        res.status(401).send('Invalid login');
+    try {
+        const user = await User.findOne({ email });
+        if (user && await user.comparePassword(password)) {
+            req.session.userId = user._id;
+            req.session.user = user;
+            res.redirect('/profile/' + (user.isAdmin ? 'Admin' : 'User'));
+        } else {
+            res.status(401).send('Invalid login');
+        }
+        
+    } catch (err) {
+        console.error("Login error: ", err);
+        return res.status(500).send("Server error");
     }
+    
 });
 
 //logout
@@ -88,7 +95,7 @@ router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
 });
 
 // update
-router.post("/update", async (req, res) => { 
+router.post("/profile/update", async (req, res) => { 
     const user = await User.findById(req.session.userId);
     const { firstname, lastname, email, password } = req.body;
 
@@ -106,7 +113,7 @@ router.post("/update", async (req, res) => {
 });
 
 // delete
-router.post('/delete/:id', async (req, res) => {
+router.post('/profile/delete/:id', async (req, res) => {
     const userId = req.query.userId;
     await User.findByIdAndDelete(req.params.id);
     res.redirect(`/profile?userId=${userId}`);

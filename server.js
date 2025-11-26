@@ -8,17 +8,20 @@ const shortid = require('shortid');
 const mongoose = require('mongoose');
 const session = require("express-session");
 const Handlebars = require('handlebars');
-const { router: userRoutes } = require('./routes/user');
+
+const { router: userRoutes, isAuthenticated } = require('./routes/user');
+
 const flightRoutes = require('./routes/flight');
 const reservationRoutes = require('./routes/reservation');
-const { isAuthenticated } = require('./routes/user');
 
 const app = express();
 const PORT = 3000;
 
-mongoose.connect('mongodb://127.0.0.1:27017/flightdb')
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error: ', err));
+if (process.env.NODE_ENV !== 'test') {
+    mongoose.connect('mongodb://127.0.0.1:27017/flightdb')
+        .then(() => console.log('Connected to MongoDB'))
+        .catch(err => console.error('MongoDB connection error: ', err));
+}
 
 // Set up Handlebars as the view engine
 app.engine('handlebars', exphbs.engine({}));
@@ -30,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to parse URL-encoded bodies (for form submissions)
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(session({
     secret: "secret-key",
