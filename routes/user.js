@@ -77,6 +77,16 @@ router.get("/User", isAuthenticated(false), async (req, res) => {
     }
 });
 
+// edit
+router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
+    try {
+        const user = await User.findById(req.session.userId).lean();
+        res.render('profile/edit', { user });
+    } catch (err) {
+        res.status(500).send("Error fetching users.");
+    }
+});
+
 // update
 router.post("/profile/update", async (req, res) => { 
     const user = await User.findById(req.session.userId);

@@ -40,7 +40,7 @@
                 <td>{{firstname}} {{lastname}}</td>
                 <td>{{email}}</td>
                 <td>
-                    <a href="/profile/edit/{{_id}}?userId={{../userId}}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="/Admin/edit" class="btn btn-primary btn-sm edit-btn" data-id="{{_id}}">Edit</a>
 
                     <form action="/profile/delete/{{_id}}?userId={{../userId}}" method="POST" style="display:inline;">
                         <button class="btn btn-danger btn-sm">Delete</button>
@@ -51,3 +51,18 @@
         </tbody>
     </table>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{!-- <script>
+  //  $(document).ready(function()) {
+       // $(".edit-btn").click(function(){
+          //  const userId = $(this).data("id");
+
+           // $.ajax({
+                url: `/Admin/edit/${userId}`,
+                method: "GET",
+                success: 
+            })
+        })
+    }
+</script> --}}
