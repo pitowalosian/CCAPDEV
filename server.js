@@ -439,3 +439,4 @@ app.listen(PORT, async () => {
         console.log("Sample users inserted.");
     }
 });
+
