@@ -4,13 +4,13 @@ const User = require('../models/User');
 
 function isAuthenticated(role = null) {
     return function (req, res, next) {
-        if (req.session.userId && req.session.user.isAdmin === role) {
-            return next();
-        } else {
-            req.session.destroy(() => {
-                res.redirect('/login');
-            });
+        if (!req.session.userId) {
+            return res.redirect('/profile/login');
         }
+        if (role !== null && req.session.user.isAdmin !== role) {
+            return res.status(403).send('Forbidden');
+        } 
+        next();
     }
 }
 
@@ -59,13 +59,26 @@ router.post("/login", async (req, res) => {
 //logout
 router.get("/logout", (req, res) => {
     req.session.destroy(() => {
-        res.redirect('/login');
+        res.redirect('/profile/login');
     });
+});
+
+router.get("/", isAuthenticated(), async (req, res) => {
+    const isAdmin = req.session.user.isAdmin;
+    res.redirect('/profile/' + (isAdmin ? 'Admin' : 'User'));
+});
+
+router.get("/User", isAuthenticated(false), async(req, res) => {
+    try {
+        const user = req.session.user;
+        res.render('profile/edit', { user });
+    } catch (err) {
+        res.status(500).send("Error fetching user.");
+    }
 });
 
 // list users
 router.get("/Admin", isAuthenticated(true), async (req, res) => {
-
     try {
         const users = await User.find().lean();
         res.render('profile/list', { title: "User Management", users });
@@ -75,12 +88,16 @@ router.get("/Admin", isAuthenticated(true), async (req, res) => {
 });
 
 // edit
-router.get("/User", isAuthenticated(false), async (req, res) => {
-    try {
-        const user = await User.findById(req.session.userId).lean();
-        res.render('profile/edit', { user });
-    } catch (err) {
-        res.status(500).send("Error fetching users.");
+router.get("/edit", isAuthenticated(), async (req, res) => {
+    const isAdmin = req.session.user.isAdmin;
+
+    if (!isAdmin) {
+        try {
+            const user = await User.findById(req.session.userId).lean();
+            res.render('profile/edit', { user });
+        } catch (err) {
+            res.status(500).send("Error fetching users.");
+        }
     }
 });
 
@@ -95,7 +112,7 @@ router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
 });
 
 // update
-router.post("/profile/update", async (req, res) => { 
+router.post("/update", async (req, res) => { 
     const user = await User.findById(req.session.userId);
     const { firstname, lastname, email, password } = req.body;
 
@@ -109,14 +126,22 @@ router.post("/profile/update", async (req, res) => {
 
     await user.save();
     req.session.user = user;
-    res.redirect(`/User`);
+    res.redirect(`/profile/`);
 });
 
 // delete
-router.post('/profile/delete/:id', async (req, res) => {
-    const userId = req.query.userId;
-    await User.findByIdAndDelete(req.params.id);
-    res.redirect(`/profile?userId=${userId}`);
+router.post('/delete', isAuthenticated(), async (req, res) => {
+    const isAdmin = req.session.user.isAdmin;
+
+    if (!isAdmin) {
+        try {
+            const userId = req.session.userId;
+            await User.findByIdAndDelete(userId);
+            res.redirect(`/profile/login`);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 });
 
 module.exports = { router, isAuthenticated };

@@ -4,13 +4,22 @@
         <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
+                    <a class="nav-link" href="/flights/search">Flight Search</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reservations/book">Book Flights</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reservations/list">My Reservations</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/flights">Flight Management</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/Admin">User Management</a>
+                <a class="nav-link" href="/profile/">User Management</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
+                <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
             </li>
             <li class="nav-item">
                 <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -55,7 +64,7 @@
 
 <div class="container-fluid my-4 w-75">
     <div class="card bg-dark-subtle border border-primary shadow-lg p-4">
-        <form class="text-start" action="/add-flights" method="POST">
+        <form class="text-start" action="/flights/add" method="POST">
             <div class="row mb-3">
                 <h3 class="text-primary-emphasis display-6 text-center mb-3">Add New Flight</h3>
             </div>

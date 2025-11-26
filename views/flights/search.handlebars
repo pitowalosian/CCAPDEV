@@ -4,19 +4,19 @@
         <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/search">Flight Search</a>
+                <a class="nav-link active" aria-current="page" href="/flights/search">Flight Search</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/book">Book Flights</a>
+                <a class="nav-link" href="/reservations/book">Book Flights</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/reservations">My Reservations</a>
+                <a class="nav-link" href="/reservations/list">My Reservations</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/profile">Profile</a>
+                <a class="nav-link" href="/profile/">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
+                <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
             </li>
             <li class="nav-item">
                 <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -29,7 +29,7 @@
     <div class="container-fluid pt-5 mt-5 text-center">
         <h1 class="display-5 text-center text-primary">Flight Search</h1>
         <span class="lead">Nothing beats a </span><span class="lead text-primary">jetBlue </span><span class="lead">holiday</span><br>
-        <img class="img-fluid transform-middle-y z-2" width="1100" src="pictures/jbu-plane1.png" alt="Plane Icon"><br><br>
+        <img class="img-fluid transform-middle-y z-2" width="1100" src="/pictures/jbu-plane1.png" alt="Plane Icon"><br><br>
     </div>
     <!--Form Container-->
     <div class="d-flex justify-content-center px-5 mx-5" id="formContainer">
@@ -37,7 +37,6 @@
             <!--Search Flights Form-->
             <form class="align-items-center bg-dark-subtle" id="searchForm">
                 <div class="row align-items-start g-2">
-                    <input type="hidden" name="userId" value="{{userId}}">
                     <!--Passenger Count-->
                     <div class="col-md-auto">
                         <div class="input-group flex-grow-0">
@@ -307,8 +306,7 @@
 
             // Keep selected flights
             let selectedFlights = { depart: null, return: null };
-            const userId = "{{userId}}";
-
+            
             function getFlightDetails(row) {
                 return {
                     airline: row.find('td:eq(0)').text(),
@@ -360,7 +358,7 @@
 
                 console.log(queryParams.toString());
 
-                summaryHTML += `<a href="/book?${queryParams.toString()}&userId=${userId}" class="btn btn-success w-100">Proceed to Booking</a>`;
+                summaryHTML += `<a href="/reservations/book?${queryParams.toString()}" class="btn btn-success w-100">Proceed to Booking</a>`;
                 $('#summaryBody').html(summaryHTML);
             }
 

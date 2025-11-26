@@ -1,13 +1,17 @@
 const express = require('express');
+const shortid = require('shortid');
 const router = express.Router();
 const Reservation = require('../models/Reservation');
+const Flight = require('../models/Flight');
 const { isAuthenticated } = require('./user');
 
+// NOT WORKING YET
 // Display booking form with selected flight
 router.get('/book', isAuthenticated(), async (req, res) => {
     try {
         const flights = await Flight.find().lean();
-        const { depart, return: ret, userId } = req.query;
+        const userId = req.session.userId;
+        const { depart, return: ret } = req.query;
 
         const selectedDepart = flights.find(f => f.flightNo === depart);
         const selectedReturn = flights.find(f => f.flightNo === ret) || null;
@@ -29,7 +33,7 @@ router.get('/book', isAuthenticated(), async (req, res) => {
             });
         }
 
-        res.render('book', {
+        res.render('reservations/book', {
             title: 'Book Flights',
             flights,
             selectedDepart,
@@ -44,44 +48,7 @@ router.get('/book', isAuthenticated(), async (req, res) => {
     }
 });
 
-// List all reservations
-router.get('/list', isAuthenticated(), async (req, res) => {
-    try {
-        const userId = req.query.userId;
-        
-        const rawReservations = await Reservation.find().lean();
-        
-        const flights = await Flight.find().lean();
-
-        const reservations = rawReservations.map(r => {
-            
-            const flightDetails = flights.find(f => f.flightNo === r.flight) || {};
-            
-            return {
-                ...r,
-                flightDetails: flightDetails 
-            };
-        });
-
-        res.render('reservations', { title: 'Reservations List', reservations, userId });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error loading reservations');
-    }
-});
-
-// Show form to create a new reservation
-router.get('/new', async (req, res) => {
-    try {
-        const flights = await Flight.find().lean();
-        const userId = req.query.userId;
-        res.render('reservations/new', { title: 'New Reservation', flights, userId });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error loading new reservation form');
-    }
-});
-
+// NOT WORKING YET
 router.post('/book', async (req, res) => {
   try {
     const {
@@ -176,13 +143,53 @@ router.post('/book', async (req, res) => {
     });
 
     await newReservation.save();
-    return res.redirect('/reservations?status=added');
+    return res.redirect('/reservations/book?status=added');
   } catch (error) {
     console.error('Error saving reservation:', error);
-    return res.redirect('/reservations?status=error');
+    return res.redirect('/reservations/book?status=error');
   }
 });
 
+// List all reservations
+router.get('/list', isAuthenticated(), async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        
+        const rawReservations = await Reservation.find().lean();
+        
+        const flights = await Flight.find().lean();
+
+        const reservations = rawReservations.map(r => {
+            
+            const flightDetails = flights.find(f => f.flightNo === r.flight) || {};
+            
+            return {
+                ...r,
+                flightDetails: flightDetails 
+            };
+        });
+
+        res.render('reservations', { title: 'Reservations List', reservations, userId });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error loading reservations');
+    }
+});
+
+// NOT WORKING YET
+// Show form to create a new reservation
+router.get('/new', async (req, res) => {
+    try {
+        const flights = await Flight.find().lean();
+        const userId = req.query.userId;
+        res.render('reservations/new', { title: 'New Reservation', flights, userId });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading new reservation form');
+    }
+});
+
+// NOT WORKING YET
 // Edit reservation form
 router.get('/edit/:id', async (req, res) => {
     try {
@@ -220,6 +227,7 @@ router.get('/edit/:id', async (req, res) => {
     }
 });
 
+// NOT WORKING YET
 router.post('/edit/:id', async (req, res) => {
     const { seat, meal, baggage, status } = req.body;
     
@@ -233,21 +241,22 @@ router.post('/edit/:id', async (req, res) => {
                 status 
             }
         });
-        res.redirect('/reservations?status=updated');
+        res.redirect('/reservations/list?status=updated');
     } catch (err) {
         console.error(err);
-        res.redirect('/reservations?status=error');
+        res.redirect('/reservations/list?status=error');
     }
 });
 
+// NOT WORKING YET
 // Cancel (soft delete)
 router.post('/delete/:id', async (req, res) => {
     try {
         await Reservation.findByIdAndUpdate(req.params.id, { status: 'Cancelled' });
-        res.redirect('/reservations?status=cancelled');
+        res.redirect('/reservations/list?status=cancelled');
     } catch (err) {
         console.error(err);
-        res.redirect('/reservations?status=error');
+        res.redirect('/reservations/list?status=error');
     }
 });
 

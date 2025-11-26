@@ -4,19 +4,19 @@
         <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
         <ul class="nav nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link" href="/search?userId={{userId}}">Flight Search</a>
+                <a class="nav-link" href="/flights/search">Flight Search</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/book?userId={{userId}}">Book Flights</a>
+                <a class="nav-link active" aria-current="page" href="/reservations/book">Book Flights</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/reservations?userId={{userId}}">My Reservations</a>
+                <a class="nav-link" href="/reservations/list">My Reservations</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/profile?userId={{userId}}">Profile</a>
+                <a class="nav-link" href="/profile/">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger fw-bold" href="/logout?userId={{userId}}">Logout</a>
+                <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
             </li>
             <li class="nav-item">
                 <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -34,7 +34,7 @@
 {{! form }}
 <div class="container mt-4 mb-5 position pt-2 shadow-lg rounded-3 bg-dark-subtle border border-primary" id="form-p1">
     <div class="container mt-4 mb-4 justify-content-center">
-        <form id="passengerInfo" action="/reservations?userId={{userId}}" method="POST">
+        <form id="passengerInfo" action="/reservations/book" method="POST">
             <input type="hidden" name="tripType" id="tripType" value="Round-trip">
             <input type="hidden" name="travelClass" id="travelClass" value="Economy">
             <input type="hidden" name="adults" id="adults" value="1">
@@ -389,7 +389,7 @@
             
             if (newFlightNo) {
                 // Reloads page with ?depart=FLIGHTNO to fetch new seat data
-                window.location.href = `/book?userId=${currentUserId}&depart=${newFlightNo}`;
+                window.location.href = `/reservations/book?userId=${currentUserId}&depart=${newFlightNo}`;
             }
         });
 

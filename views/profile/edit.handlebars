@@ -7,19 +7,19 @@
             <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="nav-link" href="/search">Flight Search</a>
+                    <a class="nav-link" href="/flights/search">Flight Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/book">Book Flights</a>
+                    <a class="nav-link" href="/reservations/book">Book Flights</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/reservations">My Reservations</a>
+                    <a class="nav-link" href="/reservations/list">My Reservations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
+                    <a class="nav-link active" aria-current="page" href="/profile/">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="/logout">Logout</a>
+                    <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
                 </li>
                 <li class="nav-item">
                     <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
@@ -27,31 +27,38 @@
             </ul>
         </div>
     </div>
+    <div class="card p-4 shadow-sm mt-3">
+        <form action="/profile/update" method="POST">
+            <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" name="firstname" value="{{user.firstname}}" class="form-control" required>
+            </div>
 
-    <form action="/profile/update" method="POST" class="card p-4 shadow-sm mt-3">
+            <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" name="lastname" value="{{user.lastname}}" class="form-control" required>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">First Name</label>
-            <input type="text" name="firstname" value="{{user.firstname}}" class="form-control" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" value="{{user.email}}" class="form-control" required>
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Last Name</label>
-            <input type="text" name="lastname" value="{{user.lastname}}" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" value="{{user.email}}" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">New Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
-
-        <a href="/profile?userId={{userId}}" class="btn btn-secondary mt-2">Back</a>
-    </form>
+            <div class="mb-3">
+                <label class="form-label">New Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+            </div>
+            <button type="submit" class="btn btn-primary mt-2 w-100">Save Changes</button>
+        </form>
+        <form action="/profile/delete" method="POST">
+            <button type="submit" class="btn btn-danger mt-2 w-100">Delete Account</button>
+        </form>
+        <a href="/profile/" class="btn btn-secondary mt-2 w-100">Back</a>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.edit-btn').
+    });
+</script>

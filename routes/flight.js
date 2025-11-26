@@ -6,7 +6,24 @@ const { isAuthenticated } = require('./user');
 // Route to handle adding a new flight
 router.post('/add', isAuthenticated(true), async (req, res) => {
     try {
-        const newFlight = new Flight(req.body);
+        const { flightNo, airline, origin, destination, departureDay, departureTime, 
+            arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
+        
+        // insert input validation
+        
+        const newFlight = new Flight({
+            flightNo,
+            airline,
+            origin,
+            destination,
+            departureDay,
+            departureTime,
+            arrivalDay,
+            arrivalTime,
+            price,
+            aircraftType,
+            seatCap
+        });
         await newFlight.save();
         res.redirect('/flights?status=added'); // redirect with success flag
     } catch (err) {
@@ -19,7 +36,7 @@ router.post('/add', isAuthenticated(true), async (req, res) => {
 router.get('/', isAuthenticated(true), async (req, res) => {
     try {
         const flights = await Flight.find().lean(); // get all flights
-        res.render('flights', { title: 'Flights List', flights, userId, status }); // send status to handlebars
+        res.render('flights', { title: 'Flights List', flights }); // send status to handlebars
     } catch (err) {
         console.error(err);
         res.render('flights', {
@@ -31,6 +48,7 @@ router.get('/', isAuthenticated(true), async (req, res) => {
     }
 });
 
+// NOT WORKING YET
 // Display edit form
 router.get('/edit/:id', async (req, res) => {
     try {
@@ -46,6 +64,7 @@ router.get('/edit/:id', async (req, res) => {
     }
 });
 
+// NOT WORKING YET
 // Handle edit form submission
 router.post('/edit/:id', async (req, res) => {
     console.log('Edit form submission:', req.body);
@@ -85,12 +104,14 @@ router.post('/delete/:id', async (req, res) => {
     }
 });
 
-router.get('/search', isAuthenticated(), async (req, res) => {
+// NOT WORKING PROPERLY
+// Search flights
+router.get('/search', async (req, res) => {
     try {
         const { origin, destination, depdate, retdate, userId } = req.query;
 
         if (!depdate) {
-            return res.render('search', { title: 'Search Flights', flights: [], date: null, userId, showResults: false });
+            return res.render('flights/search', { title: 'Search Flights', flights: [], date: null, userId, showResults: false });
         }
 
         const departureDate = new Date(depdate);
@@ -114,7 +135,7 @@ router.get('/search', isAuthenticated(), async (req, res) => {
             }
         }
 
-        res.render('search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, userId, showResults: true, formsubmitted: true});
+        res.render('flights/search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, userId, showResults: true, formsubmitted: true});
     } catch (err) {
         console.log(err);
         res.status(500).send('Error searching for flights');
