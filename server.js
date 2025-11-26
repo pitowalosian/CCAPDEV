@@ -34,6 +34,27 @@ app.use(session({
     saveUninitialized: true
 }));
 
+async function initDB() {
+    const flightCount = await Flight.countDocuments();
+    if (flightCount === 0) {
+        await Flight.insertMany([
+            { flightNo: 'PR101', airline: 'Philippine Airlines', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Monday', departureTime: '08:00', arrivalDay: 'Monday', arrivalTime: '09:30', aircraftType: 'Airbus A320', seatCap: 180, price: 1500 },
+            { flightNo: '5J201', airline: 'Cebu Pacific', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Tuesday', departureTime: '10:00', arrivalDay: 'Tuesday', arrivalTime: '11:30', aircraftType: 'Boeing 737', seatCap: 180, price: 1450 },
+        ]);
+        console.log('Sample flights inserted into the database.');
+    }
+
+    const userCount = await User.countDocuments();
+    if (userCount === 0) {
+        await User.insertMany([
+            { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123", isAdmin: true },
+            { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword", isAdmin: false },
+            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: false }
+        ]);
+        console.log("Sample users inserted.");
+    }
+}
+
 // Show main page
 app.get('/', async (req, res) => {
     res.redirect('/search');
@@ -419,24 +440,6 @@ Handlebars.registerHelper("equals", function (a, b, options) {
 // start server
 app.listen(PORT, async () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-
-    const flightCount = await Flight.countDocuments();
-    if (flightCount === 0) {
-        await Flight.insertMany([
-            { flightNo: 'PR101', airline: 'Philippine Airlines', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Monday', departureTime: '08:00', arrivalDay: 'Monday', arrivalTime: '09:30', aircraftType: 'Airbus A320', seatCap: 180, price: 1500 },
-            { flightNo: '5J201', airline: 'Cebu Pacific', origin: 'Manila (MNL)', destination: 'Cebu (CEB)', departureDay: 'Tuesday', departureTime: '10:00', arrivalDay: 'Tuesday', arrivalTime: '11:30', aircraftType: 'Boeing 737', seatCap: 180, price: 1450 },
-        ]);
-        console.log('Sample flights inserted into the database.');
-    }
-
-    const userCount = await User.countDocuments();
-    if (userCount === 0) {
-        await User.insertMany([
-            { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123", isAdmin: true },
-            { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword", isAdmin: false },
-            { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: false }
-        ]);
-        console.log("Sample users inserted.");
-    }
+    await initDB();
 });
 
