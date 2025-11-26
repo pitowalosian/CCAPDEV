@@ -1,6 +1,4 @@
-// ==========================================
-// 1. MOCK MONGOOSE BEFORE IMPORTING SERVER
-// ==========================================
+
 jest.mock('mongoose', () => {
     const actual = jest.requireActual('mongoose');
     return {
@@ -9,9 +7,7 @@ jest.mock('mongoose', () => {
     };
 });
 
-// ==========================================
-// 2. MOCK USER MODEL
-// ==========================================
+//mock user
 jest.mock('../models/User', () => ({
     findOne: jest.fn(),
     create: jest.fn(),
@@ -19,14 +15,11 @@ jest.mock('../models/User', () => ({
     findByIdAndDelete: jest.fn()
 }));
 
-// ==========================================
-// 3. IMPORTS AFTER MOCKS
-// ==========================================
 const request = require('supertest');
-const server = require('../server');        // <-- USE THIS
+const server = require('../server');        
 const User = require("../models/User");
 
-// Helper: mock user with async comparePassword
+
 function mockUser(data, matchPassword) {
     return {
         ...data,
@@ -40,9 +33,7 @@ describe("User Authentication Tests", () => {
         jest.clearAllMocks();
     });
 
-    // -------------------------------------------------
-    // Registration
-    // -------------------------------------------------
+    // test 1: register
     test("POST /profile/register creates user and redirects to login", async () => {
 
         User.create.mockResolvedValue({
@@ -52,7 +43,7 @@ describe("User Authentication Tests", () => {
         });
 
         const res = await request(server)
-            .post("/profile/register")   // <-- FIXED ROUTE
+            .post("/profile/register")   
             .send({
                 firstname: "Juan",
                 lastname: "Dela Cruz",
@@ -65,9 +56,7 @@ describe("User Authentication Tests", () => {
         expect(res.headers.location).toBe("/profile/login?registered=true");
     });
 
-    // -------------------------------------------------
-    // Normal user login
-    // -------------------------------------------------
+    // test 2: successful login (normal user)
     test("POST /profile/login logs in normal user", async () => {
 
         User.findOne.mockResolvedValue(
@@ -75,7 +64,7 @@ describe("User Authentication Tests", () => {
         );
 
         const res = await request(server)
-            .post("/profile/login")        // <-- FIXED ROUTE
+            .post("/profile/login")        
             .send({
                 email: "user@test.com",
                 password: "valid"
@@ -86,9 +75,7 @@ describe("User Authentication Tests", () => {
         expect(res.headers.location).toBe("/profile/User");
     });
 
-    // -------------------------------------------------
-    // Admin login
-    // -------------------------------------------------
+    // test 3: successful login (admin)
     test("POST /profile/login logs in admin successfully", async () => {
 
         User.findOne.mockResolvedValue(
@@ -107,9 +94,7 @@ describe("User Authentication Tests", () => {
         expect(res.headers.location).toBe("/profile/Admin");
     });
 
-    // -------------------------------------------------
-    // Failed login
-    // -------------------------------------------------
+    // test 4: failed login
     test("POST /profile/login rejects incorrect password", async () => {
 
         User.findOne.mockResolvedValue(
@@ -127,9 +112,7 @@ describe("User Authentication Tests", () => {
         expect(res.text).toMatch(/Invalid login/i);
     });
 
-    // -------------------------------------------------
-    // Logout
-    // -------------------------------------------------
+    // test 5: log out
     test("GET /profile/logout destroys session and redirects to /login", async () => {
 
         const res = await request(server).get("/profile/logout");
