@@ -438,8 +438,11 @@ Handlebars.registerHelper("equals", function (a, b, options) {
 });
 
 // start server
-app.listen(PORT, async () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-    await initDB();
-});
+if (process.env.NODE_ENV !== 'test') { //for jest testing
+    app.listen(PORT, async () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+        await initDB();
+    });
+}
 
+module.exports = app; 
