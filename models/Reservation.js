@@ -102,13 +102,26 @@ const ReservationSchema = new mongoose.Schema({
   },
   package: PackageSchema,
   status: { 
-    type: String, 
-    enum: ['Pending', 'Confirmed', 'Cancelled'], 
-    default: 'Pending' },
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
-  }
+  type: String, 
+  enum: ['Pending', 'Confirmed', 'Cancelled'], 
+  default: 'Pending' 
+},
+
+checkedIn: {
+  type: Boolean,
+  default: false
+},
+
+boardingPassNumber: {
+  type: String,
+  default: ""
+},
+
+createdAt: { 
+  type: Date, 
+  default: Date.now 
+}
 });
+
 
 module.exports = mongoose.model('Reservation', ReservationSchema);

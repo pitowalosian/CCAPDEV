@@ -251,4 +251,66 @@ router.post('/delete/:id', async (req, res) => {
     }
 });
 
+// checkin route
+router.get('/checkin', (req, res) => {
+    res.render('reservations/checkin', { title: "Online Check-In" });
+});
+
+// check in api
+router.post('/api/checkin', async (req, res) => {
+    try {
+        const { bookingId, lastName } = req.body;
+
+        // check both fields
+        if (!bookingId || !lastName) {
+            return res.status(400).json({ error: "Booking ID and last name are required." });
+        }
+
+        // find reservation using bookingId
+        const reservation = await Reservation.findOne({ bookingId });
+
+        if (!reservation) {
+            return res.status(404).json({ error: "Reservation not found." });
+        }
+
+        // get last name
+        const actualLast = reservation.passengerName.split(" ").pop().toLowerCase();
+        const providedLast = lastName.trim().toLowerCase();
+
+        // compare last names
+        if (actualLast !== providedLast) {
+            return res.status(403).json({ error: "Last name does not match our records." });
+        }
+
+        // check if checked in
+        if (reservation.checkedIn) {
+            return res.json({
+                message: "Passenger already checked in.",
+                boardingPassNumber: reservation.boardingPassNumber,
+                seat: reservation.package?.seat || "Not assigned"
+            });
+        }
+
+        // generate a boarding pass
+        const bp = "BP-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+        // update reservation
+        reservation.checkedIn = true;
+        reservation.boardingPassNumber = bp;
+        await reservation.save();
+
+        // return success response
+        res.json({
+            message: "Check-in successful!",
+            bookingId: reservation.bookingId,
+            seat: reservation.package?.seat || "Not assigned",
+            boardingPassNumber: bp
+        });
+
+    } catch (err) {
+        console.error("Check-in Error:", err);
+        res.status(500).json({ error: "Server error during check-in." });
+    }
+});
+
 module.exports = router;
