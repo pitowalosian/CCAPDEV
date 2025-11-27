@@ -50,12 +50,11 @@ router.get('/', isAuthenticated(true), async (req, res) => {
 
 // NOT WORKING YET
 // Display edit form
-router.get('/edit/:id', async (req, res) => {
+router.get('/edit', isAuthenticated(true), async (req, res) => {
     try {
         const flight = await Flight.findById(req.query.id).lean();
-        const userId = req.session.userId;
         if (flight) {
-            res.render('flights/edit', { title: 'Edit Flight', flight, userId });
+            res.render('flights/edit', { title: 'Edit Flight', flight });
         } else {
             res.status(404).send('Flight not found'); 
         }
@@ -66,12 +65,12 @@ router.get('/edit/:id', async (req, res) => {
 
 // NOT WORKING YET
 // Handle edit form submission
-router.post('/edit/:id', async (req, res) => {
+router.post('/edit', isAuthenticated(true), async (req, res) => {
     console.log('Edit form submission:', req.body);
     const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
     try {
         await Flight.findOneAndUpdate(
-            { _id: req.params.id},
+            { _id: req.query.id},
             { $set: {
                 flightNo,
                 airline, 
@@ -94,9 +93,9 @@ router.post('/edit/:id', async (req, res) => {
 });
 
 // Delete a flight by ID
-router.post('/delete/:id', async (req, res) => {
+router.post('/delete', async (req, res) => {
     try {
-        await Flight.findOneAndDelete({_id: req.params.id});
+        await Flight.findOneAndDelete({_id: req.query.id});
         res.redirect('/flights?status=deleted');
     } catch (err) {
         console.log(err);
