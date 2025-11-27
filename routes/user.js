@@ -12,7 +12,7 @@ function isAuthenticated(role = null) {
             return res.status(403).send('Forbidden');
         } 
         next();
-    }
+    };
 }
 
 // registration 
@@ -71,7 +71,7 @@ router.get("/", isAuthenticated(), async (req, res) => {
 
 // working
 router.get("/User", isAuthenticated(false), async(req, res) => {
-    res.redirect('/profile/edit/:id');
+    res.redirect(`/profile/edit/${req.session.userId}`);
 });
 
 // list users
@@ -86,14 +86,16 @@ router.get("/Admin", isAuthenticated(true), async (req, res) => {
 
 // edit
 router.get('/edit/:id', isAuthenticated(), async (req, res) => {
-    const isAdmin = req.session.user.isAdmin;
-    const userId = isAdmin ? req.params.id : req.session.userId;
-
     try {
+        const isAdmin = req.session.user.isAdmin;
+        const userId = isAdmin ? req.params.id : req.session.userId;
+    
         const user = await User.findById(userId).lean();
-        res.render('profile/edit', { user });
+
+        res.render('profile/edit', { user, isAdmin });
     } catch (err) {
         console.log(err);
+        res.status(500).send("Server error");
     }
 });
 
@@ -117,8 +119,8 @@ router.post("/update/:id", isAuthenticated(), async (req, res) => {
 
         await user.save();
         
-        if (!isAdmin || req.session.userId == userId) {
-            req.session.user = user;
+        if (req.session.userId == userId) {
+            req.session.user = user.toObject();
         }
 
         return res.redirect(`/profile/`);

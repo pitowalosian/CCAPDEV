@@ -151,28 +151,52 @@ router.post('/book', async (req, res) => {
 });
 
 // List all reservations
-router.get('/list', isAuthenticated(true), async (req, res) => {
-    try {
-        const userId = req.query.userId;
-        
-        const rawReservations = await Reservation.find().lean();
-        
-        const flights = await Flight.find().lean();
-
-        const reservations = rawReservations.map(r => {
+router.get('/list', isAuthenticated(), async (req, res) => {
+    const isAdmin = req.session.user.isAdmin;
+    
+    if (!isAdmin) {
+        try {
+            const email = req.session.user.email;
             
-            const flightDetails = flights.find(f => f.flightNo === r.flight) || {};
+            const rawReservations = await Reservation.find({ passengerEmail: email }).lean();
             
-            return {
-                ...r,
-                flightDetails: flightDetails 
-            };
-        });
+            const flights = await Flight.find().lean();
 
-        res.render('reservations', { title: 'Reservations List', reservations, userId });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error loading reservations');
+            const reservations = rawReservations.map(r => {
+                
+                const flightDetails = flights.find(f => f.flightNo === r.flight) || {};
+                
+                return {
+                    ...r,
+                    flightDetails: flightDetails 
+                };
+            });
+
+            res.render('reservations', { title: 'Reservations List', reservations });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error loading reservations');
+        }
+    } else {
+        try {
+            const rawReservations = await Reservation.find().lean();
+            const flights = await Flight.find().lean();
+
+            const reservations = rawReservations.map(r => {
+                
+                const flightDetails = flights.find(f => f.flightNo === r.flight) || {};
+                
+                return {
+                    ...r,
+                    flightDetails: flightDetails 
+                };
+            });
+
+            res.render('reservations', { title: 'Reservations List', reservations });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Error loading reservations');
+        }
     }
 });
 
