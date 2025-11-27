@@ -150,6 +150,7 @@ router.post('/book', async (req, res) => {
   }
 });
 
+// WORKING
 // List all reservations
 router.get('/list', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session.user.isAdmin;
@@ -200,24 +201,22 @@ router.get('/list', isAuthenticated(), async (req, res) => {
     }
 });
 
-// NOT WORKING YET
-// Show form to create a new reservation
-router.get('/new', async (req, res) => {
-    try {
-        const flights = await Flight.find().lean();
-        const userId = req.query.userId;
-        res.render('reservations/new', { title: 'New Reservation', flights, userId });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error loading new reservation form');
-    }
-});
+// // NOT NEEDED ?
+// // Show form to create a new reservation
+// router.get('/new', async (req, res) => {
+//     try {
+//         const flights = await Flight.find().lean();
+//         const userId = req.query.userId;
+//         res.render('reservations/new', { title: 'New Reservation', flights, userId });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Error loading new reservation form');
+//     }
+// });
 
-// NOT WORKING YET
 // Edit reservation form
 router.get('/edit/:id', async (req, res) => {
     try {
-        const userId = req.query.userId;
         const reservation = await Reservation.findById(req.params.id).lean();
         
         if (!reservation) return res.status(404).send('Reservation not found');
@@ -241,7 +240,6 @@ router.get('/edit/:id', async (req, res) => {
         res.render('reservations/edit', { 
             title: 'Edit Reservation', 
             reservation, 
-            userId,
             reservedSeats
         });
 
@@ -251,7 +249,6 @@ router.get('/edit/:id', async (req, res) => {
     }
 });
 
-// NOT WORKING YET
 router.post('/edit/:id', async (req, res) => {
     const { seat, meal, baggage, status } = req.body;
     
@@ -272,7 +269,6 @@ router.post('/edit/:id', async (req, res) => {
     }
 });
 
-// NOT WORKING YET
 // Cancel (soft delete)
 router.post('/delete/:id', async (req, res) => {
     try {
