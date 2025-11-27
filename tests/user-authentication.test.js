@@ -30,7 +30,7 @@ function mockUser(data, matchPassword) {
 describe("User Authentication Tests", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks(); //rests mocks
+        jest.clearAllMocks(); //resets mocks
     });
 
     beforeAll(() => { //for cleaner cli

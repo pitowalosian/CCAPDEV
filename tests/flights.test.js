@@ -40,7 +40,7 @@ const Flight = require('../models/Flight');
 describe("Flight Creation (Admin) Tests", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks(); //rests mocks
+        jest.clearAllMocks(); //resets mocks
     });
 
     beforeAll(() => { //for cleaner cli
@@ -50,7 +50,7 @@ describe("Flight Creation (Admin) Tests", () => {
 
     //------ VALID TESTS ------
 
-    //test 1: add flight
+    // test 1: add flight
     test("POST /flights/add creates a flight", async () => {
         Flight.prototype.save.mockResolvedValue();
 
