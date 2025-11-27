@@ -88,45 +88,37 @@ router.get("/Admin", isAuthenticated(true), async (req, res) => {
 });
 
 // edit
-router.get("/edit", isAuthenticated(), async (req, res) => {
-    const isAdmin = req.session.user.isAdmin;
-
-    if (!isAdmin) {
-        try {
-            const user = await User.findById(req.session.userId).lean();
-            res.render('profile/edit', { user });
-        } catch (err) {
-            res.status(500).send("Error fetching users.");
-        }
-    }
-});
-
-// edit
 router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
+    const userId = req.query.id;
     try {
-        const user = await User.findById(req.session.userId).lean();
-        res.render('profile/edit', { user });
+        const user = await User.findById(userId).lean();
+        res.json(user);
     } catch (err) {
-        res.status(500).send("Error fetching users.");
+        console.log(err);
     }
 });
 
 // update
-router.post("/update", async (req, res) => { 
-    const user = await User.findById(req.session.userId);
-    const { firstname, lastname, email, password } = req.body;
+router.post("/update", isAuthenticated(), async (req, res) => { 
+    const isAdmin = req.session.user.isAdmin;
 
-    user.firstname = firstname;
-    user.lastname = lastname;
-    user.email = email;
-    
-    if (password && password.trim() !== "") {
-        user.password = password;
+    if (!isAdmin) {
+        const user = await User.findById(req.session.userId);
+        const { firstname, lastname, email, password } = req.body;
+
+        user.firstname = firstname;
+        user.lastname = lastname;
+        user.email = email;
+        
+        if (password && password.trim() !== "") {
+            user.password = password;
+        }
+
+        await user.save();
+        req.session.user = user;
+        res.redirect(`/profile/`);
     }
-
-    await user.save();
-    req.session.user = user;
-    res.redirect(`/profile/`);
+    
 });
 
 // delete
