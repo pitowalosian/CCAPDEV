@@ -151,7 +151,7 @@ router.post('/book', async (req, res) => {
 });
 
 // List all reservations
-router.get('/list', isAuthenticated(), async (req, res) => {
+router.get('/list', isAuthenticated(true), async (req, res) => {
     try {
         const userId = req.query.userId;
         

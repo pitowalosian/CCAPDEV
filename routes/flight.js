@@ -36,7 +36,8 @@ router.post('/add', isAuthenticated(true), async (req, res) => {
 router.get('/', isAuthenticated(true), async (req, res) => {
     try {
         const flights = await Flight.find().lean(); // get all flights
-        res.render('flights', { title: 'Flights List', flights }); // send status to handlebars
+        const status = req.query.status; // get status from query
+        res.render('flights', { title: 'Flights List', flights, status }); 
     } catch (err) {
         console.error(err);
         res.render('flights', {
@@ -48,11 +49,10 @@ router.get('/', isAuthenticated(true), async (req, res) => {
     }
 });
 
-// NOT WORKING YET
 // Display edit form
-router.get('/edit', isAuthenticated(true), async (req, res) => {
+router.get('/edit/:id', isAuthenticated(true), async (req, res) => {
     try {
-        const flight = await Flight.findById(req.query.id).lean();
+        const flight = await Flight.findById(req.params.id).lean();
         if (flight) {
             res.render('flights/edit', { title: 'Edit Flight', flight });
         } else {
@@ -63,14 +63,13 @@ router.get('/edit', isAuthenticated(true), async (req, res) => {
     }
 });
 
-// NOT WORKING YET
 // Handle edit form submission
-router.post('/edit', isAuthenticated(true), async (req, res) => {
+router.post('/edit/:id', isAuthenticated(true), async (req, res) => {
     console.log('Edit form submission:', req.body);
     const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
     try {
         await Flight.findOneAndUpdate(
-            { _id: req.query.id},
+            { _id: req.params.id},
             { $set: {
                 flightNo,
                 airline, 
@@ -93,9 +92,9 @@ router.post('/edit', isAuthenticated(true), async (req, res) => {
 });
 
 // Delete a flight by ID
-router.post('/delete', async (req, res) => {
+router.post('/delete/:id', async (req, res) => {
     try {
-        await Flight.findOneAndDelete({_id: req.query.id});
+        await Flight.findOneAndDelete({_id: req.params.id});
         res.redirect('/flights?status=deleted');
     } catch (err) {
         console.log(err);
