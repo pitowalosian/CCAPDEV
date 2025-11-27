@@ -80,7 +80,7 @@ describe("Flight Creation (Admin) Tests", () => {
         Flight.findOneAndDelete.mockResolvedValue({});
 
         const res = await request(server)
-            .post("/flights/delete?id=123");
+            .post("/flights/delete/123");
 
         expect(Flight.findOneAndDelete).toHaveBeenCalledWith({ _id: "123" });
         expect(res.status).toBe(302);
@@ -92,7 +92,7 @@ describe("Flight Creation (Admin) Tests", () => {
         Flight.findOneAndUpdate.mockResolvedValue({});
 
         const res = await request(server)
-            .post("/flights/edit?id=777")
+            .post("/flights/edit/777")
             .send({
                 flightNo: "XY001",
                 airline: "Cebu Pacific"
@@ -124,7 +124,7 @@ describe("Flight Creation (Admin) Tests", () => {
             lean: jest.fn().mockResolvedValue({ flightNo: "FL001" })
         });
 
-        const res = await request(server).get("/flights/edit?id=abc");
+        const res = await request(server).get("/flights/edit/abc");
 
         expect(res.status).toBe(200);
     });
@@ -178,7 +178,7 @@ describe("Flight Creation (Admin) Tests", () => {
         Flight.findOneAndDelete.mockRejectedValue(new Error("fail"));
 
         const res = await request(server)
-            .post("/flights/delete?id=bad-id");
+            .post("/flights/delete/bad-id");
 
 
         expect(res.status).toBe(302);
@@ -190,7 +190,7 @@ describe("Flight Creation (Admin) Tests", () => {
         Flight.findOneAndUpdate.mockRejectedValue(new Error("nope"));
 
         const res = await request(server)
-            .post("/flights/edit?id=bad-id")
+            .post("/flights/edit/bad-id")
             .send({ flightNo: "BROKEN" });
 
         expect(res.status).toBe(302);
@@ -214,7 +214,7 @@ describe("Flight Creation (Admin) Tests", () => {
             lean: jest.fn().mockResolvedValue(null)
         });
 
-        const res = await request(server).get("/flights/edit?id=404");
+        const res = await request(server).get("/flights/edit/404");
 
         expect(res.status).toBe(404);
     });
@@ -225,7 +225,7 @@ describe("Flight Creation (Admin) Tests", () => {
             lean: jest.fn().mockRejectedValue(new Error("db fail"))
         });
 
-        const res = await request(server).get("/flights/edit?id=err");
+        const res = await request(server).get("/flights/edit/err");
 
         expect(res.status).toBe(500);
     });
