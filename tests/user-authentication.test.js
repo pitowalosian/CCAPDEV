@@ -42,7 +42,7 @@ describe("User Authentication Tests", () => {
     //------ VALID TESTS ------
 
     // test 1: register
-    test("POST /profile/register creates user and redirects to login", async () => {
+    test("POST /register", async () => {
 
         User.create.mockResolvedValue({
             firstname: "Juan",
@@ -65,7 +65,7 @@ describe("User Authentication Tests", () => {
     });
 
     // test 2: successful login (normal user)
-    test("POST /profile/login logs in normal user", async () => {
+    test("POST /login", async () => {
 
         User.findOne.mockResolvedValue(
             mockUser({ _id: "user123", email: "user@test.com", isAdmin: false }, true)
@@ -75,7 +75,7 @@ describe("User Authentication Tests", () => {
             .post("/profile/login")        
             .send({
                 email: "user@test.com",
-                password: "valid"
+                password: "password123"
             });
 
         expect(User.findOne).toHaveBeenCalledWith({ email: "user@test.com" });
@@ -84,7 +84,7 @@ describe("User Authentication Tests", () => {
     });
 
     // test 3: successful login (admin)
-    test("POST /profile/login logs in admin successfully", async () => {
+    test("POST /login admin", async () => {
 
         User.findOne.mockResolvedValue(
             mockUser({ _id: "admin123", email: "admin@test.com", isAdmin: true }, true)
@@ -103,7 +103,7 @@ describe("User Authentication Tests", () => {
     });
 
     // test 4: log out
-    test("GET /profile/logout destroys session and redirects to /login", async () => {
+    test("GET /logout", async () => {
 
         const res = await request(server).get("/profile/logout");
 
@@ -113,7 +113,7 @@ describe("User Authentication Tests", () => {
 
     //------ INVALID TESTS ------
 
-    // test 6: fails cause user is not found
+    // test 5: user is not found
     test("POST /profile/login returns 401 when user does not exist", async () => {
 
         User.findOne.mockResolvedValue(null); // simulates no user found
@@ -122,14 +122,14 @@ describe("User Authentication Tests", () => {
             .post("/profile/login")
             .send({
                 email: "notfound@test.com",
-                password: "whatever"
+                password: "invalid"
             });
 
         expect(res.status).toBe(401);
         expect(res.text).toMatch(/Invalid login/i);
     });
 
-    // test 7: failed login
+    // test 6: failed login
     test("POST /profile/login rejects incorrect password", async () => {
 
         User.findOne.mockResolvedValue(
@@ -147,7 +147,7 @@ describe("User Authentication Tests", () => {
         expect(res.text).toMatch(/Invalid login/i);
     });
 
-    // test 8: server error
+    // test 7: server error
     test("POST /profile/login returns 500 when DB error happens", async () => {
 
         User.findOne.mockRejectedValue(new Error("DB error"));
