@@ -50,7 +50,7 @@
             </div>
             <button type="submit" class="btn btn-primary mt-2 w-100">Save Changes</button>
         </form>
-        <form action="/profile/delete" method="POST">
+        <form action="/profile/delete?id={{user._id}}" method="POST">
             <button type="submit" class="btn btn-danger mt-2 w-100">Delete Account</button>
         </form>
         <a href="/profile/" class="btn btn-secondary mt-2 w-100">Back</a>

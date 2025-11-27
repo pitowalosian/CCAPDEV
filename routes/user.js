@@ -130,15 +130,17 @@ router.post("/update", isAuthenticated(), async (req, res) => {
 // delete
 router.post('/delete', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session.user.isAdmin;
+    const userId = isAdmin ? req.query.id : req.session.userId;
 
-    if (!isAdmin) {
-        try {
-            const userId = req.session.userId;
-            await User.findByIdAndDelete(userId);
-            res.redirect(`/profile/login`);
-        } catch (err) {
-            console.log(err);
+    try {
+        await User.findByIdAndDelete(userId);
+        if (isAdmin) {
+            res.redirect(`/profile/Admin`);
+        } else {
+            res.redirect(`/profile/login`)
         }
+    } catch (err) {
+        console.log(err);
     }
 });
 
