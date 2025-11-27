@@ -30,8 +30,14 @@ function mockUser(data, matchPassword) {
 describe("User Authentication Tests", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.clearAllMocks(); //rests mocks
     });
+
+    beforeAll(() => { //for cleaner cli
+        jest.spyOn(console, 'log').mockImplementation(() => {});
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+    
 
     //------ VALID TESTS ------
 

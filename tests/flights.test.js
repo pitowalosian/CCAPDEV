@@ -39,7 +39,14 @@ const Flight = require('../models/Flight');
 
 describe("Flight Creation (Admin) Tests", () => {
 
-    beforeEach(() => jest.clearAllMocks());
+    beforeEach(() => {
+        jest.clearAllMocks(); //rests mocks
+    });
+
+    beforeAll(() => { //for cleaner cli
+        jest.spyOn(console, 'log').mockImplementation(() => {});
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
 
     //------ VALID TESTS ------
 
