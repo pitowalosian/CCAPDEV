@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
+// check user role
 function isAuthenticated(role = null) {
     return function (req, res, next) {
         if (!req.session.userId) {
@@ -68,13 +69,9 @@ router.get("/", isAuthenticated(), async (req, res) => {
     res.redirect('/profile/' + (isAdmin ? 'Admin' : 'User'));
 });
 
+// working
 router.get("/User", isAuthenticated(false), async(req, res) => {
-    try {
-        const user = req.session.user;
-        res.render('profile/edit', { user });
-    } catch (err) {
-        res.status(500).send("Error fetching user.");
-    }
+    res.redirect('/profile/edit');
 });
 
 // list users
@@ -88,11 +85,13 @@ router.get("/Admin", isAuthenticated(true), async (req, res) => {
 });
 
 // edit
-router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
-    const userId = req.query.id;
+router.get('/edit', isAuthenticated(), async (req, res) => {
+    const isAdmin = req.session.user.isAdmin;
+    const userId = isAdmin ? req.query.id : req.session.userId;
+
     try {
         const user = await User.findById(userId).lean();
-        res.json(user);
+        res.render('profile/edit', { user });
     } catch (err) {
         console.log(err);
     }
@@ -100,10 +99,12 @@ router.get("/Admin/edit", isAuthenticated(true), async (req, res) => {
 
 // update
 router.post("/update", isAuthenticated(), async (req, res) => { 
-    const isAdmin = req.session.user.isAdmin;
+    try {
+        const isAdmin = req.session.user.isAdmin;
+        const userId = isAdmin ? req.query.id : req.session.userId;
 
-    if (!isAdmin) {
-        const user = await User.findById(req.session.userId);
+        const user = await User.findById(userId);
+
         const { firstname, lastname, email, password } = req.body;
 
         user.firstname = firstname;
@@ -115,10 +116,15 @@ router.post("/update", isAuthenticated(), async (req, res) => {
         }
 
         await user.save();
-        req.session.user = user;
-        res.redirect(`/profile/`);
+        
+        if (!isAdmin || req.session.userId == userId) {
+            req.session.user = user;
+        }
+
+        return res.redirect(`/profile/`);
+    } catch (err) {
+        console.log(err);
     }
-    
 });
 
 // delete
