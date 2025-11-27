@@ -102,7 +102,7 @@ describe("User Authentication Tests", () => {
         const res = await request(server).get("/profile/logout");
 
         expect(res.status).toBe(302);
-        expect(res.headers.location).toBe("/login");
+        expect(res.headers.location).toBe("/profile/login");
     });
 
     //------ INVALID TESTS ------
