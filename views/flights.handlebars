@@ -32,7 +32,7 @@
 <div class="container text-center pt-3 mt-5">
     {{!-- Form Message --}}
     {{#equals status "added"}}
-        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center h-25" role="alert">
             <i class="bi bi-check-circle"></i> Flight added successfully!
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -187,13 +187,13 @@
                     <td class="p-2">{{this.seatCap}}</td>
                     <td class="p-2 w-auto text-center">
                         <div class="d-flex justify-content-center gap-3" role="group" aria-label="Actions">
-                            <form action="/flights/edit?id={{_id}}" method="GET" class="m-0">
+                            <form action="/flights/edit/{{this._id}}" method="GET" class="m-0">
                                 <button type="submit" class="btn btn-primary align-items-center px-3">
                                     <i class="bi bi-pencil-square"></i>
                                     <span>Edit</span>
                                 </button>
                             </form>
-                            <form action="/flights/delete?id={{_id}}" method="POST" class="m-0">
+                            <form action="/flights/delete/{{this._id}}" method="POST" class="m-0">
                                 <button type="submit" class="btn btn-danger align-items-center px-3">
                                     <i class="bi bi-trash"></i>
                                     <span>Delete</span>

@@ -71,7 +71,7 @@ router.get("/", isAuthenticated(), async (req, res) => {
 
 // working
 router.get("/User", isAuthenticated(false), async(req, res) => {
-    res.redirect('/profile/edit');
+    res.redirect('/profile/edit/:id');
 });
 
 // list users
@@ -85,9 +85,9 @@ router.get("/Admin", isAuthenticated(true), async (req, res) => {
 });
 
 // edit
-router.get('/edit', isAuthenticated(), async (req, res) => {
+router.get('/edit/:id', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session.user.isAdmin;
-    const userId = isAdmin ? req.query.id : req.session.userId;
+    const userId = isAdmin ? req.params.id : req.session.userId;
 
     try {
         const user = await User.findById(userId).lean();
@@ -98,10 +98,10 @@ router.get('/edit', isAuthenticated(), async (req, res) => {
 });
 
 // update
-router.post("/update", isAuthenticated(), async (req, res) => { 
+router.post("/update/:id", isAuthenticated(), async (req, res) => { 
     try {
         const isAdmin = req.session.user.isAdmin;
-        const userId = isAdmin ? req.query.id : req.session.userId;
+        const userId = isAdmin ? req.params.id : req.session.userId;
 
         const user = await User.findById(userId);
 
@@ -128,9 +128,9 @@ router.post("/update", isAuthenticated(), async (req, res) => {
 });
 
 // delete
-router.post('/delete', isAuthenticated(), async (req, res) => {
+router.post('/delete/:id', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session.user.isAdmin;
-    const userId = isAdmin ? req.query.id : req.session.userId;
+    const userId = isAdmin ? req.params.id : req.session.userId;
 
     try {
         await User.findByIdAndDelete(userId);
