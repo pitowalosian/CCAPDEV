@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Flight = require('../models/Flight');
 const { isAuthenticated } = require('./user');
+const logger = require('../utils/logger');
 
 // Route to handle adding a new flight
 router.post('/add', isAuthenticated(true), async (req, res) => {
     try {
+        const email = req.session?.user?.email ?? 'Unknown';
         const { flightNo, airline, origin, destination, departureDay, departureTime, 
             arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
         
@@ -28,11 +30,10 @@ router.post('/add', isAuthenticated(true), async (req, res) => {
         if (!timeRegex.test(arrivalTime)) errors.push("Invalid arrival time format.");
 
         if (errors.length > 0) {
-            console.error("Flight Validation Failed:", errors);
+            logger.error(`Flight Validation Failed: ${errors.join(", ")}`);
             return res.redirect('/flights?status=error');
         }
-       
-        
+    
         const newFlight = new Flight({
             flightNo,
             airline,
@@ -47,9 +48,10 @@ router.post('/add', isAuthenticated(true), async (req, res) => {
             seatCap
         });
         await newFlight.save();
+        logger.action(`Flight created: ID = ${newFlight._id} by Admin ${email}`);
         res.redirect('/flights?status=added'); // redirect with success flag
     } catch (err) {
-        console.log(err);
+        logger.error(`Failed to create flight: ${err.message}`);
         res.redirect('/flights?status=error'); // redirect with error flag
     }
 });
@@ -59,10 +61,14 @@ router.get('/', isAuthenticated(true), async (req, res) => {
     try {
         const flights = await Flight.find().lean(); // get all flights
         const status = req.query.status; // get status from query
-        res.render('flights', { title: 'Flights List', flights, status }); 
+        const userId = req.session?.userId ?? null;
+        const email = req.session?.user?.email ?? 'Unknown';
+
+        logger.action(`Admin ${email} viewed flights list.`);
+        res.render('flights', { title: 'Flights List', flights, status, userId }); 
     } catch (err) {
-        console.error(err);
-        res.status(500).render('flights', {
+        logger.error(`Error loading flights: ${err}`);
+        res.render('flights', {
             title: 'Flights List',
             flights: [],
             status: 'error'
@@ -72,6 +78,9 @@ router.get('/', isAuthenticated(true), async (req, res) => {
 
 // Display edit form
 router.get('/edit/:id', isAuthenticated(true), async (req, res) => {
+    const email = req.session?.user?.email ?? 'Unknown';
+
+    logger.action(`Admin ${email} opened edit form for flight ${req.params.id}.`);
     try {
         const flight = await Flight.findById(req.params.id).lean();
         if (flight) {
@@ -86,9 +95,9 @@ router.get('/edit/:id', isAuthenticated(true), async (req, res) => {
 
 // Handle edit form submission
 router.post('/edit/:id', isAuthenticated(true), async (req, res) => {
-    console.log('Edit form submission:', req.body);
     const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
-    
+    const email = req.session?.user?.email ?? 'Unknown';
+
     // SERVER-SIDE VALIDATION
     const errors = [];
     if (!flightNo?.trim()) errors.push("Flight number is required.");
@@ -96,10 +105,9 @@ router.post('/edit/:id', isAuthenticated(true), async (req, res) => {
     if (Number(seatCap) < 1) errors.push("Seat capacity must be at least 1.");
 
     if (errors.length > 0) {
-        console.error("Flight Edit Validation Failed:", errors);
+        logger.error(`Flight Edit Validation Failed: ${errors.join(", ")}`);
         return res.redirect('/flights?status=error');
     }
-   
 
     try {
         await Flight.findOneAndUpdate(
@@ -118,9 +126,10 @@ router.post('/edit/:id', isAuthenticated(true), async (req, res) => {
                 seatCap
             } }, 
             { new: true, runValidators: true });
+        logger.action(`Flight ID = ${req.params.id} updated by Admin ${email}`)
         res.redirect('/flights?status=updated');
     } catch (err) {
-        console.log(err);
+        logger.error(`Update flight error: ${err.message}`);
         res.redirect('/flights?status=error');
     }
 });
@@ -128,10 +137,12 @@ router.post('/edit/:id', isAuthenticated(true), async (req, res) => {
 // Delete a flight by ID
 router.post('/delete/:id', async (req, res) => {
     try {
+        const email = req.session?.user?.email ?? 'Unknown';
         await Flight.findOneAndDelete({_id: req.params.id});
+        logger.action(`Flight ID = ${req.params.id} deleted by Admin ${email}`);
         res.redirect('/flights?status=deleted');
     } catch (err) {
-        console.log(err);
+        logger.error(`Deletion error: ${err.message}`);
         res.redirect('/flights?status=error');
     }
 });
@@ -139,10 +150,13 @@ router.post('/delete/:id', async (req, res) => {
 // Search flights
 router.get('/search', async (req, res) => {
     try {
-        const { origin, destination, depdate, retdate, userId } = req.query;
+        const { origin, destination, depdate, retdate } = req.query;
+        const isAdmin = req.session?.user?.isAdmin ?? false;
+        const userId = req.session?.userId ?? null;
+        const email = req.session?.user?.email ?? 'Unknown';
 
         if (!depdate) {
-            return res.render('flights/search', { title: 'Search Flights', flights: [], date: null, userId, showResults: false });
+            return res.render('flights/search', { title: 'Search Flights', flights: [], date: null, isAdmin, userId, showResults: false });
         }
 
         const departureDate = new Date(depdate);
@@ -165,10 +179,10 @@ router.get('/search', async (req, res) => {
                 returnFlights = await Flight.find(returnQuery).lean();
             }
         }
-
+        logger.action(`${isAdmin ? 'Admin' : 'User'} ${email} accessed search form.`);
         res.render('flights/search', { title: 'Search Flights', flights, returnFlights, dDate: depdate, rDate: retdate, dDayOfWeek, rDayOfWeek, origin, destination, userId, showResults: true, formsubmitted: true});
     } catch (err) {
-        console.log(err);
+        logger.error(`Error searching for flights: ${err.message}`);
         res.status(500).send('Error searching for flights');
     }
 });

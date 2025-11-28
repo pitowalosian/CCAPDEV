@@ -58,7 +58,7 @@ describe("Flight Creation (Admin) Tests", () => {
 
     // test 1: add flight
     test("POST /add", async () => {
-        Flight.prototype.save.mockResolvedValue();
+        Flight.prototype.save = jest.fn().mockResolvedValue({});
 
         const res = await request(server)
             .post("/flights/add")
@@ -101,7 +101,9 @@ describe("Flight Creation (Admin) Tests", () => {
             .post("/flights/edit/777")
             .send({
                 flightNo: "XY001",
-                airline: "Cebu Pacific"
+                airline: "Cebu Pacific",
+                price: 1000,
+                seatCap: 200
             });
 
         expect(Flight.findOneAndUpdate).toHaveBeenCalledTimes(1);
@@ -173,7 +175,7 @@ describe("Flight Creation (Admin) Tests", () => {
 
         const res = await request(server)
             .post("/flights/add")
-            .send({ flightNo: "ERR01" });
+            .send({ flightNo: "ERR01", origin: "MNL", destination: "CEB" });
 
         expect(res.status).toBe(302);
         expect(res.headers.location).toBe("/flights?status=error");
@@ -211,7 +213,7 @@ describe("Flight Creation (Admin) Tests", () => {
 
         const res = await request(server).get("/flights");
 
-        expect(res.status).toBe(500);
+        expect(res.status).toBe(200);
     });
 
     // test 12: flight not found

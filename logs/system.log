@@ -282,3 +282,243 @@
 > ACTION: [ 2025-11-28T14:00:30.274Z ]  User amy@example.com logged in.
 > ACTION: [ 2025-11-28T14:00:31.580Z ]  Admin amy@example.com viewed reservations list.
 > ACTION: [ 2025-11-28T14:00:33.846Z ]  User amy@example.com logged out.
+> ACTION: [ 2025-11-28T14:37:55.081Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T14:38:00.009Z ]  Admin amy@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:38:01.063Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:38:02.306Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:41:44.097Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T14:41:45.431Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:00.385Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:01.777Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:43.069Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:45.278Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:45.764Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:42:46.983Z ]  Admin amy@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:42:49.035Z ]  Admin amy@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:42:49.690Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:42:50.387Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:52.356Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:42:54.328Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:42:56.025Z ]  User amy@example.com logged out.
+> ACTION: [ 2025-11-28T14:43:42.674Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T14:44:07.618Z ]  User maria@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:44:08.566Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:44:13.412Z ]  User maria@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:44:14.141Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:44:14.852Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:46:59.529Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T14:47:02.218Z ]  Admin amy@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:47:03.260Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:47:04.222Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:47:08.535Z ]  Admin amy@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:47:12.842Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:47:13.601Z ]  Admin amy@example.com viewed flights list.
+> ACTION: [ 2025-11-28T14:47:15.150Z ]  User amy@example.com logged out.
+> ERROR: [ 2025-11-28T14:47:19.602Z ]  Login failed (incorrect password): maria@example.com.
+> ACTION: [ 2025-11-28T14:47:25.701Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T14:48:16.750Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:48:18.503Z ]  User maria@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:48:19.312Z ]  User maria@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:48:20.886Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:49:22.794Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T14:49:23.886Z ]  User amy@example.com logged out.
+> ERROR: [ 2025-11-28T14:49:29.822Z ]  Login failed (incorrect password): maria@example.com.
+> ACTION: [ 2025-11-28T14:49:34.076Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T14:50:03.650Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T14:50:55.685Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T14:50:56.929Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:50:58.028Z ]  User maria@example.com accessed booking form.
+> ACTION: [ 2025-11-28T14:50:59.907Z ]  User maria@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:51:04.202Z ]  User maria@example.com logged out.
+> ACTION: [ 2025-11-28T14:51:28.784Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T14:51:28.806Z ]  New user juan@example.com registered.
+> ERROR: [ 2025-11-28T14:51:28.812Z ]  Failed to create flight: email is not defined
+> ACTION: [ 2025-11-28T14:51:28.820Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T14:51:28.827Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T14:51:28.835Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T14:51:28.839Z ]  Reservation created: ID = undefined by User Unknown
+> ERROR: [ 2025-11-28T14:51:28.841Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-28T14:51:28.842Z ]  Deletion error: email is not defined
+> ERROR: [ 2025-11-28T14:51:28.847Z ]  Login failed (incorrect password): wrong@test.com.
+> ACTION: [ 2025-11-28T14:51:28.848Z ]  User test@test.com viewed reservations list.
+> ERROR: [ 2025-11-28T14:51:28.850Z ]  Update flight error: email is not defined
+> ERROR: [ 2025-11-28T14:51:28.852Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T14:51:28.857Z ]  Admin Unknown viewed flights list.
+> ACTION: [ 2025-11-28T14:51:28.868Z ]  User Unknown opened edit form for reservation 123
+> ACTION: [ 2025-11-28T14:51:28.882Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-28T14:51:28.887Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-28T14:51:28.888Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-28T14:51:28.894Z ]  Booking ID = BKG-123 by Doe is successful.
+> ERROR: [ 2025-11-28T14:51:28.900Z ]  Error searching for flights: Cannot read properties of undefined (reading 'email')
+> ERROR: [ 2025-11-28T14:51:28.901Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-28T14:51:28.907Z ]  Error searching for flights: Cannot read properties of undefined (reading 'email')
+> ERROR: [ 2025-11-28T14:51:28.908Z ]  Failed to create reservation: fail
+> ERROR: [ 2025-11-28T14:51:28.912Z ]  Flight Validation Failed: Airline is required., Origin is required., Destination is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T14:51:28.919Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T14:51:28.923Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T14:51:28.925Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T14:51:28.929Z ]  Cancel error: fail
+> ERROR: [ 2025-11-28T14:51:28.931Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T14:51:28.943Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T14:51:28.947Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T14:51:28.954Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-28T14:55:03.354Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T14:55:03.404Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T14:55:03.406Z ]  Reservation created: ID = undefined by User Unknown
+> ACTION: [ 2025-11-28T14:55:03.415Z ]  User test@test.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:55:03.418Z ]  User user@test.com logged in.
+> ERROR: [ 2025-11-28T14:55:03.417Z ]  Failed to create flight: email is not defined
+> ACTION: [ 2025-11-28T14:55:03.425Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T14:55:03.432Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T14:55:03.433Z ]  User Unknown opened edit form for reservation 123
+> ERROR: [ 2025-11-28T14:55:03.440Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-28T14:55:03.447Z ]  Login failed (incorrect password): wrong@test.com.
+> ACTION: [ 2025-11-28T14:55:03.448Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-28T14:55:03.450Z ]  Flight ID = 123 deleted by Admin Unknown
+> ERROR: [ 2025-11-28T14:55:03.452Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T14:55:03.454Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-28T14:55:03.458Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-28T14:55:03.463Z ]  Booking ID = BKG-123 by Doe is successful.
+> ERROR: [ 2025-11-28T14:55:03.468Z ]  Error loading booking form: fail
+> ACTION: [ 2025-11-28T14:55:03.467Z ]  Admin Unknown viewed flights list.
+> ERROR: [ 2025-11-28T14:55:03.474Z ]  Failed to create reservation: fail
+> ERROR: [ 2025-11-28T14:55:03.484Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T14:55:03.488Z ]  Cancel error: fail
+> ACTION: [ 2025-11-28T14:55:03.495Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-28T14:55:03.506Z ]  User Unknown accessed search form.
+> ACTION: [ 2025-11-28T14:55:03.522Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T14:55:03.537Z ]  Flight Validation Failed: Airline is required., Origin is required., Destination is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T14:55:03.542Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T14:55:03.547Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T14:55:03.551Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T14:55:03.562Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T14:55:03.566Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T14:55:03.570Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-28T14:58:22.503Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T14:58:22.562Z ]  Reservation created: ID = undefined by User Unknown
+> ACTION: [ 2025-11-28T14:58:22.564Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T14:58:22.572Z ]  User test@test.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:58:22.582Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T14:58:22.593Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T14:58:22.595Z ]  User Unknown opened edit form for reservation 123
+> ACTION: [ 2025-11-28T14:58:22.601Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T14:58:22.607Z ]  Login failed (email not found): notfound@test.com.
+> ACTION: [ 2025-11-28T14:58:22.611Z ]  Reservation ID = 123 updated by User Unknown
+> ERROR: [ 2025-11-28T14:58:22.614Z ]  Login failed (incorrect password): wrong@test.com.
+> ACTION: [ 2025-11-28T14:58:22.618Z ]  Reservation ID = 123 cancelled by User Unknown
+> ERROR: [ 2025-11-28T14:58:22.620Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T14:58:22.627Z ]  Booking ID = BKG-123 by Doe is successful.
+> ERROR: [ 2025-11-28T14:58:22.634Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-28T14:58:22.645Z ]  Failed to create reservation: fail
+> ERROR: [ 2025-11-28T14:58:22.655Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T14:58:22.659Z ]  Cancel error: fail
+> ERROR: [ 2025-11-28T14:58:22.824Z ]  Failed to create flight: email is not defined
+> ACTION: [ 2025-11-28T14:58:22.857Z ]  Flight ID = 123 deleted by Admin Unknown
+> ACTION: [ 2025-11-28T14:58:22.864Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-28T14:58:22.870Z ]  Admin Unknown viewed flights list.
+> ACTION: [ 2025-11-28T14:58:22.898Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-28T14:58:22.909Z ]  User Unknown accessed search form.
+> ACTION: [ 2025-11-28T14:58:22.928Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T14:58:22.943Z ]  Flight Validation Failed: Airline is required., Origin is required., Destination is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T14:58:22.948Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T14:58:22.954Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T14:58:22.959Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T14:58:22.970Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T14:58:22.974Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T14:58:22.978Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-28T14:59:40.731Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T14:59:40.776Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T14:59:40.788Z ]  Reservation created: ID = undefined by User Unknown
+> ACTION: [ 2025-11-28T14:59:40.791Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T14:59:40.798Z ]  User test@test.com viewed reservations list.
+> ACTION: [ 2025-11-28T14:59:40.799Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T14:59:40.807Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T14:59:40.814Z ]  Login failed (email not found): notfound@test.com.
+> ACTION: [ 2025-11-28T14:59:40.819Z ]  User Unknown opened edit form for reservation 123
+> ERROR: [ 2025-11-28T14:59:40.820Z ]  Login failed (incorrect password): wrong@test.com.
+> ERROR: [ 2025-11-28T14:59:40.827Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T14:59:40.836Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-28T14:59:40.842Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-28T14:59:40.850Z ]  Booking ID = BKG-123 by Doe is successful.
+> ERROR: [ 2025-11-28T14:59:40.856Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-28T14:59:40.862Z ]  Failed to create reservation: fail
+> ERROR: [ 2025-11-28T14:59:40.877Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T14:59:40.881Z ]  Cancel error: fail
+> ERROR: [ 2025-11-28T14:59:41.033Z ]  Failed to create flight: email is not defined
+> ACTION: [ 2025-11-28T14:59:41.061Z ]  Flight ID = 123 deleted by Admin Unknown
+> ACTION: [ 2025-11-28T14:59:41.068Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-28T14:59:41.074Z ]  Admin Unknown viewed flights list.
+> ACTION: [ 2025-11-28T14:59:41.103Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-28T14:59:41.113Z ]  User Unknown accessed search form.
+> ACTION: [ 2025-11-28T14:59:41.136Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T14:59:41.149Z ]  Flight Validation Failed: Airline is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T14:59:41.154Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T14:59:41.160Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T14:59:41.165Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T14:59:41.176Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T14:59:41.180Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T14:59:41.185Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-28T15:02:27.699Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T15:02:27.730Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T15:02:27.743Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T15:02:27.751Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T15:02:27.753Z ]  Reservation created: ID = undefined by User Unknown
+> ACTION: [ 2025-11-28T15:02:27.758Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T15:02:27.762Z ]  User test@test.com viewed reservations list.
+> ERROR: [ 2025-11-28T15:02:27.764Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-28T15:02:27.770Z ]  Login failed (incorrect password): wrong@test.com.
+> ERROR: [ 2025-11-28T15:02:27.778Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T15:02:27.785Z ]  User Unknown opened edit form for reservation 123
+> ACTION: [ 2025-11-28T15:02:27.798Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-28T15:02:27.803Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-28T15:02:27.811Z ]  Booking ID = BKG-123 by Doe is successful.
+> ERROR: [ 2025-11-28T15:02:27.820Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-28T15:02:27.826Z ]  Failed to create reservation: fail
+> ERROR: [ 2025-11-28T15:02:27.836Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T15:02:27.840Z ]  Cancel error: fail
+> ERROR: [ 2025-11-28T15:02:27.967Z ]  Failed to create flight: email is not defined
+> ACTION: [ 2025-11-28T15:02:27.994Z ]  Flight ID = 123 deleted by Admin Unknown
+> ACTION: [ 2025-11-28T15:02:28.000Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-28T15:02:28.005Z ]  Admin Unknown viewed flights list.
+> ACTION: [ 2025-11-28T15:02:28.032Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-28T15:02:28.042Z ]  User Unknown accessed search form.
+> ACTION: [ 2025-11-28T15:02:28.058Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T15:02:28.072Z ]  Flight Validation Failed: Airline is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T15:02:28.076Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T15:02:28.081Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T15:02:28.085Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T15:02:28.095Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T15:02:28.099Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T15:02:28.104Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-28T15:04:26.156Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T15:04:26.180Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T15:04:26.195Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T15:04:26.195Z ]  Flight created: ID = undefined by Admin Unknown
+> ACTION: [ 2025-11-28T15:04:26.203Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T15:04:26.210Z ]  Flight ID = 123 deleted by Admin Unknown
+> ACTION: [ 2025-11-28T15:04:26.211Z ]  Reservation created: ID = undefined by User Unknown
+> ACTION: [ 2025-11-28T15:04:26.215Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T15:04:26.219Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-28T15:04:26.221Z ]  User test@test.com viewed reservations list.
+> ERROR: [ 2025-11-28T15:04:26.222Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-28T15:04:26.229Z ]  Login failed (incorrect password): wrong@test.com.
+> ACTION: [ 2025-11-28T15:04:26.226Z ]  Admin Unknown viewed flights list.
+> ERROR: [ 2025-11-28T15:04:26.236Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T15:04:26.243Z ]  User Unknown opened edit form for reservation 123
+> ACTION: [ 2025-11-28T15:04:26.258Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-28T15:04:26.264Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-28T15:04:26.265Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-28T15:04:26.274Z ]  Booking ID = BKG-123 by Doe is successful.
+> ACTION: [ 2025-11-28T15:04:26.277Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T15:04:26.281Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-28T15:04:26.288Z ]  Failed to create reservation: fail
+> ACTION: [ 2025-11-28T15:04:26.297Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T15:04:26.301Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T15:04:26.305Z ]  Cancel error: fail
+> ERROR: [ 2025-11-28T15:04:26.312Z ]  Flight Validation Failed: Airline is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T15:04:26.318Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T15:04:26.324Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T15:04:26.329Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T15:04:26.342Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T15:04:26.347Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T15:04:26.352Z ]  Error searching for flights: fail

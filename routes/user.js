@@ -56,7 +56,10 @@ router.post("/register", async (req, res) => {
 
 //login 
 router.get("/login", (req, res) => {
-    res.render("profile/login", { title: "Login", status: req.query.status });
+    const isAdmin = req.session?.user?.isAdmin ?? false;
+    const userId = req.session?.userId ?? null;
+
+    res.render("profile/login", { title: "Login", status: req.query.status, isAdmin, userId });
 });
 
 router.post("/login", async (req, res) => {
@@ -109,7 +112,9 @@ router.get("/User", isAuthenticated(false), async(req, res) => {
 router.get("/Admin", isAuthenticated(true), async (req, res) => {
     try {
         const users = await User.find().lean();
-        res.render('profile/list', { title: "User Management", users, status: req.query.status });
+        const userId = req.session?.userId ?? null;
+
+        res.render('profile/list', { title: "User Management", users, status: req.query.status, userId });
     } catch (err) {
         res.status(500).send('Error fetching users.');
     }
@@ -123,7 +128,7 @@ router.get('/edit/:id', isAuthenticated(), async (req, res) => {
     
         const user = await User.findById(userId).lean();
 
-        res.render('profile/edit', { user, isAdmin, status: req.query.status });
+        res.render('profile/edit', { userId, user, isAdmin, status: req.query.status });
     } catch (err) {
         console.log(err);
         res.status(500).send("Server error");

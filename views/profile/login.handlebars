@@ -21,40 +21,38 @@
         {{/equals}}
     {{/equals}}
     <h2 class="title">Login</h2>
-    {{!-- Navigation bar --}}
-    <div class="container-fluid fixed-top">
-        <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
-            <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
-            <ul class="nav nav-pills nav-fill">
-                <li class="nav-item">
-                    <a class="nav-link" href="/flights/search">Flight Search</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/reservations/book">Book Flights</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/reservations/list">My Reservations</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/profile/">Profile</a>
-                </li>
+    {{! navbar }}
+<div class="container-fluid fixed-top">
+    <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
+        <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link" href="/flights/search">Flight Search</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reservations/book">Book Flights</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reservations/list">My Reservations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile/">Profile</a>
+            </li>
+            {{#if userId}}
                 <li class="nav-item">
                     <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
                 </li>
+            {{else}}
                 <li class="nav-item">
-                    <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
+                    <a class="nav-link active" aria-current="page" href="/profile/login">Login</a>
                 </li>
-            </ul>
-        </div>
+            {{/if}}
+            <li class="nav-item">
+                <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
+            </li>
+        </ul>
     </div>
-
-    {{#if error}}
-        <div class="alert alert-danger">Invalid email or password.</div>
-    {{/if}}
-
-    {{#if registered}}
-        <div class="alert alert-success">Account created successfully! Please log in.</div>
-    {{/if}}
+</div>
 
     <form action="/profile/login" method="POST">
 

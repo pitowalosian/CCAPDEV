@@ -34,7 +34,7 @@ router.get('/book', isAuthenticated(), async (req, res) => {
             });
         }
 
-        logger.action(`${isAdmin ? 'Admin' : 'User'} ${req.session.user.email} accessed booking form`);
+        logger.action(`${isAdmin ? 'Admin' : 'User'} ${req.session.user.email} accessed booking form.`);
 
         res.render('reservations/book', {
             title: 'Book Flights',
@@ -47,8 +47,8 @@ router.get('/book', isAuthenticated(), async (req, res) => {
             reservedSeats // [NEW] Pass this array to the view
         });
 
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        logger.error(`Error loading booking form: ${err.message}`);
         res.status(500).send('Error loading booking form');
     }
 });
@@ -268,7 +268,7 @@ router.post('/edit/:id', async (req, res) => {
                 status 
             }
         });
-        logger.action(`Reservation ID = ${req.params.id} updated by ${isAdmin ? 'Admin' : 'User'} ${email}`)
+        logger.action(`Reservation ID = ${req.params.id} updated by ${isAdmin ? 'Admin' : 'User'} ${email}`);
         res.redirect('/reservations/list?status=updated');
     } catch (err) {
         logger.error(`Update reservation error: ${err.message}`);
@@ -282,7 +282,7 @@ router.post('/delete/:id', async (req, res) => {
     const email = req.session?.user?.email ?? "Unknown";
     try {
         await Reservation.findByIdAndUpdate(req.params.id, { status: 'Cancelled' });
-        logger.action(`Reservation ID = ${req.params.id} canceled by ${isAdmin ? 'Admin' : 'User'} ${email}`);
+        logger.action(`Reservation ID = ${req.params.id} cancelled by ${isAdmin ? 'Admin' : 'User'} ${email}`);
         res.redirect('/reservations/list?status=cancelled');
     } catch (err) {
         logger.error(`Cancel error: ${err.message}`);
