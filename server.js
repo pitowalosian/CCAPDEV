@@ -4,7 +4,7 @@ const exphbs = require('express-handlebars');
 const Flight = require('./models/Flight');
 const Reservation = require('./models/Reservation');
 const User = require("./models/User");
-const shortid = require('shortid');
+const bcrypt = require("bcrypt");
 const mongoose = require('mongoose');
 const session = require("express-session");
 const Handlebars = require('handlebars');
@@ -53,11 +53,18 @@ async function initDB() {
 
     const userCount = await User.countDocuments();
     if (userCount === 0) {
-        await User.insertMany([
+        const users = [
             { firstname: "Juan", lastname: "Dela Cruz", email: "juan@example.com", password: "password123", isAdmin: true },
             { firstname: "Maria", lastname: "Santos", email: "maria@example.com", password: "mypassword", isAdmin: false },
             { firstname: "Carlos", lastname: "Reyes", email: "carlos@example.com", password: "admin123", isAdmin: false }
-        ]);
+        ];
+
+        for (const user of users) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(user.password, salt);
+        }
+        
+        await User.insertMany(users);
         console.log("Sample users inserted.");
     }
 }

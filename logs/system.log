@@ -30,3 +30,39 @@
 > ACTION: [ 2025-11-28T15:26:30.888Z ]  Admin Unknown opened edit form for flight 404.
 > ACTION: [ 2025-11-28T15:26:30.893Z ]  Admin Unknown opened edit form for flight err.
 > ERROR: [ 2025-11-28T15:26:30.899Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-28T15:27:16.596Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T15:27:20.810Z ]  Admin amy@example.com viewed reservations list.
+> ACTION: [ 2025-11-28T15:27:32.244Z ]  User amy@example.com accessed online check-in page
+> ERROR: [ 2025-11-28T15:27:43.231Z ]  Check-in error: Reservation is cancelled.
+> ACTION: [ 2025-11-28T15:32:29.355Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-28T15:32:29.405Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T15:32:29.430Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T15:32:29.436Z ]  Reservation created: ID = undefined by User Unknown
+> ACTION: [ 2025-11-28T15:32:29.440Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T15:32:29.453Z ]  User test@test.com viewed reservations list.
+> ACTION: [ 2025-11-28T15:32:29.454Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T15:32:29.464Z ]  Login failed (email not found): notfound@test.com.
+> ACTION: [ 2025-11-28T15:32:29.466Z ]  Flight created: ID = undefined by Admin Unknown
+> ERROR: [ 2025-11-28T15:32:29.478Z ]  Login failed (incorrect password): wrong@test.com.
+> ERROR: [ 2025-11-28T15:32:29.487Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T15:32:29.489Z ]  User Unknown opened edit form for reservation 123
+> ACTION: [ 2025-11-28T15:32:29.496Z ]  Flight ID = 123 deleted by Admin Unknown
+> ACTION: [ 2025-11-28T15:32:29.507Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-28T15:32:29.514Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-28T15:32:29.523Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-28T15:32:29.517Z ]  Admin Unknown viewed flights list.
+> ACTION: [ 2025-11-28T15:32:29.536Z ]  Booking ID = BKG-123 by Doe is successful.
+> ERROR: [ 2025-11-28T15:32:29.544Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-28T15:32:29.554Z ]  Failed to create reservation: fail
+> ACTION: [ 2025-11-28T15:32:29.564Z ]  Admin Unknown opened edit form for flight abc.
+> ERROR: [ 2025-11-28T15:32:29.568Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-28T15:32:29.574Z ]  Cancel error: fail
+> ACTION: [ 2025-11-28T15:32:29.580Z ]  User Unknown accessed search form.
+> ACTION: [ 2025-11-28T15:32:29.603Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-28T15:32:29.625Z ]  Flight Validation Failed: Airline is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-28T15:32:29.632Z ]  Deletion error: fail
+> ERROR: [ 2025-11-28T15:32:29.640Z ]  Update flight error: nope
+> ERROR: [ 2025-11-28T15:32:29.646Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-28T15:32:29.661Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-28T15:32:29.666Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-28T15:32:29.672Z ]  Error searching for flights: fail
