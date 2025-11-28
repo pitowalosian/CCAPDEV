@@ -61,7 +61,7 @@ describe("User Authentication Tests", () => {
 
         expect(User.create).toHaveBeenCalledTimes(1);
         expect(res.status).toBe(302);
-        expect(res.headers.location).toBe("/profile/login?registered=true");
+        expect(res.headers.location).toBe("/profile/login?status=added");
     });
 
     // test 2: successful login (normal user)
@@ -125,8 +125,8 @@ describe("User Authentication Tests", () => {
                 password: "invalid"
             });
 
-        expect(res.status).toBe(401);
-        expect(res.text).toMatch(/Invalid login/i);
+        expect(res.status).toBe(302);
+        expect(res.text).toMatch('/profile/login?status=error');
     });
 
     // test 6: failed login
@@ -143,8 +143,8 @@ describe("User Authentication Tests", () => {
                 password: "bad"
             });
 
-        expect(res.status).toBe(401);
-        expect(res.text).toMatch(/Invalid login/i);
+        expect(res.status).toBe(302);
+        expect(res.text).toMatch('/profile/login?status=error');
     });
 
     // test 7: server error

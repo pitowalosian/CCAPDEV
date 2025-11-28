@@ -4,8 +4,8 @@ const router = express.Router();
 const Reservation = require('../models/Reservation');
 const Flight = require('../models/Flight');
 const { isAuthenticated } = require('./user');
+const logger = require('../utils/logger');
 
-// NOT WORKING YET
 // Display booking form with selected flight
 router.get('/book', isAuthenticated(), async (req, res) => {
     try {

@@ -61,3 +61,17 @@
 > ACTION: [ 2025-11-28T12:27:16.470Z ]  User amy@example.com logged out.
 > ACTION: [ 2025-11-28T12:27:24.940Z ]  User jake@example.com logged in.
 > ACTION: [ 2025-11-28T12:27:28.397Z ]  User jake@example.com deleted their account.
+> ACTION: [ 2025-11-28T12:33:37.052Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T12:33:37.096Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T12:33:37.106Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T12:33:37.117Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T12:33:37.126Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-28T12:33:37.137Z ]  Login failed (incorrect password): wrong@test.com.
+> ERROR: [ 2025-11-28T12:33:37.145Z ]  Login error: DB error
+> ACTION: [ 2025-11-28T12:40:11.265Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-28T12:40:11.288Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-28T12:40:11.299Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-28T12:40:11.308Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T12:40:11.316Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-28T12:40:11.324Z ]  Login failed (incorrect password): wrong@test.com.
+> ERROR: [ 2025-11-28T12:40:11.331Z ]  Login error: DB error
