@@ -5,7 +5,6 @@ const Reservation = require('../models/Reservation');
 const Flight = require('../models/Flight');
 const { isAuthenticated } = require('./user');
 
-// NOT WORKING YET
 // Display booking form with selected flight
 router.get('/book', isAuthenticated(), async (req, res) => {
     try {
@@ -48,8 +47,8 @@ router.get('/book', isAuthenticated(), async (req, res) => {
     }
 });
 
-// NOT WORKING YET
-router.post('/book', async (req, res) => {
+// Process Booking
+router.post('/book', isAuthenticated(), async (req, res) => {
   try {
     const {
       passengerName,
@@ -119,6 +118,7 @@ router.post('/book', async (req, res) => {
     };
 
     const newReservation = new Reservation({
+      user: req.session.user._id, // Save the logged-in user's ID
       bookingId,
       passengerName,
       passengerEmail,
@@ -150,16 +150,16 @@ router.post('/book', async (req, res) => {
   }
 });
 
-// WORKING
 // List all reservations
 router.get('/list', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session?.user?.isAdmin ?? false; //if user is not logged in, isAdmin is false
     
     if (!isAdmin) {
         try {
-            const email = req.session?.user?.email ?? null; //if user is not logged in, email is null
+            // Filter by User ID instead of Email
+            const userId = req.session?.user?._id ?? null;
             
-            const rawReservations = await Reservation.find({ passengerEmail: email }).lean();
+            const rawReservations = await Reservation.find({ user: userId }).lean();
             
             const flights = await Flight.find().lean();
 
@@ -200,19 +200,6 @@ router.get('/list', isAuthenticated(), async (req, res) => {
         }
     }
 });
-
-// // NOT NEEDED ?
-// // Show form to create a new reservation
-// router.get('/new', async (req, res) => {
-//     try {
-//         const flights = await Flight.find().lean();
-//         const userId = req.query.userId;
-//         res.render('reservations/new', { title: 'New Reservation', flights, userId });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send('Error loading new reservation form');
-//     }
-// });
 
 // Edit reservation form
 router.get('/edit/:id', async (req, res) => {

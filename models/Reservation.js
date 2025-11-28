@@ -37,6 +37,11 @@ const ReservationSchema = new mongoose.Schema({
     required: true, 
     unique: true 
   },
+  user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+  },
   passengerName: { 
     type: String, 
     required: true 
