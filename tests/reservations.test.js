@@ -30,7 +30,7 @@ jest.mock('../routes/user', () => {
         isAuthenticated: () => (req, res, next) => {
             if (!req.session) 
                 req.session = {};
-
+            
             req.session.user = { _id: "USER123" };
             next();
         }
@@ -136,7 +136,7 @@ describe("Reservation Tests", () => {
 
         expect(instance.save).toHaveBeenCalledTimes(1);
         expect(res.status).toBe(302);
-        expect(res.headers.location).toBe("/reservations/list?status=added");
+        expect(res.headers.location).toBe("/reservations/book?status=added");
     });
 
     // test 3: reservation list
