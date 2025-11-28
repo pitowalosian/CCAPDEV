@@ -153,11 +153,11 @@ router.post('/book', async (req, res) => {
 // WORKING
 // List all reservations
 router.get('/list', isAuthenticated(), async (req, res) => {
-    const isAdmin = req.session.user.isAdmin;
+    const isAdmin = req.session?.user?.isAdmin ?? false; //if user is not logged in, isAdmin is false
     
     if (!isAdmin) {
         try {
-            const email = req.session.user.email;
+            const email = req.session?.user?.email ?? null; //if user is not logged in, email is null
             
             const rawReservations = await Reservation.find({ passengerEmail: email }).lean();
             
