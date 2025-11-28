@@ -5,11 +5,11 @@ const Reservation = require('../models/Reservation');
 const Flight = require('../models/Flight');
 const { isAuthenticated } = require('./user');
 
+// NOT WORKING YET
 // Display booking form with selected flight
 router.get('/book', isAuthenticated(), async (req, res) => {
     try {
         const flights = await Flight.find().lean();
-        const userId = req.session.userId;
         const { depart, return: ret } = req.query;
 
         const selectedDepart = flights.find(f => f.flightNo === depart);
@@ -37,7 +37,6 @@ router.get('/book', isAuthenticated(), async (req, res) => {
             flights,
             selectedDepart,
             selectedReturn,
-            userId,
             reservedSeats // [NEW] Pass this array to the view
         });
 
@@ -47,8 +46,8 @@ router.get('/book', isAuthenticated(), async (req, res) => {
     }
 });
 
-// Process Booking
-router.post('/book', isAuthenticated(), async (req, res) => {
+// NOT WORKING YET
+router.post('/book', async (req, res) => {
   try {
     const {
       passengerName,
@@ -71,43 +70,6 @@ router.post('/book', isAuthenticated(), async (req, res) => {
       baggageCost: baggageCostRaw,
       totalPrice: totalPriceRaw
     } = req.body;
-
-    // SERVER-SIDE VALIDATION
-    const errors = [];
-    
-    // Validate Name (Letters & spaces, min 2 chars)
-    if (!/^[a-zA-Z ]{2,}$/.test(passengerName?.trim())) {
-        errors.push("Invalid name format");
-    }
-
-    // Validate Email
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(passengerEmail?.trim())) {
-        errors.push("Invalid email format");
-    }
-
-    // Validate Phone (11 digits)
-    if (!/^\d{11}$/.test(phoneNum?.trim())) {
-        errors.push("Invalid phone number");
-    }
-
-    // Validate Passport (P + 7 digits)
-    if (!/^P\d{7}$/.test(passport?.trim())) {
-        errors.push("Invalid passport format");
-    }
-
-    // Validate Baggage (0-50kg)
-    const validBaggage = Number(baggageRaw) || 0;
-    if (validBaggage < 0 || validBaggage > 50) {
-        errors.push("Baggage weight must be between 0 and 50kg");
-    }
-
-    // If validation fails, stop and redirect with error
-    if (errors.length > 0) {
-        console.error("Validation Failed:", errors);
-        // Redirecting to 'error' status. Ideally, you'd render the form again with error messages.
-        return res.redirect('/reservations/book?status=error'); 
-    }
-   
 
     const adults = Number(adultsRaw) || 0;
     const children = Number(childrenRaw) || 0;
@@ -155,7 +117,6 @@ router.post('/book', isAuthenticated(), async (req, res) => {
     };
 
     const newReservation = new Reservation({
-      user: req.session.user._id, // Save the logged-in user's ID
       bookingId,
       passengerName,
       passengerEmail,
@@ -180,23 +141,23 @@ router.post('/book', isAuthenticated(), async (req, res) => {
     });
 
     await newReservation.save();
-    return res.redirect('/reservations/list?status=added');
+    return res.redirect('/reservations/book?status=added');
   } catch (error) {
     console.error('Error saving reservation:', error);
     return res.redirect('/reservations/book?status=error');
   }
 });
 
+// WORKING
 // List all reservations
 router.get('/list', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session?.user?.isAdmin ?? false; //if user is not logged in, isAdmin is false
     
     if (!isAdmin) {
         try {
-            // Filter by User ID instead of Email
-            const userId = req.session?.user?._id ?? null;
+            const email = req.session?.user?.email ?? null; //if user is not logged in, email is null
             
-            const rawReservations = await Reservation.find({ user: userId }).lean();
+            const rawReservations = await Reservation.find({ passengerEmail: email }).lean();
             
             const flights = await Flight.find().lean();
 
@@ -237,6 +198,19 @@ router.get('/list', isAuthenticated(), async (req, res) => {
         }
     }
 });
+
+// // NOT NEEDED ?
+// // Show form to create a new reservation
+// router.get('/new', async (req, res) => {
+//     try {
+//         const flights = await Flight.find().lean();
+//         const userId = req.query.userId;
+//         res.render('reservations/new', { title: 'New Reservation', flights, userId });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('Error loading new reservation form');
+//     }
+// });
 
 // Edit reservation form
 router.get('/edit/:id', async (req, res) => {
