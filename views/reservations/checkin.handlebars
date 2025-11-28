@@ -1,4 +1,18 @@
 <div class="container mt-5 pt-4">
+    {{!-- Form Message --}}
+    {{#equals status "success"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-check-circle"></i> Checked-in successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{else}}
+        {{#equals status "error"}}
+            <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Check-in error. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {{/equals}}
+    {{/equals}}
     <h2 class="text-primary text-center">Online Check-In</h2>
     <p class="text-center">Enter your booking reference and last name.</p>
 

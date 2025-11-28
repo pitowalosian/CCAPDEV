@@ -40,9 +40,31 @@
     </div>
 </div>
 
+{{!-- Form Message --}}
+{{#equals status "updated"}}
+    <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+        <i class="bi bi-check-circle"></i> Reservation updated successfully!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{else}}
+    {{#equals status "cancelled"}}
+        <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-check-circle"></i> Reservation cancelled successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {{else}}
+        {{#equals status "error"}}
+            <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Edit error. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {{/equals}}
+    {{/equals}}
+{{/equals}}
+
 {{! header }}
 <div class="container text-center pt-5 mt-5">
-    <h1 class="display-5 text-primary mt-5">My Reservations</h1>
+    <h1 class="title display-5 text-primary mt-5">My Reservations</h1>
     <p class="lead">View your current and past bookings</p>
 </div>
 

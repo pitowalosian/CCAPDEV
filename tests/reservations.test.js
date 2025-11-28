@@ -31,7 +31,9 @@ jest.mock('../routes/user', () => {
             if (!req.session) 
                 req.session = {};
             
-            req.session.user = { _id: "USER123" };
+            req.session.userId = "507f1f77bcf86cd799439011"; 
+            req.session.user = { email: "test@test.com" };     
+
             next();
         }
     };

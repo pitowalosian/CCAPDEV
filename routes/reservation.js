@@ -11,6 +11,8 @@ router.get('/book', isAuthenticated(), async (req, res) => {
     try {
         const flights = await Flight.find().lean();
         const { depart, return: ret } = req.query;
+        const isAdmin = req.session?.user?.isAdmin ?? false;
+        const userId = req.session?.userId ?? null;
 
         const selectedDepart = flights.find(f => f.flightNo === depart);
         const selectedReturn = flights.find(f => f.flightNo === ret) || null;
@@ -32,11 +34,16 @@ router.get('/book', isAuthenticated(), async (req, res) => {
             });
         }
 
+        logger.action(`${isAdmin ? 'Admin' : 'User'} ${req.session.user.email} accessed booking form`);
+
         res.render('reservations/book', {
             title: 'Book Flights',
             flights,
             selectedDepart,
             selectedReturn,
+            isAdmin,
+            userId,
+            status: req.query.status,
             reservedSeats // [NEW] Pass this array to the view
         });
 
@@ -46,8 +53,8 @@ router.get('/book', isAuthenticated(), async (req, res) => {
     }
 });
 
-// NOT WORKING YET
 router.post('/book', async (req, res) => {
+    const email = req.session?.user?.email ?? 'Unknown';
   try {
     const {
       passengerName,
@@ -117,6 +124,7 @@ router.post('/book', async (req, res) => {
     };
 
     const newReservation = new Reservation({
+      user: req.session.userId,
       bookingId,
       passengerName,
       passengerEmail,
@@ -141,18 +149,19 @@ router.post('/book', async (req, res) => {
     });
 
     await newReservation.save();
+    logger.action(`Reservation created: ID = ${newReservation._id} by User ${email}`)
     return res.redirect('/reservations/book?status=added');
-  } catch (error) {
-    console.error('Error saving reservation:', error);
+  } catch (err) {
+    logger.error(`Failed to create reservation: ${err.message}`);
     return res.redirect('/reservations/book?status=error');
   }
 });
 
-// WORKING
 // List all reservations
 router.get('/list', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session?.user?.isAdmin ?? false; //if user is not logged in, isAdmin is false
     const userId = req.session?.userId ?? null;
+    const email = req.session?.user?.email ?? 'Unknown';
 
     if (!isAdmin) {
         try {
@@ -172,9 +181,9 @@ router.get('/list', isAuthenticated(), async (req, res) => {
                 };
             });
 
-            res.render('reservations', { title: 'Reservations List', reservations, isAdmin, userId });
-        } catch (error) {
-            console.error(error);
+            res.render('reservations', { title: 'Reservations List', reservations, isAdmin, userId, status: req.query.status });
+        } catch (err) {
+            logger.error(`Error loading reservations: ${err.message}`)
             res.status(500).send('Error loading reservations');
         }
     } else {
@@ -192,31 +201,23 @@ router.get('/list', isAuthenticated(), async (req, res) => {
                 };
             });
 
-            res.render('reservations', { title: 'Reservations List', reservations, isAdmin, userId });
-        } catch (error) {
-            console.error(error);
+            res.render('reservations', { title: 'Reservations List', reservations, isAdmin, userId, status: req.query.status});
+        } catch (err) {
+            logger.error(`Error loading reservations: ${err.message}`)
             res.status(500).send('Error loading reservations');
         }
     }
-});
 
-// // NOT NEEDED ?
-// // Show form to create a new reservation
-// router.get('/new', async (req, res) => {
-//     try {
-//         const flights = await Flight.find().lean();
-//         const userId = req.query.userId;
-//         res.render('reservations/new', { title: 'New Reservation', flights, userId });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send('Error loading new reservation form');
-//     }
-// });
+    logger.action(`${isAdmin ? 'Admin' : 'User'} ${email} viewed reservations list.`);
+});
 
 // Edit reservation form
 router.get('/edit/:id', async (req, res) => {
     try {
         const reservation = await Reservation.findById(req.params.id).lean();
+        const isAdmin = req.session?.user?.isAdmin ?? false;
+        const userId = req.session?.userId ?? null;
+        const email = req.session?.user?.email ?? 'Unknown';
         
         if (!reservation) return res.status(404).send('Reservation not found');
 
@@ -236,20 +237,26 @@ router.get('/edit/:id', async (req, res) => {
                 return [];
             });
 
+        logger.action(`${isAdmin ? 'Admin' : 'User'} ${email} opened edit form for reservation ${req.params.id}`);
+
         res.render('reservations/edit', { 
             title: 'Edit Reservation', 
+            isAdmin,
+            userId,
             reservation, 
             reservedSeats
         });
 
     } catch (err) {
-        console.error(err);
+        logger.error(`Error retrieving reservation: ${err.message}`);
         res.status(500).send('Error retrieving reservation');
     }
 });
 
 router.post('/edit/:id', async (req, res) => {
     const { seat, meal, baggage, status } = req.body;
+    const isAdmin = req.session?.user?.isAdmin ?? false;
+    const email = req.session?.user?.email ?? 'Unknown';
     
     try {
         await Reservation.findByIdAndUpdate(req.params.id, {
@@ -261,27 +268,33 @@ router.post('/edit/:id', async (req, res) => {
                 status 
             }
         });
+        logger.action(`Reservation ID = ${req.params.id} updated by ${isAdmin ? 'Admin' : 'User'} ${email}`)
         res.redirect('/reservations/list?status=updated');
     } catch (err) {
-        console.error(err);
+        logger.error(`Update reservation error: ${err.message}`);
         res.redirect('/reservations/list?status=error');
     }
 });
 
 // Cancel (soft delete)
 router.post('/delete/:id', async (req, res) => {
+    const isAdmin = req.session?.user?.isAdmin ?? false;
+    const email = req.session?.user?.email ?? "Unknown";
     try {
         await Reservation.findByIdAndUpdate(req.params.id, { status: 'Cancelled' });
+        logger.action(`Reservation ID = ${req.params.id} canceled by ${isAdmin ? 'Admin' : 'User'} ${email}`);
         res.redirect('/reservations/list?status=cancelled');
     } catch (err) {
-        console.error(err);
+        logger.error(`Cancel error: ${err.message}`);
         res.redirect('/reservations/list?status=error');
     }
 });
 
 // checkin route
 router.get('/checkin', (req, res) => {
-    res.render('reservations/checkin', { title: "Online Check-In" });
+    const email = req.session?.user?.email ?? 'Unknown';
+    logger.action(`User ${email} accessed online check-in page`);
+    res.render('reservations/checkin', { title: "Online Check-In", status: req.query.status });
 });
 
 // check in api
@@ -291,14 +304,16 @@ router.post('/api/checkin', async (req, res) => {
 
         // check both fields
         if (!bookingId || !lastName) {
-            return res.status(400).json({ error: "Booking ID and last name are required." });
+            logger.error(`Check-in error: No booking ID or last name.`);
+            return res.redirect(`/checkin?status=error`);
         }
 
         // find reservation using bookingId
         const reservation = await Reservation.findOne({ bookingId });
 
         if (!reservation) {
-            return res.status(404).json({ error: "Reservation not found." });
+            logger.error(`Check-in error: Reservation not found.`);
+            return res.redirect(`/checkin?status=error`);
         }
 
         // get last name
@@ -307,7 +322,8 @@ router.post('/api/checkin', async (req, res) => {
 
         // compare last names
         if (actualLast !== providedLast) {
-            return res.status(403).json({ error: "Last name does not match our records." });
+            logger.error(`Check-in error: Last name does not match records.`);
+            return res.redirect(`/checkin?status=error`);
         }
 
         // check if checked in
@@ -327,6 +343,7 @@ router.post('/api/checkin', async (req, res) => {
         reservation.boardingPassNumber = bp;
         await reservation.save();
 
+        logger.action(`Booking ID = ${reservation.bookingId} by ${lastName} is successful.`);
         // return success response
         res.json({
             message: "Check-in successful!",
@@ -336,7 +353,7 @@ router.post('/api/checkin', async (req, res) => {
         });
 
     } catch (err) {
-        console.error("Check-in Error:", err);
+        logger.error(`Check-in error: ${err.message}`);
         res.status(500).json({ error: "Server error during check-in." });
     }
 });
