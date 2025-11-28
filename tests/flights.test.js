@@ -67,7 +67,13 @@ describe("Flight Creation (Admin) Tests", () => {
                 airline: "Air Asia",
                 origin: "MNL",
                 destination: "CEB",
-                departureDay: "Monday"
+                departureDay: "Monday",
+                departureTime: "10:00",
+                arrivalDay: "Monday",
+                arrivalTime: "12:00",
+                price: 1000,
+                aircraftType: "A320",
+                seatCap: 180
             });
 
         expect(Flight.prototype.save).toHaveBeenCalledTimes(1);

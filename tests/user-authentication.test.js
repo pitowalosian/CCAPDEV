@@ -56,7 +56,7 @@ describe("User Authentication Tests", () => {
                 firstname: "Juan",
                 lastname: "Dela Cruz",
                 email: "juan@example.com",
-                password: "12345"
+                password: "123456"
             });
 
         expect(User.create).toHaveBeenCalledTimes(1);

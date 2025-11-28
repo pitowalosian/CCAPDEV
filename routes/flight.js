@@ -62,7 +62,7 @@ router.get('/', isAuthenticated(true), async (req, res) => {
         res.render('flights', { title: 'Flights List', flights, status }); 
     } catch (err) {
         console.error(err);
-        res.render('flights', {
+        res.status(500).render('flights', {
             title: 'Flights List',
             flights: [],
             status: 'error'

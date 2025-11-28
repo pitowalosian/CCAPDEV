@@ -27,9 +27,16 @@ jest.mock('../routes/user', () => {
     const express = require('express');
     return {
         router: express.Router(),
-        isAuthenticated: () => (req, res, next) => next()
+        isAuthenticated: () => (req, res, next) => {
+            if (!req.session) 
+                req.session = {};
+
+            req.session.user = { _id: "USER123" };
+            next();
+        }
     };
 });
+
 
 //mock reservations model
 jest.mock('../models/Reservation', () => {
@@ -93,17 +100,43 @@ describe("Reservation Tests", () => {
             .send({
                 passengerName: "Juan Cruz",
                 passengerEmail: "juan@test.com",
+                phoneNum: "09178620245",
+                passport: "P1234567", 
                 flightNo: "FL001",
                 seat: "A1",
                 meal: "0",
-                baggage: "10"
+                baggage: "10",
+
+                adults: "1",
+                children: "0",
+                infants: "0",
+
+                passengerCost: "1000",
+                passengerCostRaw: "1000",
+
+                tripType: "One-way",
+                tripTypeCostRaw: "0",
+
+                travelClass: "Economy",
+                travelClassCostRaw: "0",
+
+                mealCostRaw: "0",
+                baggageCostRaw: "0",
+
+                totalPriceRaw: "1000",
+                totalPrice: "1000",            
+
+                package: {
+                    seat: "A1",
+                    meal: "Standard (included)"
+                }
             });
 
         const instance = Reservation.mock.instances[0];
 
         expect(instance.save).toHaveBeenCalledTimes(1);
         expect(res.status).toBe(302);
-        expect(res.headers.location).toBe("/reservations/book?status=added");
+        expect(res.headers.location).toBe("/reservations/list?status=added");
     });
 
     // test 3: reservation list
