@@ -1,33 +1,3 @@
-{{!-- Navigation bar --}}
-<div class="container-fluid fixed-top">
-    <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
-        <a class="navbar-brand" href="/"><img height="40" src="/pictures/icon.png"/></a>
-        <ul class="nav nav-pills nav-fill">
-            <li class="nav-item">
-                    <a class="nav-link" href="/flights/search">Flight Search</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/reservations/book">Book Flights</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/reservations/list">Reservation Management</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/flights">Flight Management</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/profile/">User Management</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
-            </li>
-            <li class="nav-item">
-                <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
-            </li>
-        </ul>
-    </div>
-</div>
-
 {{!-- Page header --}}
 <div class="container text-center pt-3 mt-5">
     {{!-- Form Message --}}
@@ -58,7 +28,7 @@
             {{/equals}}
         {{/equals}}
     {{/equals}}
-    <h1 id="title" class="display-5 text-primary mt-5">Flight Management</h1>
+    <h1 class="title display-5 text-primary mt-5">Flight Management</h1>
     <p class="lead">Create, update, or delete flight information</p>
 </div>
 
@@ -216,20 +186,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
-        const msg = $('.form-msg');
-        const title = $('#title');
-        const flightList = $('#flight-list');
-        if (msg.length) {
-            title.removeClass('mt-5');
-            setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
-
-            msg.on('closed.bs.alert', function () {
-                title.addClass('mt-5');
-            });
-        } else {
-            $('#title').addClass('mt-5');
-        }
-
         // Handle departure and arrival day dropdowns in flight management
         const depDay = $('#departureDay').val();
         const arrDay = $('#arrivalDay').val();

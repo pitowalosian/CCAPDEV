@@ -152,7 +152,8 @@ router.post('/book', async (req, res) => {
 // List all reservations
 router.get('/list', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session?.user?.isAdmin ?? false; //if user is not logged in, isAdmin is false
-    
+    const userId = req.session?.userId ?? null;
+
     if (!isAdmin) {
         try {
             const email = req.session?.user?.email ?? null; //if user is not logged in, email is null
@@ -171,7 +172,7 @@ router.get('/list', isAuthenticated(), async (req, res) => {
                 };
             });
 
-            res.render('reservations', { title: 'Reservations List', reservations });
+            res.render('reservations', { title: 'Reservations List', reservations, isAdmin, userId });
         } catch (error) {
             console.error(error);
             res.status(500).send('Error loading reservations');
@@ -191,7 +192,7 @@ router.get('/list', isAuthenticated(), async (req, res) => {
                 };
             });
 
-            res.render('reservations', { title: 'Reservations List', reservations });
+            res.render('reservations', { title: 'Reservations List', reservations, isAdmin, userId });
         } catch (error) {
             console.error(error);
             res.status(500).send('Error loading reservations');

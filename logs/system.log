@@ -1,0 +1,63 @@
+> ACTION: [ 2025-11-28T10:09:49.660Z ]  User logged in.
+> ACTION: [ 2025-11-28T10:21:07.373Z ]  User unknown logged out. IP: ::1 | Session: U2Kj12PRVn-6B6WtI6WVYXb55eG5QBYh
+> ACTION: [ 2025-11-28T10:21:20.749Z ]  User logged in.
+> ACTION: [ 2025-11-28T10:21:25.079Z ]  User amy@example.com logged out. IP: ::1 | Session: _PYZk8nwtriK68NfVYZkeFfI7R8d-nEA
+> ACTION: [ 2025-11-28T10:21:35.733Z ]  User logged in.
+> ACTION: [ 2025-11-28T10:21:43.476Z ]  User jake@example.com logged out. IP: ::1 | Session: 6l234nFSI-kQ0-RdkC8vUkUP8AcTjG1h
+> ACTION: [ 2025-11-28T10:32:10.559Z ]  User unknown logged out. IP: ::1 | Session: ZizZpsT-APVizN0elJj6_mC5IAa2ERV4
+> ERROR: [ 2025-11-28T11:00:52.544Z ]  Login failed (email not found): amys@example.com.
+> ERROR: [ 2025-11-28T11:01:12.107Z ]  Login failed (incorrect password): amy@example.com.
+> ACTION: [ 2025-11-28T11:01:17.626Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:02:24.923Z ]  Admin amy@example.com updated user juan@example.com.
+> ERROR: [ 2025-11-28T11:03:50.949Z ]  Update Validation Failed: Invalid Last Name
+> ERROR: [ 2025-11-28T11:04:17.648Z ]  Update Validation Failed: Invalid First Name, Invalid Last Name
+> ACTION: [ 2025-11-28T11:05:04.824Z ]  Admin amy@example.com updated user juan@example.com.
+> ACTION: [ 2025-11-28T11:05:10.274Z ]  User amy@example.com updated their profile.
+> ACTION: [ 2025-11-28T11:05:19.268Z ]  User amy@example.com updated their profile.
+> ACTION: [ 2025-11-28T11:05:25.787Z ]  Admin amy@example.com deleted user carlos@example.com.
+> ACTION: [ 2025-11-28T11:05:33.722Z ]  User amy@example.com logged out.
+> ACTION: [ 2025-11-28T11:06:28.604Z ]  New user maria@example.com registered.
+> ERROR: [ 2025-11-28T11:09:43.424Z ]  Registration Validation Failed: Invalid First Name, Password must be at least 6 characters
+> ERROR: [ 2025-11-28T11:10:18.496Z ]  Failed to register user: E11000 duplicate key error collection: flightdb.users index: email_1 dup key: { email: "amy@example.com" }
+> ACTION: [ 2025-11-28T11:10:35.434Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T11:10:59.040Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T11:11:10.188Z ]  User maria@example.com updated their profile.
+> ERROR: [ 2025-11-28T11:11:17.805Z ]  Update Validation Failed: Invalid First Name
+> ACTION: [ 2025-11-28T11:11:30.567Z ]  User maria@example.com deleted their account.
+> ACTION: [ 2025-11-28T11:11:52.337Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T11:17:56.385Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T11:18:08.925Z ]  Registration Validation Failed: Invalid First Name, Password must be at least 6 characters
+> ERROR: [ 2025-11-28T11:19:27.725Z ]  Registration Validation Failed: Invalid First Name
+> ACTION: [ 2025-11-28T11:21:24.583Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T11:21:36.839Z ]  Registration Validation Failed: Invalid Last Name
+> ACTION: [ 2025-11-28T11:32:09.893Z ]  New user maria@example.com registered.
+> ACTION: [ 2025-11-28T11:32:18.346Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T11:32:30.413Z ]  User maria@example.com logged out.
+> ACTION: [ 2025-11-28T11:32:44.772Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:34:52.014Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:35:56.906Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:44:12.980Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T11:44:22.413Z ]  User unknown logged out.
+> ACTION: [ 2025-11-28T11:44:35.010Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:46:43.379Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:47:47.868Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:51:29.626Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:51:40.201Z ]  User amy@example.com logged out.
+> ACTION: [ 2025-11-28T11:54:44.356Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T11:57:00.508Z ]  User unknown logged out.
+> ERROR: [ 2025-11-28T11:57:16.642Z ]  Registration Validation Failed: Invalid First Name, Invalid Last Name, Password must be at least 6 characters
+> ACTION: [ 2025-11-28T12:15:55.965Z ]  User amy@example.com logged in.
+> ERROR: [ 2025-11-28T12:16:02.891Z ]  Update Validation Failed: Invalid First Name
+> ACTION: [ 2025-11-28T12:16:10.702Z ]  Admin amy@example.com updated user juan@example.com.
+> ACTION: [ 2025-11-28T12:18:52.230Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T12:18:56.373Z ]  Admin amy@example.com updated user juan@example.com.
+> ACTION: [ 2025-11-28T12:19:07.084Z ]  Admin amy@example.com deleted user maria@example.com.
+> ACTION: [ 2025-11-28T12:19:10.218Z ]  User amy@example.com logged out.
+> ACTION: [ 2025-11-28T12:19:27.383Z ]  New user maria@example.com registered.
+> ACTION: [ 2025-11-28T12:19:32.473Z ]  User maria@example.com logged in.
+> ACTION: [ 2025-11-28T12:19:35.584Z ]  User maria@example.com updated their profile.
+> ACTION: [ 2025-11-28T12:27:09.551Z ]  User amy@example.com logged in.
+> ACTION: [ 2025-11-28T12:27:11.886Z ]  Admin amy@example.com deleted user maria@example.com.
+> ACTION: [ 2025-11-28T12:27:16.470Z ]  User amy@example.com logged out.
+> ACTION: [ 2025-11-28T12:27:24.940Z ]  User jake@example.com logged in.
+> ACTION: [ 2025-11-28T12:27:28.397Z ]  User jake@example.com deleted their account.

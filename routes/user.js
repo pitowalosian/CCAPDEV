@@ -18,7 +18,7 @@ function isAuthenticated(role = null) {
 
 // registration 
 router.get("/register", (req, res) => {
-    res.render("profile/register", { title: "Register" });
+    res.render("profile/register", { title: "Register", status: req.query.status });
 });
 
 router.post("/register", async (req, res) => {
@@ -40,23 +40,23 @@ router.post("/register", async (req, res) => {
     if (!password || password.length < 6) errors.push("Password must be at least 6 characters");
 
     if (errors.length > 0) {
-        console.error("Registration Validation Failed:", errors);
-        // Redirect back to register with generic error flag (or pass specific errors if your UI supports it)
-        return res.redirect("/profile/register?error=true");
+        logger.error(`Registration Validation Failed: ${errors.join(", ")}`);
+        return res.redirect("/profile/register?status=error");
     }
 
     try {
         await User.create({ firstname, lastname, email, password });
-        return res.redirect("/profile/login?registered=true");
+        logger.action(`New user ${email} registered.`);
+        return res.redirect("/profile/login?status=added");
     } catch (err) {
-        console.error(err);
-        return res.redirect("/profile/register?error=true");
+        logger.error(`Failed to register user: ${err.message}`);
+        return res.redirect("/profile/register?status=error");
     }
 });
 
 //login 
 router.get("/login", (req, res) => {
-    res.render("profile/login", { title: "Login" });
+    res.render("profile/login", { title: "Login", status: req.query.status });
 });
 
 router.post("/login", async (req, res) => {
@@ -64,23 +64,32 @@ router.post("/login", async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
-        if (user && await user.comparePassword(password)) {
-            req.session.userId = user._id;
-            req.session.user = user;
-            res.redirect('/profile/' + (user.isAdmin ? 'Admin' : 'User'));
+        if (user) {
+            if (await user.comparePassword(password)) {
+                req.session.userId = user._id;
+                req.session.user = user;
+                logger.action(`User ${email} logged in.`);
+                res.redirect('/profile/' + (user.isAdmin ? 'Admin' : 'User'));
+            } else {
+                logger.error(`Login failed (incorrect password): ${email}.`);
+                res.redirect('/profile/login?status=error');
+            }
         } else {
-            res.status(401).send('Invalid login');
+            logger.error(`Login failed (email not found): ${email}.`)
+            res.redirect('/profile/login?status=error');
         }
-        
     } catch (err) {
-        console.error("Login error: ", err);
+        logger.error(`Login error: ${err.message}`);
         return res.status(500).send("Server error");
     }
-    
 });
 
 //logout
 router.get("/logout", (req, res) => {
+    const email = req.session.user?.email ?? "unknown";
+
+    logger.action(`User ${email} logged out.`);
+
     req.session.destroy(() => {
         res.redirect('/profile/login');
     });
@@ -91,7 +100,7 @@ router.get("/", isAuthenticated(), async (req, res) => {
     res.redirect('/profile/' + (isAdmin ? 'Admin' : 'User'));
 });
 
-// working
+// show profile edit
 router.get("/User", isAuthenticated(false), async(req, res) => {
     res.redirect(`/profile/edit/${req.session.userId}`);
 });
@@ -100,13 +109,13 @@ router.get("/User", isAuthenticated(false), async(req, res) => {
 router.get("/Admin", isAuthenticated(true), async (req, res) => {
     try {
         const users = await User.find().lean();
-        res.render('profile/list', { title: "User Management", users });
+        res.render('profile/list', { title: "User Management", users, status: req.query.status });
     } catch (err) {
         res.status(500).send('Error fetching users.');
     }
 });
 
-// edit
+// edit profile
 router.get('/edit/:id', isAuthenticated(), async (req, res) => {
     try {
         const isAdmin = req.session.user.isAdmin;
@@ -114,7 +123,7 @@ router.get('/edit/:id', isAuthenticated(), async (req, res) => {
     
         const user = await User.findById(userId).lean();
 
-        res.render('profile/edit', { user, isAdmin });
+        res.render('profile/edit', { user, isAdmin, status: req.query.status });
     } catch (err) {
         console.log(err);
         res.status(500).send("Server error");
@@ -125,6 +134,7 @@ router.get('/edit/:id', isAuthenticated(), async (req, res) => {
 router.post("/update/:id", isAuthenticated(), async (req, res) => { 
     try {
         const isAdmin = req.session.user.isAdmin;
+        const sessionUser = req.session.user;
         const userId = isAdmin ? req.params.id : req.session.userId;
         const { firstname, lastname, email, password } = req.body;
 
@@ -143,10 +153,8 @@ router.post("/update/:id", isAuthenticated(), async (req, res) => {
         }
 
         if (errors.length > 0) {
-            console.error("Update Validation Failed:", errors);
-            // In a real app, you'd want to render the edit page with errors. 
-            // Here we redirect to keep it simple as requested.
-            return res.redirect(`/profile/`); 
+            logger.error(`Update Validation Failed: ${errors.join(", ")}`);
+            return res.redirect(`/profile/edit/${userId}?status=error`); 
         }
 
         const user = await User.findById(userId);
@@ -165,26 +173,40 @@ router.post("/update/:id", isAuthenticated(), async (req, res) => {
             req.session.user = user.toObject();
         }
 
-        return res.redirect(`/profile/`);
+        if (isAdmin && req.session.userId !== userId) {
+            logger.action(`Admin ${sessionUser.email} updated user ${email}.`);
+        } else {
+            logger.action(`User ${email} updated their profile.`);
+        }
+
+        res.redirect(`/profile/edit/${userId}?status=success`)
     } catch (err) {
-        console.log(err);
+        logger.error(`Update error: ${err.message}`);
+        res.redirect(`/profile/edit/${userId}?status=error`)
     }
 });
 
 // delete
 router.post('/delete/:id', isAuthenticated(), async (req, res) => {
     const isAdmin = req.session.user.isAdmin;
+    const sessionUser = req.session.user;
     const userId = isAdmin ? req.params.id : req.session.userId;
 
     try {
+        const user = await User.findById(userId);
         await User.findByIdAndDelete(userId);
-        if (isAdmin) {
-            res.redirect(`/profile/Admin`);
-        } else {
-            res.redirect(`/profile/login`)
+        if (isAdmin && req.session.userId !== userId) {
+            logger.action(`Admin ${sessionUser.email} deleted user ${user.email}.`);
+            return res.redirect(`/profile/Admin?status=deleted`);
         }
+
+        logger.action(`User ${user.email} deleted their account.`);
+        req.session.destroy(() => {
+            res.redirect("/profile/login?status=deleted");
+        });
     } catch (err) {
-        console.log(err);
+        logger.error(`Delete error: ${err.message}`);
+        res.redirect(`/profile/${isAdmin ? 'Admin' : 'User'}?status=deleteError`);
     }
 });
 

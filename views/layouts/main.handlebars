@@ -18,6 +18,7 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             $(document).ready(function() {
                 // Toggle Dark Button
@@ -39,6 +40,19 @@
                     $('#destination').toggleClass('btn-outline-secondary btn-light');
                     $('#search').toggleClass('btn-primary btn-outline-light');
                 });
+                const msg = $('.form-msg');
+                const title = $('.title');
+    
+                if (msg.length) {
+                    title.removeClass('mt-5');
+                    setTimeout(() => {msg.alert('close'); }, 3000); // hides after 3 seconds
+
+                    msg.on('closed.bs.alert', function () {
+                        title.addClass('mt-5');
+                    });
+                } else {
+                    $('.title').addClass('mt-5');
+                }
             });
         </script>
     </body>

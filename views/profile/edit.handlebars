@@ -1,5 +1,19 @@
 <div class="container mt-5 pt-5">
-    <h2>Edit User</h2>
+    {{!-- Form Message --}}
+    {{#equals status "success"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-check-circle"></i> User edited successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{else}}
+        {{#equals status "error"}}
+            <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Edit error. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {{/equals}}
+    {{/equals}}
+    <h2 class="title">Edit User</h2>
 
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">

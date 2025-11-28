@@ -1,5 +1,19 @@
 <div class="container mt-5 pt-5">
-    <h2>User Management</h2>
+    {{!-- Form Message --}}
+    {{#equals status "deleted"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-check-circle"></i> User deleted successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{else}}
+        {{#equals status "deleteError"}}
+            <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Delete error. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {{/equals}}
+    {{/equals}}
+    <h2 class="title">User Management</h2>
 
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">

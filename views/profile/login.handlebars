@@ -1,5 +1,26 @@
 <div class="container mt-5 pt-5 w-50">
-    <h2>Login</h2>
+    {{!-- Form Message --}}
+    {{#equals status "success"}}
+        <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center h-25" role="alert">
+            <i class="bi bi-check-circle"></i> Account created successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{else}}
+        {{#equals status "error"}}
+            <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> Login Error. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{else}}
+            {{#equals status "deleted"}}
+                <div class="form-msg alert alert-success alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+                    <i class="bi bi-check-circle"></i> User deleted successfully!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {{/equals}}
+        {{/equals}}
+    {{/equals}}
+    <h2 class="title">Login</h2>
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">
         <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">

@@ -1,5 +1,12 @@
 <div class="container mt-5 pt-5 w-50">
-    <h2>Create Account</h2>
+    {{!-- Form Message --}}
+    {{#equals status "error"}}
+        <div class="form-msg alert alert-danger alert-dismissible fade show w-50 mx-auto text-center" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> Registration Error. Please try again.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{/equals}}
+    <h2 class="title">Create Account</h2>
     {{!-- Navigation bar --}}
     <div class="container-fluid fixed-top">
         <div class="navbar fixed-top bg-dark-subtle border-bottom border-primary" id="navbarNav">
@@ -17,19 +24,21 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/profile">Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
-                </li>
+                {{#if user}}
+                    <li class="nav-item">
+                        <a class="nav-link text-danger fw-bold" href="/profile/logout">Logout</a>
+                    </li>
+                {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile/login">Login</a>
+                    </li>
+                {{/if}}
                 <li class="nav-item">
                     <button class="btn"><i id="toggleDark" class="bi bi-sun-fill"></i></button>
                 </li>
             </ul>
         </div>
     </div>
-
-    {{#if error}}
-        <div class="alert alert-danger">Registration failed. Try again.</div>
-    {{/if}}
 
     <form action="/profile/register" method="POST">
 
