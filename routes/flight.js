@@ -9,7 +9,29 @@ router.post('/add', isAuthenticated(true), async (req, res) => {
         const { flightNo, airline, origin, destination, departureDay, departureTime, 
             arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
         
-        // insert input validation
+        // SERVER-SIDE VALIDATION ---
+        const errors = [];
+
+        // Validate Strings (Empty checks)
+        if (!flightNo?.trim()) errors.push("Flight number is required.");
+        if (!airline?.trim()) errors.push("Airline is required.");
+        if (!origin?.trim()) errors.push("Origin is required.");
+        if (!destination?.trim()) errors.push("Destination is required.");
+
+        // Validate Numbers (Price and Capacity)
+        if (Number(price) < 0) errors.push("Price cannot be negative.");
+        if (Number(seatCap) < 1) errors.push("Seat capacity must be at least 1.");
+
+        // Validate Time Format (Simple HH:MM check)
+        const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+        if (!timeRegex.test(departureTime)) errors.push("Invalid departure time format.");
+        if (!timeRegex.test(arrivalTime)) errors.push("Invalid arrival time format.");
+
+        if (errors.length > 0) {
+            console.error("Flight Validation Failed:", errors);
+            return res.redirect('/flights?status=error');
+        }
+       
         
         const newFlight = new Flight({
             flightNo,
@@ -43,7 +65,6 @@ router.get('/', isAuthenticated(true), async (req, res) => {
         res.render('flights', {
             title: 'Flights List',
             flights: [],
-            userId,
             status: 'error'
         });
     }
@@ -67,6 +88,19 @@ router.get('/edit/:id', isAuthenticated(true), async (req, res) => {
 router.post('/edit/:id', isAuthenticated(true), async (req, res) => {
     console.log('Edit form submission:', req.body);
     const { flightNo, airline, origin, destination, departureDay, departureTime, arrivalDay, arrivalTime, price, aircraftType, seatCap } = req.body;
+    
+    // SERVER-SIDE VALIDATION
+    const errors = [];
+    if (!flightNo?.trim()) errors.push("Flight number is required.");
+    if (Number(price) < 0) errors.push("Price cannot be negative.");
+    if (Number(seatCap) < 1) errors.push("Seat capacity must be at least 1.");
+
+    if (errors.length > 0) {
+        console.error("Flight Edit Validation Failed:", errors);
+        return res.redirect('/flights?status=error');
+    }
+   
+
     try {
         await Flight.findOneAndUpdate(
             { _id: req.params.id},
@@ -102,7 +136,6 @@ router.post('/delete/:id', async (req, res) => {
     }
 });
 
-// NOT WORKING PROPERLY
 // Search flights
 router.get('/search', async (req, res) => {
     try {

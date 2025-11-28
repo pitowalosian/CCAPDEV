@@ -23,6 +23,27 @@ router.get("/register", (req, res) => {
 router.post("/register", async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
 
+    // --- [START] SERVER-SIDE VALIDATION ---
+    const errors = [];
+
+    // Validate Name (Letters only, min 2 chars)
+    const nameRegex = /^[a-zA-Z ]{2,}$/;
+    if (!nameRegex.test(firstname?.trim())) errors.push("Invalid First Name");
+    if (!nameRegex.test(lastname?.trim())) errors.push("Invalid Last Name");
+
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email?.trim())) errors.push("Invalid Email Address");
+
+    // Validate Password (Min 6 chars)
+    if (!password || password.length < 6) errors.push("Password must be at least 6 characters");
+
+    if (errors.length > 0) {
+        console.error("Registration Validation Failed:", errors);
+        // Redirect back to register with generic error flag (or pass specific errors if your UI supports it)
+        return res.redirect("/profile/register?error=true");
+    }
+
     try {
         await User.create({ firstname, lastname, email, password });
         return res.redirect("/profile/login?registered=true");
@@ -104,10 +125,30 @@ router.post("/update/:id", isAuthenticated(), async (req, res) => {
     try {
         const isAdmin = req.session.user.isAdmin;
         const userId = isAdmin ? req.params.id : req.session.userId;
+        const { firstname, lastname, email, password } = req.body;
+
+        // SERVER-SIDE VALIDATION
+        const errors = [];
+        const nameRegex = /^[a-zA-Z ]{2,}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!nameRegex.test(firstname?.trim())) errors.push("Invalid First Name");
+        if (!nameRegex.test(lastname?.trim())) errors.push("Invalid Last Name");
+        if (!emailRegex.test(email?.trim())) errors.push("Invalid Email Address");
+
+        // Only validate password if the user is trying to change it
+        if (password && password.trim() !== "") {
+            if (password.length < 6) errors.push("Password must be at least 6 characters");
+        }
+
+        if (errors.length > 0) {
+            console.error("Update Validation Failed:", errors);
+            // In a real app, you'd want to render the edit page with errors. 
+            // Here we redirect to keep it simple as requested.
+            return res.redirect(`/profile/`); 
+        }
 
         const user = await User.findById(userId);
-
-        const { firstname, lastname, email, password } = req.body;
 
         user.firstname = firstname;
         user.lastname = lastname;
