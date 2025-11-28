@@ -305,7 +305,7 @@ router.post('/api/checkin', async (req, res) => {
         // check both fields
         if (!bookingId || !lastName) {
             logger.error(`Check-in error: No booking ID or last name.`);
-            return res.redirect(`/checkin?status=error`);
+            return res.status(400).json({ error: "Booking ID and last name required." });
         }
 
         // find reservation using bookingId
@@ -313,7 +313,12 @@ router.post('/api/checkin', async (req, res) => {
 
         if (!reservation) {
             logger.error(`Check-in error: Reservation not found.`);
-            return res.redirect(`/checkin?status=error`);
+            return res.status(404).json({ error: "Reservation not found." });
+        }
+
+        if (reservation.status === "Cancelled") {
+            logger.error(`Check-in error: Reservation is cancelled.`);
+            return res.status(400).json({ error: "Reservation is cancelled." });
         }
 
         // get last name
@@ -323,7 +328,7 @@ router.post('/api/checkin', async (req, res) => {
         // compare last names
         if (actualLast !== providedLast) {
             logger.error(`Check-in error: Last name does not match records.`);
-            return res.redirect(`/checkin?status=error`);
+            return res.status(400).json({ error: "Last name does not match records." });
         }
 
         // check if checked in

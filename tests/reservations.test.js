@@ -301,5 +301,4 @@ describe("Reservation Tests", () => {
         expect(res.status).toBe(302);
         expect(res.headers.location).toBe("/reservations/list?status=error");
     });
-
 });
