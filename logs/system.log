@@ -66,3 +66,35 @@
 > ACTION: [ 2025-11-28T15:32:29.661Z ]  Admin Unknown opened edit form for flight 404.
 > ACTION: [ 2025-11-28T15:32:29.666Z ]  Admin Unknown opened edit form for flight err.
 > ERROR: [ 2025-11-28T15:32:29.672Z ]  Error searching for flights: fail
+> ACTION: [ 2025-11-29T04:17:53.741Z ]  User test@test.com accessed booking form.
+> ACTION: [ 2025-11-29T04:17:53.765Z ]  Flight created: ID = undefined by Admin Unknown
+> ACTION: [ 2025-11-29T04:17:53.764Z ]  New user juan@example.com registered.
+> ACTION: [ 2025-11-29T04:17:53.791Z ]  Flight ID = 123 deleted by Admin Unknown
+> ACTION: [ 2025-11-29T04:17:53.795Z ]  User user@test.com logged in.
+> ACTION: [ 2025-11-29T04:17:53.805Z ]  Flight ID = 777 updated by Admin Unknown
+> ACTION: [ 2025-11-29T04:17:53.807Z ]  User admin@test.com logged in.
+> ACTION: [ 2025-11-29T04:17:53.821Z ]  User unknown logged out.
+> ACTION: [ 2025-11-29T04:17:53.819Z ]  Admin Unknown viewed flights list.
+> ERROR: [ 2025-11-29T04:17:53.833Z ]  Login failed (email not found): notfound@test.com.
+> ERROR: [ 2025-11-29T04:17:53.844Z ]  Login failed (incorrect password): wrong@test.com.
+> ACTION: [ 2025-11-29T04:17:53.843Z ]  Reservation created: ID = undefined by User Unknown
+> ERROR: [ 2025-11-29T04:17:53.853Z ]  Login error: DB error
+> ACTION: [ 2025-11-29T04:17:53.858Z ]  User test@test.com viewed reservations list.
+> ACTION: [ 2025-11-29T04:17:53.890Z ]  Admin Unknown opened edit form for flight abc.
+> ACTION: [ 2025-11-29T04:17:53.900Z ]  User Unknown opened edit form for reservation 123
+> ACTION: [ 2025-11-29T04:17:53.913Z ]  User Unknown accessed search form.
+> ACTION: [ 2025-11-29T04:17:53.925Z ]  Reservation ID = 123 updated by User Unknown
+> ACTION: [ 2025-11-29T04:17:53.937Z ]  Reservation ID = 123 cancelled by User Unknown
+> ACTION: [ 2025-11-29T04:17:53.949Z ]  Booking ID = BKG-123 by Doe is successful.
+> ACTION: [ 2025-11-29T04:17:53.953Z ]  User Unknown accessed search form.
+> ERROR: [ 2025-11-29T04:17:53.959Z ]  Error loading booking form: fail
+> ERROR: [ 2025-11-29T04:17:53.969Z ]  Validation Failed: ${errors.join(
+> ERROR: [ 2025-11-29T04:17:53.976Z ]  Flight Validation Failed: Airline is required., Invalid departure time format., Invalid arrival time format.
+> ERROR: [ 2025-11-29T04:17:53.988Z ]  Update reservation error: fail
+> ERROR: [ 2025-11-29T04:17:53.987Z ]  Deletion error: fail
+> ERROR: [ 2025-11-29T04:17:53.994Z ]  Cancel error: fail
+> ERROR: [ 2025-11-29T04:17:53.997Z ]  Update flight error: nope
+> ERROR: [ 2025-11-29T04:17:54.004Z ]  Error loading flights: Error: fail
+> ACTION: [ 2025-11-29T04:17:54.026Z ]  Admin Unknown opened edit form for flight 404.
+> ACTION: [ 2025-11-29T04:17:54.033Z ]  Admin Unknown opened edit form for flight err.
+> ERROR: [ 2025-11-29T04:17:54.040Z ]  Error searching for flights: fail

@@ -123,6 +123,41 @@ router.post('/book', async (req, res) => {
       excessBaggageWeight: excessWeight
     };
 
+    // SERVER-SIDE VALIDATION
+    const errors = [];
+    
+    // Validate Name (Letters & spaces, min 2 chars)
+    if (!/^[a-zA-Z ]{2,}$/.test(passengerName?.trim())) {
+        errors.push("Invalid name format");
+    }
+
+    // Validate Email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(passengerEmail?.trim())) {
+        errors.push("Invalid email format");
+    }
+
+    // Validate Phone (11 digits)
+    if (!/^\d{11}$/.test(phoneNum?.trim())) {
+        errors.push("Invalid phone number");
+    }
+
+    // Validate Passport (P + 7 digits)
+    if (!/^P\d{7}$/.test(passport?.trim())) {
+        errors.push("Invalid passport format");
+    }
+
+    // Validate Baggage (0-50kg)
+    const validBaggage = Number(baggageRaw) || 0;
+    if (validBaggage < 0 || validBaggage > 50) {
+        errors.push("Baggage weight must be between 0 and 50kg");
+    }
+
+    // If validation fails, stop and redirect with error
+    if (errors.length > 0) {
+        logger.error("Validation Failed: ${errors.join(", ")}");
+        return res.redirect('/reservations/book?status=error'); 
+    }
+
     const newReservation = new Reservation({
       user: req.session.userId,
       bookingId,
