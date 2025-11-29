@@ -381,7 +381,7 @@ router.post('/api/checkin', async (req, res) => {
         // update reservation
         reservation.checkedIn = true;
         reservation.boardingPassNumber = bp;
-        await reservation.save();
+        await reservation.save({ validateBeforeSave: false });
 
         logger.action(`Booking ID = ${reservation.bookingId} by ${lastName} is successful.`);
         // return success response
